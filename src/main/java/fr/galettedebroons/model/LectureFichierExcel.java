@@ -16,7 +16,7 @@ import fr.galettedebroons.view.FormulaireGalette;
 //import com.sun.istack.internal.logging.Logger;
 
 
-public class Lecture_Fichier_Excel {
+public class LectureFichierExcel {
 	private static String nomDocument_;
 	private static Date date_;
 	private static String codeClient_;
