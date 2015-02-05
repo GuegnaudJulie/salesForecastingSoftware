@@ -17,12 +17,12 @@ import fr.galettedebroons.view.FormulaireGalette;
 
 
 public class Lecture_Fichier_Excel {
-	private static String nom_document;
-	private static Date date;
-	private static String code_client;
-	private static String nom_client;
-	private static String code_article;
-	private static int quantite;
+	private static String nomDocument_;
+	private static Date date_;
+	private static String codeClient_;
+	private static String nomClient_;
+	private static String codeArticle_;
+	private static int quantite_;
 	
 	//private static Logger logger = Logger.getLogger(Lecture_Fichier_Excel.class);
 	
@@ -53,19 +53,19 @@ public class Lecture_Fichier_Excel {
 	        System.out.println("Valeur de row :" +row);
 	        while (row != null) {
 	        	System.out.println("Ligne non null");
-	        	nom_document = row.getCell(0).getStringCellValue();
-	        	date = row.getCell(1).getDateCellValue();
-	        	code_client = row.getCell(2).getStringCellValue();
-	        	nom_client = row.getCell(3).getStringCellValue();
-	        	code_article = row.getCell(4).getStringCellValue();
-	        	quantite = (int) row.getCell(5).getNumericCellValue();
+	        	nomDocument_ = row.getCell(0).getStringCellValue();
+	        	date_ = row.getCell(1).getDateCellValue();
+	        	codeClient_ = row.getCell(2).getStringCellValue();
+	        	nomClient_ = row.getCell(3).getStringCellValue();
+	        	codeArticle_ = row.getCell(4).getStringCellValue();
+	        	quantite_ = (int) row.getCell(5).getNumericCellValue();
 	        	
-	        	System.out.println("Le nom du document : " +nom_document);
-	        	System.out.println("La date du document : " +date);
-	        	System.out.println("Le code du client : " +code_client);
-	        	System.out.println("Le nom du client : " +nom_client);
-	        	System.out.println("Le code de l'article : " +code_article);
-	        	System.out.println("La quantite : " +quantite);
+	        	System.out.println("Le nom du document : " +nomDocument_);
+	        	System.out.println("La date du document : " +date_);
+	        	System.out.println("Le code du client : " +codeClient_);
+	        	System.out.println("Le nom du client : " +nomClient_);
+	        	System.out.println("Le code de l'article : " +codeArticle_);
+	        	System.out.println("La quantite : " +quantite_);
 	        	
 	            row = sheet.getRow(index++);
 	        }
@@ -76,42 +76,41 @@ public class Lecture_Fichier_Excel {
 	        e.printStackTrace();
 	    }
 	}
-
-
+	
 	public String getNom_document() {
-		return nom_document;
+		return nomDocument_;
 	}
 	public void setNom_document(String nom_document) {
-		this.nom_document = nom_document;
+		this.nomDocument_ = nom_document;
 	}
 	public Date getDate() {
-		return date;
+		return date_;
 	}
 	public void setDate(Date date) {
-		this.date = date;
+		this.date_ = date;
 	}
 	public String getCode_client() {
-		return code_client;
+		return codeClient_;
 	}
 	public void setCode_client(String code_client) {
-		this.code_client = code_client;
+		this.codeClient_ = code_client;
 	}
 	public String getNom_client() {
-		return nom_client;
+		return nomClient_;
 	}
 	public void setNom_client(String nom_client) {
-		this.nom_client = nom_client;
+		this.nomClient_ = nom_client;
 	}
 	public String getCode_article() {
-		return code_article;
+		return codeArticle_;
 	}
 	public void setCode_article(String code_article) {
-		this.code_article = code_article;
+		this.codeArticle_ = code_article;
 	}
 	public int getQuantite() {
-		return quantite;
+		return quantite_;
 	}
 	public void setQuantite(int quantite) {
-		this.quantite = quantite;
+		this.quantite_ = quantite;
 	}
 }

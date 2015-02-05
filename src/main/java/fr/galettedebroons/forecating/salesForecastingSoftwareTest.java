@@ -7,10 +7,10 @@ import javax.persistence.Persistence;
 
 public class salesForecastingSoftwareTest {
 
-	private EntityManager manager;
+	private EntityManager manager_;
 
 	public salesForecastingSoftwareTest(EntityManager manager) {
-		this.manager = manager;
+		this.manager_ = manager;
 	}
 
 	/**
