@@ -1,9 +1,9 @@
-package fr.galettedebroons.excel;
+package fr.galettedebroons.model;
 
 public class excelDataSmoothing {
 
 	// Fréquence de livraison des clients
-	// public void fréquanceNormal
+	// public void frequenceNormal
 	
 	// Ajustement des Données
 	
