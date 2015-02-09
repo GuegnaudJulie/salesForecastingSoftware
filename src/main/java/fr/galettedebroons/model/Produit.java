@@ -1,6 +1,7 @@
 package fr.galettedebroons.model;
 
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 public class Produit {
 	
@@ -8,11 +9,11 @@ public class Produit {
 	private String code_produit;
 	private String nom_produit;
 	private String presentation_produit;
-	private String code_gamme;
+	private Gamme code_gamme;
 	private int qte_lot;
 	
 	public Produit(String code_produit, String nom_produit,
-			String presentation_produit, String code_gamme, int qte_lot) {
+			String presentation_produit, Gamme code_gamme, int qte_lot) {
 		super();
 		this.code_produit = code_produit;
 		this.nom_produit = nom_produit;
@@ -38,10 +39,12 @@ public class Produit {
 	public void setPresentation_produit(String presentation_produit) {
 		this.presentation_produit = presentation_produit;
 	}
-	public String getCode_gamme() {
+	
+	@ManyToOne
+	public Gamme getCode_gamme() {
 		return code_gamme;
 	}
-	public void setCode_gamme(String code_gamme) {
+	public void setCode_gamme(Gamme code_gamme) {
 		this.code_gamme = code_gamme;
 	}
 	public int getQte_lot() {
