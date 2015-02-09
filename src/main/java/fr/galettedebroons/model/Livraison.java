@@ -3,20 +3,22 @@ package fr.galettedebroons.model;
 import java.sql.Date;
 
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 public class Livraison {
 	
 	@Id
 	private String bon_livraison;
-	private String code_client;
-	private String code_produit;
+	private Client code_client;
+	private Produit code_produit;
 	private Date date_livraison;
 	private int qte_livraison;
 	private int qte_reprise;
 	
 	
-	public Livraison(String bon_livraison, String code_client,
-			String code_produit, Date date_livraison, int qte_livraison,
+	public Livraison(String bon_livraison, Client code_client,
+			Produit code_produit, Date date_livraison, int qte_livraison,
 			int qte_reprise) {
 		super();
 		this.bon_livraison = bon_livraison;
@@ -35,19 +37,21 @@ public class Livraison {
 		this.bon_livraison = bon_livraison;
 	}
 	
-	public String getCode_client() {
+	@ManyToOne
+	public Client getCode_client() {
 		return code_client;
 	}
 	
-	public void setCode_client(String code_client) {
+	public void setCode_client(Client code_client) {
 		this.code_client = code_client;
 	}
 	
-	public String getCode_produit() {
+	@ManyToMany
+	public Produit getCode_produit() {
 		return code_produit;
 	}
 	
-	public void setCode_produit(String code_produit) {
+	public void setCode_produit(Produit code_produit) {
 		this.code_produit = code_produit;
 	}
 	

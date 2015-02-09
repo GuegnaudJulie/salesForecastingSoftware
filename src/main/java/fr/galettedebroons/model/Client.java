@@ -22,10 +22,11 @@ public class Client {
 		this.client_profil = client_profil;
 	}
 
-	public Client(String code_client, String enseigne_client, String adresse_client) {
+	public Client(String code_client, String enseigne_client, String adresse_client, ProfilClient cp) {
 		this.code_client = code_client;
 		this.enseigne_client = enseigne_client;
 		this.adresse_client = adresse_client;
+		this.client_profil = cp;
 	}
 	
 	public String getCode_client() {
