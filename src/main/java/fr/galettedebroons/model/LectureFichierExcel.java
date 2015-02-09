@@ -31,15 +31,15 @@ public class LectureFichierExcel {
 	 * open and read excel file
 	 * @throws InvalidFormatException
 	 */
-	public void ouverture_fichier() throws InvalidFormatException {
+	public void ouverture_fichier(File file) throws InvalidFormatException {
 	//public static void main(String[] args) throws InvalidFormatException{	
 		System.out.println("HELLO !!!");
 	    try {
 	    	new FormulaireGalette().setVisible(true);
-	    	File file = new File(("C:\\exemple1.xlsx"));
+	    	//File file = new File(("C:\\exemple1.xlsx"));
 	    	
 	        final Workbook workbook = WorkbookFactory.create(file);
-	        System.out.println("J'ai trouvé mon fichier !!!");
+	        System.out.println("J'ai trouve mon fichier !!!");
 	        final Sheet sheet = workbook.getSheetAt(0);
 	        
 	        // Lecture du fichier commence a la ligne 1 car titre ligne 0
