@@ -1,17 +1,21 @@
 package fr.galettedebroons.domain;
 
+import java.util.ArrayList;
+
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+@Entity
 public class Tournee {
 	
 	@Id
 	private int id_tournee;
 	private String nom;
 	private String jour_tournee;
-	private ProfilClient profil;
+	private ArrayList<ProfilClient> profil;
 	
-	public Tournee(int id_tournee, String nom, String jour_tournee, ProfilClient p) {
+	public Tournee(int id_tournee, String nom, String jour_tournee, ArrayList<ProfilClient> p) {
 		this.id_tournee = id_tournee;
 		this.nom = nom;
 		this.jour_tournee = jour_tournee;
@@ -40,11 +44,11 @@ public class Tournee {
 		this.jour_tournee = jour_tournee;
 	}
 
-	public ProfilClient getProfil() {
+	public ArrayList<ProfilClient> getProfil() {
 		return profil;
 	}
 
-	public void setProfil(ProfilClient profil) {
+	public void setProfil(ArrayList<ProfilClient> profil) {
 		this.profil = profil;
 	}
 	

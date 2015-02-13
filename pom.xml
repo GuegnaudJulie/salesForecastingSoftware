@@ -11,17 +11,7 @@
 	<url>http://maven.apache.org</url>
 	
 	<properties>
-	<property name="hibernate.hbm2ddl.auto" value="create"/>
-	<property name="toplink.target-database" value="HSQL"/>
-	<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-	<property name="hibernate.show_sql" value="true"/>
-	<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-	<property name="hibernate.connection.url" value="jdbc:mysql://anteros.istic.univ-rennes1.fr/base_14010287"/>
-	<property name="hibernate.connection.username" value="user_14010287"/>
-	<property name="hibernate.connection.password" value="toor"/>
-
-
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		

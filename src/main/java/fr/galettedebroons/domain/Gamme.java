@@ -1,18 +1,21 @@
 package fr.galettedebroons.domain;
 
+import java.util.ArrayList;
+
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+@Entity
 public class Gamme {
 	
 	@Id
 	private String code_gamme;
 	private int duree_conservation;
-	private Produit code_prod;
-	private ProfilClient pc;
+	private ArrayList<Produit> code_prod;
+	private ArrayList<ProfilClient> pc;
 	
-	
-	public Gamme(String code_gamme, int duree_conservation, Produit code_p, ProfilClient pcl) {
+	public Gamme(String code_gamme, int duree_conservation, ArrayList<Produit> code_p, ArrayList<ProfilClient> pcl) {
 		this.code_gamme = code_gamme;
 		this.duree_conservation = duree_conservation;
 		this.code_prod = code_p;
@@ -32,21 +35,21 @@ public class Gamme {
 		this.duree_conservation = duree_conservation;
 	}
 
-	@OneToMany
-	public Produit getCode_prod() {
+	@OneToMany(mappedBy="code_gamme")
+	public ArrayList<Produit> getCode_prod() {
 		return code_prod;
 	}
 
-	public void setCode_prod(Produit code_prod) {
+	public void setCode_prod(ArrayList<Produit> code_prod) {
 		this.code_prod = code_prod;
 	}
 
-	@OneToMany
-	public ProfilClient getPc() {
+	@OneToMany(mappedBy="code_gamme")
+	public ArrayList<ProfilClient> getPc() {
 		return pc;
 	}
 
-	public void setPc(ProfilClient pc) {
+	public void setPc(ArrayList<ProfilClient> pc) {
 		this.pc = pc;
 	}
 	

@@ -42,18 +42,16 @@ public class LectureFichierExcel {
 		this.manager = manager;
 	}
 	
-	
-	
 	/**
 	 * open and read excel file
 	 * @throws InvalidFormatException
 	 */
-	//public void ouverture_fichier(File file) throws InvalidFormatException {
-	public static void main(String[] args) throws InvalidFormatException{	
+	public void ouverture_fichier(File file) throws InvalidFormatException {
+	//public static void main(String[] args) throws InvalidFormatException{	
 		System.out.println("HELLO !!!");
 	    try {
 	    	//new FormulaireGalette().setVisible(true);
-	    	File file = new File(("C:\\Classeur1.xlsx"));
+	    	//File file = new File(("C:\\Classeur1.xlsx"));
 	    	
 	        final Workbook workbook = WorkbookFactory.create(file);
 	        System.out.println("J'ai trouve mon fichier !!!");

@@ -1,9 +1,16 @@
 package fr.galettedebroons.forecating;
 
+import java.io.File;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import fr.galettedebroons.model.LectureFichierExcel;
+import fr.galettedebroons.view.FormulaireGalette;
 
 public class salesForecastingSoftwareTest {
 
@@ -32,7 +39,22 @@ public class salesForecastingSoftwareTest {
 		tx.commit();
 
 		// TODO run request
-
+		
+		
+		
+		// Run !!!
+		/*
+		new FormulaireGalette().setVisible(true);
+		
+		LectureFichierExcel lfe = new LectureFichierExcel(manager);
+		File file = new File(("C:\\Classeur1.xlsx"));
+		try {
+			lfe.ouverture_fichier(file);
+		}
+		catch (InvalidFormatException e) { e.printStackTrace(); }
+		*/
+		
+		
 		System.out.println(".. done");
 	}
 

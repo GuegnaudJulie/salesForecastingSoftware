@@ -1,8 +1,13 @@
 package fr.galettedebroons.domain;
 
+import java.util.ArrayList;
+
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+@Entity
 public class Produit {
 	
 	@Id
@@ -11,6 +16,8 @@ public class Produit {
 	private String presentation_produit;
 	private Gamme code_gamme;
 	private int qte_lot;
+	private String nature_produit;
+	private ArrayList<Livraison> livraison;
 	
 	public Produit(String code_produit, String nom_produit,
 			String presentation_produit, Gamme code_gamme, int qte_lot) {
@@ -21,6 +28,7 @@ public class Produit {
 		this.code_gamme = code_gamme;
 		this.qte_lot = qte_lot;
 	}
+	
 	public String getCode_produit() {
 		return code_produit;
 	}
@@ -53,7 +61,18 @@ public class Produit {
 	public void setQte_lot(int qte_lot) {
 		this.qte_lot = qte_lot;
 	}
+	public String getNatureProduit() {
+		return nature_produit;
+	}
+	public void setNatureProduit(String nature_produit) {
+		this.nature_produit = nature_produit;
+	}
 	
-	
-
+	@ManyToMany
+	public ArrayList<Livraison> getLivraison() {
+		return livraison;
+	}
+	public void setLivraison(ArrayList<Livraison> livraison) {
+		this.livraison = livraison;
+	}
 }

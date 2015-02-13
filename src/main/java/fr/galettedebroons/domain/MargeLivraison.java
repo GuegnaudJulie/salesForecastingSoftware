@@ -8,14 +8,14 @@ import javax.persistence.Id;
  * @author 14008374
  *
  */
-public class Marge_Livraison {
+public class MargeLivraison {
 	
 	@Id
 	@GeneratedValue
 	private int id;
 	private double taux_reprise;
 	
-	public Marge_Livraison(double taux_reprise) {
+	public MargeLivraison(double taux_reprise) {
 		this.taux_reprise = taux_reprise;
 	}
 	

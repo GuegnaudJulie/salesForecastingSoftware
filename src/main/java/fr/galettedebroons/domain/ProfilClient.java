@@ -1,21 +1,24 @@
 package fr.galettedebroons.domain;
 
+import java.util.List;
+
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
+@Entity
 public class ProfilClient {
 	
+	@Id
 	private int id;
-	private String code_client;
+	private Client client;
 	private Gamme code_gamme;
-	private Livraison livraison;
+	private List<Livraison> livraison;
 	private Boolean actif;
 	
 		
-	public ProfilClient(String code_client, Gamme code_gamme, Livraison livraison, Boolean actif) {
-		this.code_client = code_client;
+	public ProfilClient(Gamme code_gamme, List<Livraison> livraison, Boolean actif) {
 		this.code_gamme = code_gamme;
 		this.livraison = livraison;
 		this.actif = actif;
@@ -26,7 +29,6 @@ public class ProfilClient {
 	public int getId() {
 		return id;
 	}
-
 
 	public void setId(int id) {
 		this.id = id;
@@ -39,15 +41,7 @@ public class ProfilClient {
 	public void setActif(Boolean actif) {
 		this.actif = actif;
 	}
-
-	public String getCode_client() {
-		return code_client;
-	}
-	public void setCode_client(String code_client) {
-		this.code_client = code_client;
-	}
 	
-	@OneToOne
 	public Gamme getCode_gamme() {
 		return code_gamme;
 	}
@@ -55,14 +49,19 @@ public class ProfilClient {
 		this.code_gamme = code_gamme;
 	}
 	
-	@OneToMany
-	public Livraison getLivraison() {
+	@OneToMany(mappedBy="profil")
+	public List<Livraison> getLivraison() {
 		return livraison;
 	}
-	public void setLivraison(Livraison livraison) {
+	public void setLivraison(List<Livraison> livraison) {
 		this.livraison = livraison;
 	}
-	
-	
 
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
 }
