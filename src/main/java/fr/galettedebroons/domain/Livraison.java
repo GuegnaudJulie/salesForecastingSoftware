@@ -1,4 +1,4 @@
-package fr.galettedebroons.model;
+package fr.galettedebroons.domain;
 
 import java.sql.Date;
 

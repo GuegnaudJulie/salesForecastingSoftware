@@ -1,4 +1,4 @@
-package fr.galettedebroons.model;
+package fr.galettedebroons.domain;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

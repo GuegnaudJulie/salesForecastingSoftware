@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import fr.galettedebroons.domain.Client;
 import fr.galettedebroons.view.FormulaireGalette;
 
 //import com.sun.istack.internal.logging.Logger;
@@ -120,9 +121,8 @@ public class LectureFichierExcel {
 			// Client inexistant
 		}else {
 			// J'ajoute ma ligne de livraison
-			Livraison_Effective lf = new Livraison_Effective(nomDocument_, date_, codeClient_, nomClient_, codeArticle_,quantite_);
+			// Livraison_Effective lf = new Livraison_Effective(nomDocument_, date_, codeClient_, nomClient_, codeArticle_,quantite_);
 		}
-		
 	}
 	
 	public String getNom_document() {
