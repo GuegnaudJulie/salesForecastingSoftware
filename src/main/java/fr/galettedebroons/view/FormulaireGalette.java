@@ -1,5 +1,9 @@
 package fr.galettedebroons.view;
 
+import java.io.File;
+
+import javax.swing.JFileChooser;
+
 /**
 *
 * @author Oumoul
@@ -35,7 +39,6 @@ public class FormulaireGalette extends javax.swing.JFrame {
        jLabel6 = new javax.swing.JLabel();
        jLabel7 = new javax.swing.JLabel();
        Parcou = new javax.swing.JButton();
-       attach = new javax.swing.JButton();
        save = new javax.swing.JButton();
        reset = new javax.swing.JButton();
        numdoc = new javax.swing.JTextField();
@@ -46,7 +49,7 @@ public class FormulaireGalette extends javax.swing.JFrame {
        CdArt = new javax.swing.JComboBox();
        NmArt = new javax.swing.JComboBox();
        TyArt = new javax.swing.JComboBox();
-       jLabel9 = new javax.swing.JLabel();
+       fichier = new javax.swing.JLabel();
        jLabel10 = new javax.swing.JLabel();
        jLabel11 = new javax.swing.JLabel();
        date = new com.toedter.calendar.JDateChooser();
@@ -55,7 +58,7 @@ public class FormulaireGalette extends javax.swing.JFrame {
 
        jLabel1.setText("Formulaire");
 
-       jLabel2.setText("Numéro du document");
+       jLabel2.setText("Numï¿½ro du document");
 
        jLabel3.setText("Date");
 
@@ -71,10 +74,21 @@ public class FormulaireGalette extends javax.swing.JFrame {
        Parcou.addActionListener(new java.awt.event.ActionListener() {
            public void actionPerformed(java.awt.event.ActionEvent evt) {
                ParcouActionPerformed(evt);
+               JFileChooser choix = new JFileChooser();
+               int retour=choix.showOpenDialog(getParent());
+                if(retour==JFileChooser.APPROVE_OPTION){
+            	System.out.println ("un fichier a Ã©tÃ© choisi (sortie par OK)");
+            	   // nom du fichier  choisi 
+            	  System.out.println( choix.getSelectedFile().getName());
+            	   // chemin absolu du fichier choisi
+            	  fexcel. setText(choix.getSelectedFile().getAbsolutePath());
+            	}
+            // pas de fichier choisi
+               else System.out.println("Aucun fichier choisi") ;   
+             
+               
            }
        });
-
-       attach.setText("Attacher");
 
        save.setText("Enregistrer");
        save.addActionListener(new java.awt.event.ActionListener() {
@@ -85,7 +99,7 @@ public class FormulaireGalette extends javax.swing.JFrame {
 
        reset.setText("Annuler");
 
-       fexcel.setText("Votre fichier Excel à télécharger");
+       fexcel.setText("Votre fichier Excel Ã  tÃ©lÃ©charger");
        fexcel.addActionListener(new java.awt.event.ActionListener() {
            public void actionPerformed(java.awt.event.ActionEvent evt) {
                fexcelActionPerformed(evt);
@@ -109,7 +123,7 @@ public class FormulaireGalette extends javax.swing.JFrame {
 
        TyArt.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-       jLabel9.setText("Télécharger un fichier Excel");
+       fichier.setText("TÃ©lÃ©charger un fichier Excel");
 
        jLabel10.setText("Veuillez renseigner les informations sur les articles");
 
@@ -161,15 +175,8 @@ public class FormulaireGalette extends javax.swing.JFrame {
                                    .addComponent(jLabel11)
                                    .addComponent(jLabel10)))
                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                               .addContainerGap()
-                               .addComponent(fexcel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                               .addGap(18, 18, 18)
-                               .addComponent(Parcou)
-                               .addGap(32, 32, 32)
-                               .addComponent(attach))
-                           .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                .addGap(115, 115, 115)
-                               .addComponent(jLabel9)))
+                               .addComponent(fichier)))
                        .addGap(0, 0, Short.MAX_VALUE)))
                .addGap(52, 52, 52))
            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -221,12 +228,8 @@ public class FormulaireGalette extends javax.swing.JFrame {
                    .addComponent(jLabel8)
                    .addComponent(TyArt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                .addGap(44, 44, 44)
-               .addComponent(jLabel9)
+               .addComponent(fichier)
                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-               .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                   .addComponent(fexcel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                   .addComponent(Parcou)
-                   .addComponent(attach))
                .addGap(29, 29, 29)
                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                    .addComponent(reset)
@@ -263,7 +266,6 @@ public class FormulaireGalette extends javax.swing.JFrame {
    private javax.swing.JComboBox NmClient;
    private javax.swing.JButton Parcou;
    private javax.swing.JComboBox TyArt;
-   private javax.swing.JButton attach;
    private javax.swing.JComboBox codecli;
    private com.toedter.calendar.JDateChooser date;
    private javax.swing.JTextField fexcel;
@@ -277,7 +279,7 @@ public class FormulaireGalette extends javax.swing.JFrame {
    private javax.swing.JLabel jLabel6;
    private javax.swing.JLabel jLabel7;
    private javax.swing.JLabel jLabel8;
-   private javax.swing.JLabel jLabel9;
+   private javax.swing.JLabel fichier;
    private javax.swing.JTextField numdoc;
    private javax.swing.JButton reset;
    private javax.swing.JButton save;
