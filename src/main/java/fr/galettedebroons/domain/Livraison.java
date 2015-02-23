@@ -1,7 +1,7 @@
 package fr.galettedebroons.domain;
 
 import java.sql.Date;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,23 +11,25 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Livraison {
 	
-	@Id
 	private String bon_livraison;
-	private ProfilClient profil;
-	private ArrayList<Produit> code_produit;
+	private Profil livraison_profil;
+	private List<Produit> livraison_produit;
 	private Date date_livraison;
 	private int qte_livraison;
 	private int qte_reprise;
 	
-	public Livraison(String bon_livraison, ArrayList<Produit> code_produit, Date date_livraison, int qte_livraison, int qte_reprise) {
+	public Livraison(){}
+	
+	public Livraison(String bon_livraison, List<Produit> code_produit, Date date_livraison, int qte_livraison, int qte_reprise) {
 		super();
 		this.bon_livraison = bon_livraison;
-		this.code_produit = code_produit;
+		this.livraison_produit = code_produit;
 		this.date_livraison = date_livraison;
 		this.qte_livraison = qte_livraison;
 		this.qte_reprise = qte_reprise;
 	}
 	
+	@Id
 	public String getBon_livraison() {
 		return bon_livraison;
 	}
@@ -36,13 +38,13 @@ public class Livraison {
 		this.bon_livraison = bon_livraison;
 	}
 	
-	@ManyToMany(mappedBy="livraison")
-	public ArrayList<Produit> getCode_produit() {
-		return code_produit;
+	@ManyToMany(mappedBy="livraison_produit")
+	public List<Produit> getLivraison_produit() {
+		return livraison_produit;
 	}
 	
-	public void setCode_produit(ArrayList<Produit> code_produit) {
-		this.code_produit = code_produit;
+	public void setLivraison_produit(List<Produit> livraison_produit) {
+		this.livraison_produit = livraison_produit;
 	}
 	
 	public Date getDate_livraison() {
@@ -69,11 +71,12 @@ public class Livraison {
 	}
 
 	@ManyToOne
-	public ProfilClient getProfil() {
-		return profil;
+	public Profil getLivraison_profil() {
+		return livraison_profil;
 	}
-	public void setProfil(ProfilClient profil) {
-		this.profil = profil;
+	
+	public void setLivraison_profil(Profil profil) {
+		this.livraison_profil = profil;
 	}
 
 	
