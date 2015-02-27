@@ -49,6 +49,11 @@ public class AjoutClientForm extends javax.swing.JFrame {
        add.setText("Ajouter");
 
        del.setText("Annuler");
+       del.addActionListener(new java.awt.event.ActionListener() {
+           public void actionPerformed(java.awt.event.ActionEvent evt) {
+               delcliActionPerformed(evt);
+           }
+       });
 
        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
        getContentPane().setLayout(layout);
@@ -101,6 +106,15 @@ public class AjoutClientForm extends javax.swing.JFrame {
    private void adrcliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adrcliActionPerformed
        // TODO add your handling code here:
    }//GEN-LAST:event_adrcliActionPerformed
+   
+   
+   private void delcliActionPerformed(java.awt.event.ActionEvent evt) {
+       // TODO add your handling code here:
+	   // pop up pour informer que le client ne sera pas ajouter
+	   
+	   // Si confirmer alors on ferme
+	   this.setVisible(false);
+   }
 
    /**
     * @param args the command line arguments

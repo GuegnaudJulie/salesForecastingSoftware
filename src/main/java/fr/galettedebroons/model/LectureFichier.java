@@ -12,12 +12,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
-import org.odftoolkit.odfdom.pkg.OdfFileDom;
-import org.w3c.dom.Node; 
 
+
+//import org.odftoolkit.odfdom.pkg.OdfFileDom;
+import org.w3c.dom.Node; 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,11 +25,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import org.odftoolkit.odfdom.doc.OdfDocument;
-import org.odftoolkit.odfdom.pkg.OdfFileDom;
+//import org.odftoolkit.odfdom.doc.OdfDocument;
+//import org.odftoolkit.odfdom.pkg.OdfFileDom;
 import org.w3c.dom.NodeList;
 
 import fr.galettedebroons.domain.Client;
+import fr.galettedebroons.view.AjoutClientForm;
 import fr.galettedebroons.view.FormulaireGalette;
 
 //import com.sun.istack.internal.logging.Logger;
@@ -182,8 +183,16 @@ public class LectureFichier {
 	
 	public static void insertLigneClient(){
 		// Verification si le client n'est pas dans la base
-		List<Client> client = manager_.createQuery("select c from Client c where code_client = " +codeClient_, Client.class).getResultList();
+		//List<Client> client = manager_.createQuery("select c from Client c where c.code_client LIKE :codeClient_ ", Client.class).getResultList();
+		@SuppressWarnings("unchecked")
+		List<Client> client = manager_.createQuery("select c from Client c where c.code_client LIKE :codeClient ").setParameter("codeClient", codeClient_).setMaxResults(10).getResultList();
+		
+		
 		if (client.size() == 0){
+			System.out.println("LE CLIENT N'EXISTE PAS !!!!!!");
+			AjoutClientForm nouveauClient = new AjoutClientForm();
+			nouveauClient.setVisible(true);
+			
 			// Afficher la fenetre créer un client
 			// Vous devez renseigner les champs du nouveau client
 			// Client inexistant
