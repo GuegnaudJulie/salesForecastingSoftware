@@ -1,8 +1,13 @@
 package fr.galettedebroons.view;
 
-import java.io.File;
+import java.io.IOException;
 
+import javax.persistence.EntityManager;
 import javax.swing.JFileChooser;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import fr.galettedebroons.model.LectureFichier;
 
 /**
 *
@@ -10,7 +15,9 @@ import javax.swing.JFileChooser;
 */
 public class FormulaireGalette extends javax.swing.JFrame {
 
-   /**
+	private static final long serialVersionUID = 3597536893040891337L;
+	
+	/**
     * Creates new form FormulaireGalette
     */
 	
@@ -18,10 +25,7 @@ public class FormulaireGalette extends javax.swing.JFrame {
    public FormulaireGalette() {
        initComponents();
    }
-
-   public static void main(String[] args){
-   	new FormulaireGalette().setVisible(true);
-   }
+   
    /**
     * This method is called from within the constructor to initialize the form.
     * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,12 +85,11 @@ public class FormulaireGalette extends javax.swing.JFrame {
             	   // nom du fichier  choisi 
             	  System.out.println( choix.getSelectedFile().getName());
             	   // chemin absolu du fichier choisi
-            	  fexcel. setText(choix.getSelectedFile().getAbsolutePath());
+            	 fexcel. setText(choix.getSelectedFile().getAbsolutePath());
+            	  System.out.println(choix.getSelectedFile().getAbsolutePath() + "\\" + choix.getSelectedFile().getName());
             	}
             // pas de fichier choisi
                else System.out.println("Aucun fichier choisi") ;   
-             
-               
            }
        });
 
@@ -175,6 +178,12 @@ public class FormulaireGalette extends javax.swing.JFrame {
                                    .addComponent(jLabel11)
                                    .addComponent(jLabel10)))
                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                               .addContainerGap()
+                               .addComponent(fexcel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                               .addGap(18, 18, 18)
+                               .addComponent(Parcou)
+                               .addGap(32, 32, 32))
+                           .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                .addGap(115, 115, 115)
                                .addComponent(fichier)))
                        .addGap(0, 0, Short.MAX_VALUE)))
@@ -230,6 +239,9 @@ public class FormulaireGalette extends javax.swing.JFrame {
                .addGap(44, 44, 44)
                .addComponent(fichier)
                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+               .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                   .addComponent(fexcel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                   .addComponent(Parcou))
                .addGap(29, 29, 29)
                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                    .addComponent(reset)
@@ -249,7 +261,15 @@ public class FormulaireGalette extends javax.swing.JFrame {
 
    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
                // TODO add your handling code here:
-     
+	   LectureFichier lfe = new LectureFichier();
+	   try {
+		   lfe.ouverture_fichier(fexcel.getText());
+	   } catch (IOException e) {
+		   e.printStackTrace();
+	   } catch (InvalidFormatException e) {
+		e.printStackTrace();
+	   }
+	   
    }//GEN-LAST:event_saveActionPerformed
 
    private void ParcouActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ParcouActionPerformed
@@ -261,6 +281,8 @@ public class FormulaireGalette extends javax.swing.JFrame {
     */
    
    // Variables declaration - do not modify//GEN-BEGIN:variables
+   private EntityManager manager;
+   
    private javax.swing.JComboBox CdArt;
    private javax.swing.JComboBox NmArt;
    private javax.swing.JComboBox NmClient;

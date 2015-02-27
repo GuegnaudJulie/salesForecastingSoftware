@@ -1,7 +1,9 @@
 package fr.galettedebroons.model;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +13,11 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import org.odftoolkit.odfdom.pkg.OdfFileDom;
+import org.w3c.dom.Node; 
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,15 +25,19 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import org.odftoolkit.odfdom.doc.OdfDocument;
+import org.odftoolkit.odfdom.pkg.OdfFileDom;
+import org.w3c.dom.NodeList;
+
 import fr.galettedebroons.domain.Client;
 import fr.galettedebroons.view.FormulaireGalette;
 
 //import com.sun.istack.internal.logging.Logger;
 
 
-public class LectureFichierExcel {
+public class LectureFichier {
 	
-	private static EntityManager manager;
+	private static EntityManager manager_;
 	
 	private static String nomDocument_;
 	private static Date date_;
@@ -38,22 +49,40 @@ public class LectureFichierExcel {
 	//private static Logger logger = Logger.getLogger(Lecture_Fichier_Excel.class);
 	
 	
-	public LectureFichierExcel(EntityManager manager){
-		this.manager = manager;
-	}
+	public LectureFichier(){}
 	
 	/**
 	 * open and read excel file
 	 * @throws InvalidFormatException
+	 * @throws IOException 
 	 */
-	public void ouverture_fichier(File file) throws InvalidFormatException {
-	//public static void main(String[] args) throws InvalidFormatException{	
+	public void ouverture_fichier(String nomFichier) throws InvalidFormatException, IOException{
+		
+		File file = new File(nomFichier);
+		
+		// add to database with read values
+    	EntityManagerFactory factory = Persistence.createEntityManagerFactory("example");
+    	EntityManager manager = factory.createEntityManager();
+    	this.setManager(manager);
+    	
+    	EntityTransaction tx = manager_.getTransaction();
+    	tx.begin();
+		
+		/* Vérification du fichier (CSV/xlsx/ods) */
+		if (nomFichier.contains(".xlsx"))
+			lectureExcel(file);
+		else if (nomFichier.contains(".ods"))
+			lectureCalc(file);
+		else if (nomFichier.contains(".csv"))
+			lectureCsv(nomFichier);
+		
+    	tx.commit();
+	}
+			
+	public void lectureExcel(File file) throws InvalidFormatException{	
 		System.out.println("HELLO !!!");
 	    try {
-	    	//new FormulaireGalette().setVisible(true);
-	    	//File file = new File(("C:\\Classeur1.xlsx"));
-	    	
-	        final Workbook workbook = WorkbookFactory.create(file);
+	    	final Workbook workbook = WorkbookFactory.create(file);
 	        System.out.println("J'ai trouve mon fichier !!!");
 	        final Sheet sheet = workbook.getSheetAt(0);
 	        
@@ -85,23 +114,16 @@ public class LectureFichierExcel {
 	        	System.out.println("La quantite : " +quantite_);
 	        	
 	        	
-	        	// add to database with read values
-	        	EntityManagerFactory factory = Persistence.createEntityManagerFactory("example");
-	        	EntityManager manager = factory.createEntityManager();
-	        	LectureFichierExcel test = new LectureFichierExcel(manager);
-	        	
-	        	EntityTransaction tx = manager.getTransaction();
-	        	tx.begin();
-	        	
 	        	try{
 	        		insertLigneClient();
 	        	}catch(Exception e){
 	        		e.printStackTrace();
 	        	}  	
+
 	        	
 	            row = sheet.getRow(index++);
 	        }
-	
+	        
 	    } catch(FileNotFoundException fnf){
 	    	fnf.printStackTrace();
 	    } catch (IOException e) {
@@ -109,10 +131,58 @@ public class LectureFichierExcel {
 	    }
 	}
 	
+	public void lectureCalc(File file){
+		/*
+		// Load the ODF document from the path
+		OdfDocument odfDoc = OdfDocument.loadDocument("C:\\example.ods");
+
+		// Get the content as DOM tree
+		OdfFileDom odfContent = odfDoc.getContentDom();
+		// System.out.println( "odfContent = " + odfContent.toString());
+
+		// Initialize XPath
+		XPath xpath = odfDoc.getXPath();
+
+		// Issue XPath query to select first cell in each row
+		NodeList nodeList = (NodeList) xpath.evaluate("//table:table-row/table:table-cell[1]",
+		odfContent, XPathConstants.NODESET);
+
+		// Print textual content of each cell in the nodeset
+		for (int i = 0; i < nodeList.getLength(); i++) {
+		Node cell = nodeList.item(i);
+		System.out.println(cell.getTextContent());
+		}
+		*/
+	}
+	
+	public void lectureCsv(String nomFichier) throws IOException{
+		try
+		{
+		   BufferedReader file = new BufferedReader(new FileReader(nomFichier));
+		   String chaine;
+		   int i = 1;
+		 
+		   while((chaine = file.readLine())!= null)
+		   {
+		      if(i > 1)
+		      {
+		         String[] tabChaine = chaine.split(";");
+		         //Tu effectues tes traitements avec les données contenues dans le tableau
+		         //La première information se trouve à l'indice 0
+		      }
+		      i++;
+		   }
+		   file.close();                 
+		}
+		catch (FileNotFoundException e)
+		{
+		   System.out.println("Le fichier est introuvable !");
+		}
+	}
 	
 	public static void insertLigneClient(){
 		// Verification si le client n'est pas dans la base
-		List<Client> client = manager.createQuery("select c from Client c where code_client = " +codeClient_, Client.class).getResultList();
+		List<Client> client = manager_.createQuery("select c from Client c where code_client = " +codeClient_, Client.class).getResultList();
 		if (client.size() == 0){
 			// Afficher la fenetre créer un client
 			// Vous devez renseigner les champs du nouveau client
@@ -158,5 +228,11 @@ public class LectureFichierExcel {
 	}
 	public void setQuantite(int quantite) {
 		this.quantite_ = quantite;
+	}
+	public EntityManager getManager(){
+		return manager_;
+	}
+	public void setManager(EntityManager manager){
+		manager_ = manager;
 	}
 }

@@ -6,7 +6,9 @@ package fr.galettedebroons.view;
 */
 public class AjoutClientForm extends javax.swing.JFrame {
 
-   /**
+	private static final long serialVersionUID = -772408061681528266L;
+	
+	/**
     * Creates new form ajoutClientForm
     */
    public AjoutClientForm() {

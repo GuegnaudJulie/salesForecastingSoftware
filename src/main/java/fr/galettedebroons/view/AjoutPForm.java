@@ -6,7 +6,9 @@ package fr.galettedebroons.view;
 */
 public class AjoutPForm extends javax.swing.JFrame {
 
-   /**
+	private static final long serialVersionUID = 7360078324094620060L;
+	
+	/**
     * Creates new form ajoutPForm
     */
    public AjoutPForm() {
@@ -40,7 +42,7 @@ public class AjoutPForm extends javax.swing.JFrame {
 
        jLabel3.setText("Type Produit");
 
-       jLabel4.setText("Durée de validité");
+       jLabel4.setText("Durï¿½e de validitï¿½");
 
        save.setText("Enregistrer");
 
