@@ -1,5 +1,7 @@
 package fr.galettedebroons.view;
 
+import fr.galettedebroons.model.LectureFichier;
+
 /**
 *
 * @author Oumoul
@@ -7,6 +9,9 @@ package fr.galettedebroons.view;
 public class AjoutClientForm extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = -772408061681528266L;
+	
+	private String code_client;
+	private String enseigne_client;
 	
 	/**
     * Creates new form ajoutClientForm
@@ -38,15 +43,15 @@ public class AjoutClientForm extends javax.swing.JFrame {
 
        jLabel3.setText("Nom Client");
 
-       jLabel4.setText("Adresse Client");
+       jLabel4.setText("Code Client");
 
-       adrcli.addActionListener(new java.awt.event.ActionListener() {
-           public void actionPerformed(java.awt.event.ActionEvent evt) {
-               adrcliActionPerformed(evt);
-           }
-       });
 
        add.setText("Ajouter");
+       add.addActionListener(new java.awt.event.ActionListener() {
+           public void actionPerformed(java.awt.event.ActionEvent evt) {
+               addcliActionPerformed(evt);
+           }
+       });
 
        del.setText("Annuler");
        del.addActionListener(new java.awt.event.ActionListener() {
@@ -103,10 +108,6 @@ public class AjoutClientForm extends javax.swing.JFrame {
        pack();
    }// </editor-fold>//GEN-END:initComponents
 
-   private void adrcliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adrcliActionPerformed
-       // TODO add your handling code here:
-   }//GEN-LAST:event_adrcliActionPerformed
-   
    
    private void delcliActionPerformed(java.awt.event.ActionEvent evt) {
        // TODO add your handling code here:
@@ -114,6 +115,15 @@ public class AjoutClientForm extends javax.swing.JFrame {
 	   
 	   // Si confirmer alors on ferme
 	   this.setVisible(false);
+   }
+   
+   private void addcliActionPerformed(java.awt.event.ActionEvent evt) {
+       // TODO add your handling code here:
+	   // pop up pour informer que le client ne sera pas ajouter
+	   this.code_client = nmcli.getText();
+	   this.enseigne_client = adrcli.getText();
+	   LectureFichier.createClient(code_client, enseigne_client, null);
+	   
    }
 
    /**

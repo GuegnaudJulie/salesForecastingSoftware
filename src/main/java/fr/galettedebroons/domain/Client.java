@@ -12,7 +12,9 @@ public class Client {
 	private String enseigne_client;
 	private List<Profil> client_profil;
 
-	public Client(){}
+	public Client(){
+		
+	}
 	
 	public Client(String code_client, String enseigne_client, List<Profil> client_profil) {
 		this.code_client = code_client;
@@ -37,12 +39,12 @@ public class Client {
 		this.enseigne_client = enseigne_client;
 	}
 	
-	@OneToMany(mappedBy="client_profil")
+	/*@OneToMany(mappedBy="client_profil")
 	public List<Profil> getClient_profil() {
 		return client_profil;
 	}
 
 	public void setClient_profil(List<Profil> client_profil) {
 		this.client_profil = client_profil;
-	}
+	}*/
 }

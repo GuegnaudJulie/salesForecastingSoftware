@@ -46,6 +46,7 @@ public class LectureFichier {
 	private static String nomClient_;
 	private static String codeArticle_;
 	private static int quantite_;
+	private static EntityTransaction tx;
 	
 	//private static Logger logger = Logger.getLogger(Lecture_Fichier_Excel.class);
 	
@@ -66,7 +67,7 @@ public class LectureFichier {
     	EntityManager manager = factory.createEntityManager();
     	this.setManager(manager);
     	
-    	EntityTransaction tx = manager_.getTransaction();
+    	tx = manager.getTransaction();
     	tx.begin();
 		
 		/* Vérification du fichier (CSV/xlsx/ods) */
@@ -77,7 +78,7 @@ public class LectureFichier {
 		else if (nomFichier.contains(".csv"))
 			lectureCsv(nomFichier);
 		
-    	tx.commit();
+    	//tx.commit();
 	}
 			
 	public void lectureExcel(File file) throws InvalidFormatException{	
@@ -189,17 +190,32 @@ public class LectureFichier {
 		
 		
 		if (client.size() == 0){
+			// Afficher la fenetre créer un client
+			// Vous devez renseigner les champs du nouveau client
 			System.out.println("LE CLIENT N'EXISTE PAS !!!!!!");
 			AjoutClientForm nouveauClient = new AjoutClientForm();
 			nouveauClient.setVisible(true);
 			
-			// Afficher la fenetre créer un client
-			// Vous devez renseigner les champs du nouveau client
-			// Client inexistant
+			
+			
 		}else {
 			// J'ajoute ma ligne de livraison
 			// Livraison_Effective lf = new Livraison_Effective(nomDocument_, date_, codeClient_, nomClient_, codeArticle_,quantite_);
 		}
+	}
+	
+	
+	public static void createClient(String code_client, String enseigne_client, String profil){
+		// Ajout du client en base
+		System.out.println("Ajout du nouveau client");
+		System.out.println("mon code client " +code_client);
+		System.out.println("mon enseigne client " +enseigne_client);
+		//Client c = new Client();
+		Client c = new Client(code_client, enseigne_client, null);
+		System.out.println("Mon objetc client " +c.getCode_client());
+		manager_.persist(c);
+		System.out.println("Mon client est créé");
+		tx.commit();
 	}
 	
 	public String getNom_document() {

@@ -8,7 +8,7 @@
      <!--  <class>org.hibernate.ejb.test.Item</class> -->
       <properties>
       
-	    <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+	    <property name="hibernate.hbm2ddl.auto" value="update"/>
 		<property name="toplink.target-database" value="HSQL"/>
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 		<property name="hibernate.show_sql" value="true"/>
