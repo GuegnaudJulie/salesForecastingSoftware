@@ -15,9 +15,10 @@ public class AjoutClientForm extends javax.swing.JFrame {
 	
 	/**
     * Creates new form ajoutClientForm
+    * @param nomClient recupere du fichier Excel pour l'indiquer directement dans le textField
     */
-   public AjoutClientForm() {
-       initComponents();
+   public AjoutClientForm(String nomClient) {
+       initComponents(nomClient);
    }
 
    /**
@@ -27,7 +28,7 @@ public class AjoutClientForm extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+   private void initComponents(String nomClient) {
 
        jLabel1 = new javax.swing.JLabel();
        jLabel3 = new javax.swing.JLabel();
@@ -44,6 +45,8 @@ public class AjoutClientForm extends javax.swing.JFrame {
        jLabel3.setText("Nom Client");
 
        jLabel4.setText("Code Client");
+       
+       nmcli.setText(nomClient);
 
 
        add.setText("Ajouter");

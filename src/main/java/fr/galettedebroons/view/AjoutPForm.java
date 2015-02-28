@@ -11,8 +11,8 @@ public class AjoutPForm extends javax.swing.JFrame {
 	/**
     * Creates new form ajoutPForm
     */
-   public AjoutPForm() {
-       initComponents();
+   public AjoutPForm(String code_produit) {
+       initComponents(code_produit);
    }
 
    /**
@@ -22,7 +22,7 @@ public class AjoutPForm extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+   private void initComponents(String code_produit) {
 
        jLabel1 = new javax.swing.JLabel();
        jLabel2 = new javax.swing.JLabel();
@@ -47,6 +47,8 @@ public class AjoutPForm extends javax.swing.JFrame {
        save.setText("Enregistrer");
 
        drop.setText("Annuler");
+       
+       nmprod.setText(code_produit);
 
        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
        getContentPane().setLayout(layout);
