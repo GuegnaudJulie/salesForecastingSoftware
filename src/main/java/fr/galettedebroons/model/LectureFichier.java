@@ -18,6 +18,7 @@ import javax.xml.xpath.XPathConstants;
 
 
 
+
 //import org.odftoolkit.odfdom.pkg.OdfFileDom;
 import org.w3c.dom.Node; 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -32,6 +33,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.w3c.dom.NodeList;
 
 import fr.galettedebroons.domain.Client;
+import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.view.AjoutClientForm;
 import fr.galettedebroons.view.AjoutPForm;
@@ -222,10 +224,25 @@ public class LectureFichier {
 		System.out.println("Ajout du nouveau client");
 		System.out.println("mon code client " +code_client);
 		System.out.println("mon enseigne client " +enseigne_client);
-		//Client c = new Client();
+		
 		Client c = new Client(code_client, enseigne_client, null);
 		System.out.println("Mon objetc client " +c.getCode_client());
 		manager_.persist(c);
+		tx.commit();
+	}
+	
+	public static void createProduit(String nomProduit, String typeProduit, String dureeValidite){
+		// Ajout du client en base
+		System.out.println("Ajout du nouveau produit");
+		System.out.println("mon nom produit " +nomProduit);
+		System.out.println("mon type produit " +typeProduit);
+		System.out.println("ma duree validite " +dureeValidite);
+		
+		//String code_produit, String nom_produit,
+		//String presentation_produit, Gamme code_gamme, int qte_lot
+		//Produit p = new Produit(code_client, enseigne_client, null);
+		//System.out.println("Mon objetc client " +c.getCode_client());
+		//manager_.persist(c);
 		System.out.println("Mon client est créé");
 		tx.commit();
 	}

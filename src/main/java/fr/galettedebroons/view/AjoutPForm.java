@@ -1,5 +1,7 @@
 package fr.galettedebroons.view;
 
+import fr.galettedebroons.model.LectureFichier;
+
 /**
 *
 * @author Oumoul
@@ -7,6 +9,10 @@ package fr.galettedebroons.view;
 public class AjoutPForm extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 7360078324094620060L;
+	
+	private String nomProduit;
+	private String typeProduit;
+	private String dureeValidite;
 	
 	/**
     * Creates new form ajoutPForm
@@ -45,6 +51,11 @@ public class AjoutPForm extends javax.swing.JFrame {
        jLabel4.setText("Dur�e de validit�");
 
        save.setText("Enregistrer");
+       save.addActionListener(new java.awt.event.ActionListener() {
+           public void actionPerformed(java.awt.event.ActionEvent evt) {
+               savecliActionPerformed(evt);
+           }
+       });
 
        drop.setText("Annuler");
        
@@ -105,6 +116,17 @@ public class AjoutPForm extends javax.swing.JFrame {
        pack();
    }// </editor-fold>//GEN-END:initComponents
 
+   private void savecliActionPerformed(java.awt.event.ActionEvent evt) {
+       // TODO add your handling code here:
+	   // pop up pour informer que le client ne sera pas ajouter
+	   this.nomProduit = nmprod.getText();
+	   this.typeProduit = typprod.getText();
+	   this.dureeValidite = durprod.getText();
+	   LectureFichier.createClient(nomProduit, typeProduit, dureeValidite);
+	   
+   }
+   
+   
    /**
     * @param args the command line arguments
     */
