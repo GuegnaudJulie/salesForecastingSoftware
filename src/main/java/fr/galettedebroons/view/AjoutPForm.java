@@ -10,9 +10,12 @@ public class AjoutPForm extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 7360078324094620060L;
 	
+	private String code_produit;
+	private String nature_produit;
 	private String nomProduit;
-	private String typeProduit;
-	private String dureeValidite;
+	private String presentation_produit;
+	private int qte_lot;
+	private String produit_gamme;
 	
 	/**
     * Creates new form ajoutPForm
@@ -31,10 +34,16 @@ public class AjoutPForm extends javax.swing.JFrame {
    private void initComponents(String code_produit) {
 
        jLabel1 = new javax.swing.JLabel();
-       jLabel2 = new javax.swing.JLabel();
-       jLabel3 = new javax.swing.JLabel();
-       jLabel4 = new javax.swing.JLabel();
-       nmprod = new javax.swing.JTextField();
+       jLabel_CodeProduit = new javax.swing.JLabel();
+       jLabel_NatureProduit = new javax.swing.JLabel();
+       jLabel_NomProduit = new javax.swing.JLabel();
+       jLabel_PresentationProduit = new javax.swing.JLabel();
+       jLabel_QteProduit = new javax.swing.JLabel();
+       jLabel_ProduitGamme = new javax.swing.JLabel();
+       
+       codeprod = new javax.swing.JTextField();
+       natureprod = new javax.swing.JTextField();
+       
        typprod = new javax.swing.JTextField();
        durprod = new javax.swing.JTextField();
        save = new javax.swing.JButton();
@@ -44,11 +53,17 @@ public class AjoutPForm extends javax.swing.JFrame {
 
        jLabel1.setText("AJOUT PRODUIT");
 
-       jLabel2.setText("Nom Produit");
+       jLabel_CodeProduit.setText("Code Produit");
+       
+       jLabel_NatureProduit.setText("Nom Produit");
 
-       jLabel3.setText("Type Produit");
+       jLabel_NomProduit.setText("Type Produit");
+       
+       jLabel_PresentationProduit.setText("Présentation produit");
+       
+       jLabel_QteProduit.setText("Quantité produit");
 
-       jLabel4.setText("Dur�e de validit�");
+       jLabel_ProduitGamme.setText("Gamme du produit");
 
        save.setText("Enregistrer");
        save.addActionListener(new java.awt.event.ActionListener() {
@@ -59,7 +74,7 @@ public class AjoutPForm extends javax.swing.JFrame {
 
        drop.setText("Annuler");
        
-       nmprod.setText(code_produit);
+       codeprod.setText(code_produit);
 
        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
        getContentPane().setLayout(layout);
@@ -78,15 +93,18 @@ public class AjoutPForm extends javax.swing.JFrame {
            .addGroup(layout.createSequentialGroup()
                .addContainerGap()
                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                   .addComponent(jLabel2)
-                   .addComponent(jLabel3)
-                   .addComponent(jLabel4))
+                   .addComponent(jLabel_CodeProduit)
+                   .addComponent(jLabel_NatureProduit)
+                   .addComponent(jLabel_NomProduit)
+                   .addComponent(jLabel_PresentationProduit)
+                   .addComponent(jLabel_QteProduit)
+                   .addComponent(jLabel_ProduitGamme))
                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                    .addComponent(durprod, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                        .addComponent(typprod, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-                       .addComponent(nmprod)))
+                       .addComponent(codeprod)))
                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
        );
        layout.setVerticalGroup(
@@ -96,15 +114,27 @@ public class AjoutPForm extends javax.swing.JFrame {
                .addComponent(jLabel1)
                .addGap(26, 26, 26)
                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                   .addComponent(jLabel2)
-                   .addComponent(nmprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                   .addComponent(jLabel_CodeProduit)
+                   .addComponent(codeprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                .addGap(30, 30, 30)
                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                   .addComponent(jLabel3)
+                   .addComponent(jLabel_NatureProduit)
                    .addComponent(typprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                .addGap(30, 30, 30)
                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                   .addComponent(jLabel4)
+                   .addComponent(jLabel_NomProduit)
+                   .addComponent(typprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+               .addGap(30, 30, 30)
+               .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                   .addComponent(jLabel_PresentationProduit)
+                   .addComponent(typprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+               .addGap(30, 30, 30)
+               .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                   .addComponent(jLabel_QteProduit)
+                   .addComponent(typprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+               .addGap(30, 30, 30)
+               .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                   .addComponent(jLabel_ProduitGamme)
                    .addComponent(durprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                .addGap(46, 46, 46)
                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -119,10 +149,10 @@ public class AjoutPForm extends javax.swing.JFrame {
    private void savecliActionPerformed(java.awt.event.ActionEvent evt) {
        // TODO add your handling code here:
 	   // pop up pour informer que le client ne sera pas ajouter
-	   this.nomProduit = nmprod.getText();
-	   this.typeProduit = typprod.getText();
-	   this.dureeValidite = durprod.getText();
-	   LectureFichier.createClient(nomProduit, typeProduit, dureeValidite);
+	   this.nomProduit = codeprod.getText();
+	   this.nature_produit = typprod.getText();
+	   this.produit_gamme = durprod.getText();
+	   LectureFichier.createClient(nomProduit, nature_produit, produit_gamme);
 	   
    }
    
@@ -135,11 +165,17 @@ public class AjoutPForm extends javax.swing.JFrame {
    // Variables declaration - do not modify//GEN-BEGIN:variables
    private javax.swing.JButton drop;
    private javax.swing.JTextField durprod;
+   
    private javax.swing.JLabel jLabel1;
-   private javax.swing.JLabel jLabel2;
-   private javax.swing.JLabel jLabel3;
-   private javax.swing.JLabel jLabel4;
-   private javax.swing.JTextField nmprod;
+   private javax.swing.JLabel jLabel_CodeProduit;
+   private javax.swing.JLabel jLabel_NatureProduit;
+   private javax.swing.JLabel jLabel_NomProduit;
+   private javax.swing.JLabel jLabel_PresentationProduit;
+   private javax.swing.JLabel jLabel_QteProduit;
+   private javax.swing.JLabel jLabel_ProduitGamme;
+   
+   private javax.swing.JTextField codeprod;
+   private javax.swing.JTextField natureprod;
    private javax.swing.JButton save;
    private javax.swing.JTextField typprod;
    // End of variables declaration//GEN-END:variables
