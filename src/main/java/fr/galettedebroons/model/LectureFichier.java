@@ -27,6 +27,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.jopendocument.dom.spreadsheet.MutableCell;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 //import org.odftoolkit.odfdom.doc.OdfDocument;
 //import org.odftoolkit.odfdom.pkg.OdfFileDom;
@@ -81,7 +83,7 @@ public class LectureFichier {
 			lectureExcel(file);
 		else if (nomFichier.contains(".ods"))
 			lectureCalc(file);
-		else if (nomFichier.contains(".csv"))
+		else if (nomFichier.contains(".csv") || nomFichier.contains(".txt"))
 			lectureCsv(nomFichier);
 		
     	//tx.commit();
@@ -140,27 +142,41 @@ public class LectureFichier {
 	}
 	
 	public void lectureCalc(File file){
-		/*
-		// Load the ODF document from the path
-		OdfDocument odfDoc = OdfDocument.loadDocument("C:\\example.ods");
+	
+System.out.println("fichier avec l'extension .ods !!!");
+		
+		org.jopendocument.dom.spreadsheet.Sheet sheet;
+        try {
+             //Getting the 0th sheet for manipulation| pass sheet name as string
+             sheet = SpreadSheet.createFromFile(file).getSheet(0);
+              
+             //Get row count and column count
+             int nColCount = sheet.getColumnCount();
+             int nRowCount = sheet.getRowCount();
 
-		// Get the content as DOM tree
-		OdfFileDom odfContent = odfDoc.getContentDom();
-		// System.out.println( "odfContent = " + odfContent.toString());
+             System.out.println("Rows :"+nRowCount);
+             System.out.println("Cols :"+nColCount);
+             //Iterating through each row of the selected sheet
+             
+             MutableCell cell = null;
+             for(int nRowIndex = 0; nRowIndex < nRowCount; nRowIndex++)
+             {
+            	 System.out.println("Je suis dans la première boucle for");
+               //Iterating through each column
+               int nColIndex = 0;
+               for( ;nColIndex < nColCount; nColIndex++)
+               {
+            	   System.out.println("je suis dans la second boucle for");
+                 cell = sheet.getCellAt(nColIndex, nRowIndex);
+                 System.out.print(cell.getValue()+ " ");
+                }
+                System.out.println();
+              }
 
-		// Initialize XPath
-		XPath xpath = odfDoc.getXPath();
-
-		// Issue XPath query to select first cell in each row
-		NodeList nodeList = (NodeList) xpath.evaluate("//table:table-row/table:table-cell[1]",
-		odfContent, XPathConstants.NODESET);
-
-		// Print textual content of each cell in the nodeset
-		for (int i = 0; i < nodeList.getLength(); i++) {
-		Node cell = nodeList.item(i);
-		System.out.println(cell.getTextContent());
-		}
-		*/
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+        
 	}
 	
 	public void lectureCsv(String nomFichier) throws IOException{
