@@ -1,15 +1,6 @@
 package fr.galettedebroons.forecating;
 
-import java.io.File;
-
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
-import fr.galettedebroons.model.LectureFichier;
 import fr.galettedebroons.view.FormulaireGalette;
 
 public class salesForecastingSoftwareTest {
