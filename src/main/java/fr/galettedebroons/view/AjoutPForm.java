@@ -152,7 +152,7 @@ public class AjoutPForm extends javax.swing.JFrame {
 	   this.nomProduit = codeprod.getText();
 	   this.nature_produit = typprod.getText();
 	   this.produit_gamme = durprod.getText();
-	   LectureFichier.createClient(nomProduit, nature_produit, produit_gamme);
+	   //LectureFichier.createClient(nomProduit, nature_produit, produit_gamme);
 	   
    }
    

@@ -6,21 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
 
-
-
-
-
-//import org.odftoolkit.odfdom.pkg.OdfFileDom;
-import org.w3c.dom.Node; 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -30,19 +19,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jopendocument.dom.spreadsheet.MutableCell;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
-//import org.odftoolkit.odfdom.doc.OdfDocument;
-//import org.odftoolkit.odfdom.pkg.OdfFileDom;
-import org.w3c.dom.NodeList;
-
-import fr.galettedebroons.domain.Client;
-import fr.galettedebroons.domain.Gamme;
-import fr.galettedebroons.domain.Produit;
-import fr.galettedebroons.view.AjoutClientForm;
-import fr.galettedebroons.view.AjoutPForm;
-import fr.galettedebroons.view.FormulaireGalette;
-
-//import com.sun.istack.internal.logging.Logger;
-
+import fr.galettedebroons.domain.*;
 
 public class LectureFichier {
 	
@@ -55,10 +32,10 @@ public class LectureFichier {
 	private static String codeArticle_;
 	private static int quantite_;
 	private static EntityTransaction tx;
+	//Livraison l=new Livraison();
+	
 	
 	//private static Logger logger = Logger.getLogger(Lecture_Fichier_Excel.class);
-	
-	
 	public LectureFichier(){}
 	
 	/**
@@ -69,7 +46,7 @@ public class LectureFichier {
 	public void ouverture_fichier(String nomFichier) throws InvalidFormatException, IOException{
 		
 		File file = new File(nomFichier);
-		
+		/*
 		// add to database with read values
     	EntityManagerFactory factory = Persistence.createEntityManagerFactory("example");
     	EntityManager manager = factory.createEntityManager();
@@ -77,6 +54,7 @@ public class LectureFichier {
     	
     	tx = manager.getTransaction();
     	tx.begin();
+		*/
 		
 		/* Vérification du fichier (CSV/xlsx/ods) */
 		if (nomFichier.contains(".xlsx"))
@@ -86,50 +64,58 @@ public class LectureFichier {
 		else if (nomFichier.contains(".csv") || nomFichier.contains(".txt"))
 			lectureCsv(nomFichier);
 		
-    	//tx.commit();
+		/*
+    	tx.commit();
+    	*/
 	}
 			
 	public void lectureExcel(File file) throws InvalidFormatException{	
-		System.out.println("HELLO !!!");
+		
 	    try {
-	    	final Workbook workbook = WorkbookFactory.create(file);
-	        System.out.println("J'ai trouve mon fichier !!!");
-	        final Sheet sheet = workbook.getSheetAt(0);
-	        
+	    	final Workbook workbook = WorkbookFactory.create(file);	        
+	        final Sheet sheet = workbook.getSheetAt(0);	        
 	        // Lecture du fichier commence a la ligne 1 car titre ligne 0
 	        int index = 1;
-	        Row row = sheet.getRow(index++);
-	        
-	        if(row == null){
-	        	//logger.info("Le fichier excel est vide");
-	        }
+	        Row row = sheet.getRow(index++);	        
+	        if(row == null){}
 
 	        System.out.println("Valeur de row :" +row);
 	        while (row != null) {
-	        	System.out.println("Ligne non null");
+	        	
 	        	nomDocument_ = row.getCell(0).getStringCellValue();
 	        	date_ = row.getCell(1).getDateCellValue();
+	        	System.out.println(date_);
 	        	codeClient_ = row.getCell(2).getStringCellValue();
 	        	nomClient_ = row.getCell(3).getStringCellValue();
+	        	
 	        	// convert row to string exception when cell is a int
 	        	row.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
 	        	codeArticle_ = (String) row.getCell(4).getStringCellValue();
 	        	quantite_ = (int) row.getCell(5).getNumericCellValue();
-	        	
-	        	System.out.println("Le nom du document : " +nomDocument_);
-	        	System.out.println("La date du document : " +date_);
-	        	System.out.println("Le code du client : " +codeClient_);
-	        	System.out.println("Le nom du client : " +nomClient_);
-	        	System.out.println("Le code de l'article : " +codeArticle_);
-	        	System.out.println("La quantite : " +quantite_);
-	        	
-	        	
 	        	try{
-	        		insertLigneClient();
+	        		Produit p = manager_.find(Produit.class, codeArticle_);
+	        	} catch (Exception e){
+	        		System.out.println("le produit n'existe pas");
+	        	}
+	        	
+	        	/*
+	        	try{
+	        		l.setBon_livraison(nomDocument_);
+	            	l.setLivraison_profil(codeClient_);
+	            	l.getLivraison_produit().add(p);
+	            	l.setDate_livraison(date_);  
+	            	if(quantite_<=0){
+	            		l.setQte_reprise(quantite_);
+	            	}
+	            	else{
+	            		l.setQte_livraison(quantite_);
+	            	}   
+	            	manager_.persist(l);
+	        		
 	        	}catch(Exception e){
 	        		e.printStackTrace();
 	        	}  	
-
+	        	*/
 	        	
 	            row = sheet.getRow(index++);
 	        }
@@ -141,44 +127,40 @@ public class LectureFichier {
 	    }
 	}
 	
+	// dans le cas d'un fichier avec l'extension ODS.
 	public void lectureCalc(File file){
-	
-System.out.println("fichier avec l'extension .ods !!!");
 		
 		org.jopendocument.dom.spreadsheet.Sheet sheet;
-        try {
-             //Getting the 0th sheet for manipulation| pass sheet name as string
-             sheet = SpreadSheet.createFromFile(file).getSheet(0);
-              
-             //Get row count and column count
-             int nColCount = sheet.getColumnCount();
-             int nRowCount = sheet.getRowCount();
+		try{
+			//Getting the 0th sheet for manipulation| pass sheet name as string
+			sheet = SpreadSheet.createFromFile(file).getSheet(0);
 
-             System.out.println("Rows :"+nRowCount);
-             System.out.println("Cols :"+nColCount);
-             //Iterating through each row of the selected sheet
-             
-             MutableCell cell = null;
-             for(int nRowIndex = 0; nRowIndex < nRowCount; nRowIndex++)
-             {
-            	 System.out.println("Je suis dans la première boucle for");
-               //Iterating through each column
-               int nColIndex = 0;
-               for( ;nColIndex < nColCount; nColIndex++)
-               {
-            	   System.out.println("je suis dans la second boucle for");
-                 cell = sheet.getCellAt(nColIndex, nRowIndex);
-                 System.out.print(cell.getValue()+ " ");
-                }
-                System.out.println();
-              }
+			//Get row count and column count
+			int nColCount = sheet.getColumnCount();
+			int nRowCount = sheet.getRowCount();
 
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-        
+			System.out.println("Rows :"+nRowCount);
+			System.out.println("Cols :"+nColCount);
+
+			//Iterating through each row of the selected sheet
+			MutableCell cell = null;
+			for(int nRowIndex = 0; nRowIndex < nRowCount; nRowIndex++){
+				System.out.println("Je suis dans la première boucle for");
+				//Iterating through each column
+				int nColIndex = 0;
+				for( ;nColIndex < nColCount; nColIndex++){
+					cell = sheet.getCellAt(nColIndex, nRowIndex);
+					System.out.print(cell.getValue()+ " ");
+				}
+				System.out.println();
+			}
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
+	//Dans le cas d'un fichier avec l'extension CSV.
 	public void lectureCsv(String nomFichier) throws IOException{
 		try
 		{
@@ -193,6 +175,7 @@ System.out.println("fichier avec l'extension .ods !!!");
 		         String[] tabChaine = chaine.split(";");
 		         //Tu effectues tes traitements avec les données contenues dans le tableau
 		         //La première information se trouve à l'indice 0
+		         System.out.println("coucou");
 		      }
 		      i++;
 		   }
@@ -204,7 +187,12 @@ System.out.println("fichier avec l'extension .ods !!!");
 		}
 	}
 	
-	public static void insertLigneClient(){
+	//Remplissage de la table temporaire
+	public void remplirLivraison(){
+		
+	}
+	
+	/*public static void insertLigneClient(){
 		// Verification si le client n'est pas dans la base
 		@SuppressWarnings("unchecked")
 		List<Client> client = manager_.createQuery("select c from Client c where c.code_client LIKE :codeClient ").setParameter("codeClient", codeClient_).setMaxResults(10).getResultList();
@@ -232,10 +220,10 @@ System.out.println("fichier avec l'extension .ods !!!");
 		// Livraison_Effective lf = new Livraison_Effective(nomDocument_, date_, codeClient_, nomClient_, codeArticle_,quantite_);
 		
 		
-	}
+	}*/
 	
 	
-	public static void createClient(String code_client, String enseigne_client, String profil){
+/*	public static void createClient(String code_client, String enseigne_client, String profil){
 		// Ajout du client en base
 		System.out.println("Ajout du nouveau client");
 		System.out.println("mon code client " +code_client);
@@ -245,7 +233,7 @@ System.out.println("fichier avec l'extension .ods !!!");
 		System.out.println("Mon objetc client " +c.getCode_client());
 		manager_.persist(c);
 		tx.commit();
-	}
+	}*/
 	
 	public static void createProduit(String nomProduit, String typeProduit, String dureeValidite){
 		// Ajout du client en base

@@ -125,7 +125,7 @@ public class AjoutClientForm extends javax.swing.JFrame {
 	   // pop up pour informer que le client ne sera pas ajouter
 	   this.code_client = nmcli.getText();
 	   this.enseigne_client = adrcli.getText();
-	   LectureFichier.createClient(code_client, enseigne_client, null);
+	   //LectureFichier.createClient(code_client, enseigne_client, null);
 	   
    }
 

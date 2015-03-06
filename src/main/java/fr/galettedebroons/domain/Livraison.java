@@ -78,7 +78,4 @@ public class Livraison {
 	public void setLivraison_profil(Profil profil) {
 		this.livraison_profil = profil;
 	}
-
-	
-	
 }

@@ -33,28 +33,9 @@ public class salesForecastingSoftwareTest {
 		EntityTransaction tx = manager.getTransaction();
 		tx.begin();
 		*/
-		
-		/*
-		 ****** Plan pour la mise en place des données dans la base *******
-		 *  
-		 *  
-		 *  Lecture du fichier ligne par ligne
-		 ***  Vérification de l'existance sur la base de la données (profil/produit/livraison à une date T)
-		 ***** Si exite déjà => pas d'effet ou question "Voulez-vous modifier la donnée... OUI/NON ?"
-		 ***** Sinon => Vérification client puis produit puis livraison
-		 ******* Si une des données précédentes n'existe pas on la créer dans la base (formulaire à envoyer graphiquement)
-		 ******* On enregistre la livraison dans la base
-		 *** On passe à la ligne suivante
-		 *
-		 */
-		
-		
-		// Run !!! Test !!! =p (by juju)
 
 		new FormulaireGalette().setVisible(true);
-				
 		
-
 		// TODO create entity
 
 		// TODO persist entity
