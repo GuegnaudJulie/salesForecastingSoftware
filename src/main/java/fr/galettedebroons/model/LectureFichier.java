@@ -1,5 +1,6 @@
 package fr.galettedebroons.model;
 
+/* import */
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,6 +22,21 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 import fr.galettedebroons.domain.*;
 
+
+/**
+ * Classe permettant la lecture d'un fichier d'extension .xls, .ods, .csv ou .txt
+ * Celui devra contenir les champs suivants : 
+ ***** Bon de livraison
+ ***** Date
+ ***** Code client
+ ***** Nom client
+ ***** Code produit
+ ***** Quantité
+ * 
+ * @author  Melissa Poher, Oumoul Sy, Julie Guegnaud
+ * @version 1.0
+ * @since   2015-03-06
+ */
 public class LectureFichier {
 	
 	private static EntityManager manager_;
@@ -39,9 +55,11 @@ public class LectureFichier {
 	public LectureFichier(){}
 	
 	/**
-	 * open and read excel file
+	 * Récupère l'extention d'un fichier et renvoie le fichier sur la bonne méthode de traitement
+	 * @param file est le fichier contenant les données à insérer en base 
 	 * @throws InvalidFormatException
-	 * @throws IOException 
+	 * @throws IOException
+	 * @return Rien
 	 */
 	public void ouverture_fichier(String nomFichier) throws InvalidFormatException, IOException{
 		
@@ -68,7 +86,13 @@ public class LectureFichier {
     	tx.commit();
     	*/
 	}
-			
+	
+	/**
+	 * Récupération des données d'un fichier excel
+	 * @param file fichier .xls
+	 * @throws InvalidFormatException
+	 * @return rien
+	 */
 	public void lectureExcel(File file) throws InvalidFormatException{	
 		
 	    try {
@@ -127,7 +151,11 @@ public class LectureFichier {
 	    }
 	}
 	
-	// dans le cas d'un fichier avec l'extension ODS.
+	/**
+	 * Récupération des données d'un fichier open source
+	 * @param file fichier .ods
+	 * @return rien
+	 */
 	public void lectureCalc(File file){
 		
 		org.jopendocument.dom.spreadsheet.Sheet sheet;
@@ -160,24 +188,46 @@ public class LectureFichier {
 		}
 	}
 	
-	//Dans le cas d'un fichier avec l'extension CSV.
+	/**
+	 * Récupération des données d'un fichier texte
+	 * @param file fichier .csv ou .txt
+	 * @return rien
+	 */
 	public void lectureCsv(String nomFichier) throws IOException{
 		try
 		{
 		   BufferedReader file = new BufferedReader(new FileReader(nomFichier));
 		   String chaine;
-		   int i = 1;
-		 
+		   int present;
+		   VerificationDonnee verif = new VerificationDonnee();
+		   //DonneeInnexistante temp = new DonneeInnexistante();
+		   boolean tableTemp = false;
+		   
+		   file.readLine();
 		   while((chaine = file.readLine())!= null)
 		   {
-		      if(i > 1)
-		      {
-		         String[] tabChaine = chaine.split(";");
-		         //Tu effectues tes traitements avec les données contenues dans le tableau
-		         //La première information se trouve à l'indice 0
-		         System.out.println("coucou");
-		      }
-		      i++;
+		     String[] tabChaine = chaine.split(";");
+		     //Tu effectues tes traitements avec les données contenues dans le tableau
+		     //La première information se trouve à l'indice 0
+		     
+		    present = verif.present(tabChaine);
+		     
+		    /*
+		     if (present != 0 && !tableTemp){
+		    	 temp.creaTemp();
+		    	 tableTemp = true;
+		     }
+		     
+		     if (present == -1)
+		    	 //client inexistant
+		    	 temp.ajout(tabChaine, "C");
+		     else if (present == -2)
+		    	 //produit inexistant
+		    	 temp.ajout(tabChaine, "P");
+		     else if (present == -3)
+		    	 //client et produit inexistant
+		    	 temp.ajout(tabChaine, "CP");
+		     */
 		   }
 		   file.close();                 
 		}
