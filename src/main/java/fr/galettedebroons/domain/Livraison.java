@@ -54,6 +54,7 @@ public class Livraison {
 	public void setDate_livraison(Date date_livraison) {
 		this.date_livraison = date_livraison;
 	}
+	
 	public int getQte_livraison() {
 		return qte_livraison;
 	}

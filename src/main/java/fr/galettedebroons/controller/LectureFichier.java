@@ -1,4 +1,4 @@
-package fr.galettedebroons.model;
+package fr.galettedebroons.controller;
 
 /* import */
 import java.io.BufferedReader;
@@ -17,8 +17,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.jopendocument.dom.spreadsheet.MutableCell;
-import org.jopendocument.dom.spreadsheet.SpreadSheet;
+//import org.jopendocument.dom.spreadsheet.MutableCell;
+//import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 import fr.galettedebroons.domain.*;
 
@@ -157,7 +157,7 @@ public class LectureFichier {
 	 * @return rien
 	 */
 	public void lectureCalc(File file){
-		
+		/*
 		org.jopendocument.dom.spreadsheet.Sheet sheet;
 		try{
 			//Getting the 0th sheet for manipulation| pass sheet name as string
@@ -185,7 +185,7 @@ public class LectureFichier {
 		
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	/**
@@ -200,7 +200,11 @@ public class LectureFichier {
 		   String chaine;
 		   int present;
 		   VerificationDonnee verif = new VerificationDonnee();
-		   //DonneeInnexistante temp = new DonneeInnexistante();
+		   
+		   for (int i =0; i<10 ; i++)
+			   System.out.println("coucou !!!!");
+		   
+		   //DonneeInnexistante temp = DonneeInnexistante.init();
 		   boolean tableTemp = false;
 		   
 		   file.readLine();
@@ -211,7 +215,7 @@ public class LectureFichier {
 		     //La première information se trouve à l'indice 0
 		     
 		    present = verif.present(tabChaine);
-		     
+		    System.out.println(present);
 		    /*
 		     if (present != 0 && !tableTemp){
 		    	 temp.creaTemp();

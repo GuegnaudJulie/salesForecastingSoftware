@@ -1,4 +1,4 @@
-package fr.galettedebroons.model;
+package fr.galettedebroons.controller;
 
 public class VerificationDonnee {
 

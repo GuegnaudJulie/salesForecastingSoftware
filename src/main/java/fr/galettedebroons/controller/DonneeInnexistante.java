@@ -1,10 +1,9 @@
-package fr.galettedebroons.model;
+package fr.galettedebroons.controller;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnit;
 
 /**
  * @author	Julie Guegnaud
@@ -13,15 +12,33 @@ import javax.persistence.PersistenceUnit;
  */
 public class DonneeInnexistante {
 	
-	private EntityManagerFactory factory_;
 	private EntityManager manager_;
 	
-	public DonneeInnexistante(){
-		factory_ = Persistence.createEntityManagerFactory("Crea&Sup");
+	public DonneeInnexistante(EntityManager manager){
+		this.manager_ = manager;
+		
+		/*
+		factory_ = Persistence.createEntityManagerFactory("CreaSup");
 		manager_ = factory_.createEntityManager();
+		*/
 	}
 
-	public void creaTemp(){
+	public static void init(){
+
+		String createTemp =
+		        "create temporary table if not exists donneeFichier " +
+		        		"(bon_livraison varchar(15) NOT NULL, " +
+		        		"date DATE NOT NULL" + 
+		        		"code_profil varchar(15) NOT NULL" +
+		        		"nom_client varchar(40) NOT NULL" +
+		        		"code_produit varchar(40) NOT NULL" +
+		        		"quantite int NOT NULL" +
+		        		"code_erreur Varchar(2) NOT NULL" +
+		        		");" ;
+
+	}
+	
+	/* public void creaTemp(){
 		EntityTransaction tx = manager_.getTransaction();
 		tx.begin();
 		
@@ -40,8 +57,9 @@ public class DonneeInnexistante {
 	    
 	    tx.commit();
 	}
-	
-	public void ajout(String[] donnee, String code) {
+ 	*/
+
+	/* public void ajout(String[] donnee, String code) {
 		// nom de la table temp : donneeFichier
 		EntityTransaction tx = manager_.getTransaction();
 		tx.begin();
@@ -58,5 +76,6 @@ public class DonneeInnexistante {
 		
 		tx.commit();
 	}
+	*/
 	
 }

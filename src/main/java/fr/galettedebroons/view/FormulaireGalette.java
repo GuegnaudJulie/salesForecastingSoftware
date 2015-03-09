@@ -7,7 +7,7 @@ import javax.swing.JFileChooser;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import fr.galettedebroons.model.LectureFichier;
+import fr.galettedebroons.controller.LectureFichier;
 
 /**
 *

@@ -1,6 +1,6 @@
 package fr.galettedebroons.view;
 
-import fr.galettedebroons.model.LectureFichier;
+import fr.galettedebroons.controller.LectureFichier;
 
 /**
 *

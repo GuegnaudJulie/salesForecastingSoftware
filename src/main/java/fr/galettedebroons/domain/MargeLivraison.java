@@ -8,12 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-/**
- * connaitre 
- * @author 14008374
- *
- */
-
 @Entity
 public class MargeLivraison {
 	
