@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Profil {
 	
-	private String id;
+	private String code_client;
 	private Client client_profil;
 	private Gamme gamme_profil;
 	private List<Livraison> livraison_profil;
@@ -27,12 +27,12 @@ public class Profil {
 	}
 	
 	@Id
-	public String getId() {
-		return id;
+	public String getCode_client() {
+		return code_client;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setCode_client(String code_client) {
+		this.code_client = code_client;
 	}
 
 	public Boolean getActif() {
