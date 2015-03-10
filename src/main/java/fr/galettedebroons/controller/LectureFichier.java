@@ -192,21 +192,17 @@ public class LectureFichier {
 		   VerificationDonnee verif = new VerificationDonnee();
 		   
 		   DonneeInnexistante temp = new DonneeInnexistante();
-		   boolean tableTemp = false;
 		   
 		   file.readLine();
 		   while((chaine = file.readLine())!= null)
 		   {
 			   chaine = chaine.replaceAll("\"","");
 			   String[] tabChaine = chaine.split(";");
-			   int indice = tabChaine[5].indexOf(",");
-			   tabChaine[5] = tabChaine[5].substring(0, indice);
 			   
 			   //Tu effectues tes traitements avec les données contenues dans le tableau
 			   //La première information se trouve à l'indice 0
 
 			   present = verif.present(tabChaine);
-			   System.out.println(present);
 			     
 			   if (present == -1)
 				   //client inexistant

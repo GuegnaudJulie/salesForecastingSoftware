@@ -37,6 +37,9 @@ public class DonneeInnexistante {
 			date = new Date(d.getTime());
 		} catch (Exception e) {e.printStackTrace();}
 	    
+	    int indice = donnee[5].indexOf(",");
+	    donnee[5] = donnee[5].substring(0, indice);
+	    
 	    Temporaire temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], Integer.parseInt(donnee[5]), code);
 	    
 		manager_.persist(temp);
