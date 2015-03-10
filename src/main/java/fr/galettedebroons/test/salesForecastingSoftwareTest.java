@@ -16,14 +16,15 @@ public class salesForecastingSoftwareTest {
 	}
 
 	public static void main(String[] args) {
-		
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("creasup");
+		/*
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("maj");
 		EntityManager manager = factory.createEntityManager();
 		salesForecastingSoftwareTest test = new salesForecastingSoftwareTest(manager);
 
 		EntityTransaction tx = manager.getTransaction();
 		tx.begin();
-
+		*/
+		
 		new FormulaireGalette().setVisible(true);
 		
 		// TODO create entity

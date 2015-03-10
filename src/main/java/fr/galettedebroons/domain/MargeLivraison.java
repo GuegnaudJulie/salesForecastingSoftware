@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -30,8 +31,7 @@ public class MargeLivraison {
 		this.taux_reprise = taux_reprise;
 	}
 	
-	@Id
-	@GeneratedValue
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public int getId() {
 		return id;
 	}

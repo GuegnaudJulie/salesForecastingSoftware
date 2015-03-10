@@ -1,9 +1,14 @@
 package fr.galettedebroons.controller;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+
+import fr.galettedebroons.domain.Temporaire;
 
 /**
  * @author	Julie Guegnaud
@@ -13,69 +18,34 @@ import javax.persistence.Persistence;
 public class DonneeInnexistante {
 	
 	private EntityManager manager_;
+	private EntityManagerFactory factory_;
 	
-	public DonneeInnexistante(EntityManager manager){
-		this.manager_ = manager;
-		
-		/*
-		factory_ = Persistence.createEntityManagerFactory("CreaSup");
+	public DonneeInnexistante(){
+		factory_ = Persistence.createEntityManagerFactory("maj");
 		manager_ = factory_.createEntityManager();
-		*/
 	}
 
-	public static void init(){
-
-		String createTemp =
-		        "create temporary table if not exists donneeFichier " +
-		        		"(bon_livraison varchar(15) NOT NULL, " +
-		        		"date DATE NOT NULL" + 
-		        		"code_profil varchar(15) NOT NULL" +
-		        		"nom_client varchar(40) NOT NULL" +
-		        		"code_produit varchar(40) NOT NULL" +
-		        		"quantite int NOT NULL" +
-		        		"code_erreur Varchar(2) NOT NULL" +
-		        		");" ;
-
-	}
-	
-	/* public void creaTemp(){
-		EntityTransaction tx = manager_.getTransaction();
-		tx.begin();
-		
-	    String createTemp =
-	        "create temporary table if not exists donneeFichier " +
-	        		"(bon_livraison varchar(15) NOT NULL, " +
-	        		"date DATE NOT NULL" + 
-	        		"code_profil varchar(15) NOT NULL" +
-	        		"nom_client varchar(40) NOT NULL" +
-	        		"code_produit varchar(40) NOT NULL" +
-	        		"quantite int NOT NULL" +
-	        		"code_erreur Varchar(2) NOT NULL" +
-	        		");" ;
-	 
-	    manager_.createQuery(createTemp);
-	    
-	    tx.commit();
-	}
- 	*/
-
-	/* public void ajout(String[] donnee, String code) {
+	public void ajout(String[] donnee, String code) {
 		// nom de la table temp : donneeFichier
 		EntityTransaction tx = manager_.getTransaction();
 		tx.begin();
 		
-		String sql = "INSERT INTO donneeFichier VALUES(";
-		for(int i = 0; i<donnee.length ; i++){
-			sql += donnee[i] + ", ";
-		}
-		sql += code + ");" ;
-		
-		System.out.println("le profil " + donnee[2] + " ou le produit " + donnee[4] + "n'existe pas (" + code + ")");
-		
-		manager_.createQuery(sql);
+		Date date = null;
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+	    try {
+	    	java.util.Date d = format.parse(donnee[1]);
+			date = new Date(d.getTime());
+		} catch (Exception e) {e.printStackTrace();}
+	    
+	    Temporaire temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], Integer.parseInt(donnee[5]), code);
+	    
+		manager_.persist(temp);
 		
 		tx.commit();
 	}
-	*/
+	
+	public void suppression(){
+		
+	}
 	
 }

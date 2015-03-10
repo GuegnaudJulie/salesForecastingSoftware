@@ -17,8 +17,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-//import org.jopendocument.dom.spreadsheet.MutableCell;
-//import org.jopendocument.dom.spreadsheet.SpreadSheet;
+import org.jopendocument.dom.spreadsheet.MutableCell;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 import fr.galettedebroons.domain.*;
 
@@ -33,9 +33,11 @@ import fr.galettedebroons.domain.*;
  ***** Code produit
  ***** Quantité
  * 
- * @author  Melissa Poher, Oumoul Sy, Julie Guegnaud
+ * @author  Melissa Poher 
+ * @author Oumoul Sy
+ * @author Julie Guegnaud
  * @version 1.0
- * @since   2015-03-06
+ * @since   2015-03-10
  */
 public class LectureFichier {
 	
@@ -64,17 +66,8 @@ public class LectureFichier {
 	public void ouverture_fichier(String nomFichier) throws InvalidFormatException, IOException{
 		
 		File file = new File(nomFichier);
-		/*
-		// add to database with read values
-    	EntityManagerFactory factory = Persistence.createEntityManagerFactory("example");
-    	EntityManager manager = factory.createEntityManager();
-    	this.setManager(manager);
-    	
-    	tx = manager.getTransaction();
-    	tx.begin();
-		*/
 		
-		/* Vérification du fichier (CSV/xlsx/ods) */
+		// Vérification du fichier (CSV/xlsx/ods)
 		if (nomFichier.contains(".xlsx"))
 			lectureExcel(file);
 		else if (nomFichier.contains(".ods"))
@@ -82,9 +75,7 @@ public class LectureFichier {
 		else if (nomFichier.contains(".csv") || nomFichier.contains(".txt"))
 			lectureCsv(nomFichier);
 		
-		/*
-    	tx.commit();
-    	*/
+		// Si table temporaire non vide alors on renvoie des formulaires et on alimente la BD
 	}
 	
 	/**
@@ -157,7 +148,6 @@ public class LectureFichier {
 	 * @return rien
 	 */
 	public void lectureCalc(File file){
-		/*
 		org.jopendocument.dom.spreadsheet.Sheet sheet;
 		try{
 			//Getting the 0th sheet for manipulation| pass sheet name as string
@@ -174,9 +164,9 @@ public class LectureFichier {
 			MutableCell cell = null;
 			for(int nRowIndex = 0; nRowIndex < nRowCount; nRowIndex++){
 				System.out.println("Je suis dans la première boucle for");
+				
 				//Iterating through each column
-				int nColIndex = 0;
-				for( ;nColIndex < nColCount; nColIndex++){
+				for(int nColIndex = 0 ;nColIndex < nColCount; nColIndex++){
 					cell = sheet.getCellAt(nColIndex, nRowIndex);
 					System.out.print(cell.getValue()+ " ");
 				}
@@ -185,7 +175,7 @@ public class LectureFichier {
 		
 		} catch (IOException e) {
 			e.printStackTrace();
-		}*/
+		}
 	}
 	
 	/**
@@ -201,49 +191,40 @@ public class LectureFichier {
 		   int present;
 		   VerificationDonnee verif = new VerificationDonnee();
 		   
-		   for (int i =0; i<10 ; i++)
-			   System.out.println("coucou !!!!");
-		   
-		   //DonneeInnexistante temp = DonneeInnexistante.init();
+		   DonneeInnexistante temp = new DonneeInnexistante();
 		   boolean tableTemp = false;
 		   
 		   file.readLine();
 		   while((chaine = file.readLine())!= null)
 		   {
-		     String[] tabChaine = chaine.split(";");
-		     //Tu effectues tes traitements avec les données contenues dans le tableau
-		     //La première information se trouve à l'indice 0
-		     
-		    present = verif.present(tabChaine);
-		    System.out.println(present);
-		    /*
-		     if (present != 0 && !tableTemp){
-		    	 temp.creaTemp();
-		    	 tableTemp = true;
-		     }
-		     
-		     if (present == -1)
-		    	 //client inexistant
-		    	 temp.ajout(tabChaine, "C");
-		     else if (present == -2)
-		    	 //produit inexistant
-		    	 temp.ajout(tabChaine, "P");
-		     else if (present == -3)
-		    	 //client et produit inexistant
-		    	 temp.ajout(tabChaine, "CP");
-		     */
+			   chaine = chaine.replaceAll("\"","");
+			   String[] tabChaine = chaine.split(";");
+			   int indice = tabChaine[5].indexOf(",");
+			   tabChaine[5] = tabChaine[5].substring(0, indice);
+			   
+			   //Tu effectues tes traitements avec les données contenues dans le tableau
+			   //La première information se trouve à l'indice 0
+
+			   present = verif.present(tabChaine);
+			   System.out.println(present);
+			     
+			   if (present == -1)
+				   //client inexistant
+				   temp.ajout(tabChaine, "C");
+			   else if (present == -2)
+				   //produit inexistant
+				   temp.ajout(tabChaine, "P");
+			   else if (present == -3)
+				   //client et produit inexistant
+				   temp.ajout(tabChaine, "CP");
+			     
 		   }
-		   file.close();                 
+		   file.close();
 		}
 		catch (FileNotFoundException e)
 		{
-		   System.out.println("Le fichier est introuvable !");
+			System.out.println("Le fichier est introuvable !");
 		}
-	}
-	
-	//Remplissage de la table temporaire
-	public void remplirLivraison(){
-		
 	}
 	
 	/*public static void insertLigneClient(){
@@ -275,7 +256,6 @@ public class LectureFichier {
 		
 		
 	}*/
-	
 	
 /*	public static void createClient(String code_client, String enseigne_client, String profil){
 		// Ajout du client en base

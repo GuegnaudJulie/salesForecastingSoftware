@@ -2,31 +2,32 @@ package fr.galettedebroons.domain;
 
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Client {
 	
-	private String code_client;
+	private int id;
 	private String enseigne_client;
 	private List<Profil> client_profil;
 
 	public Client(){}
 	
-	public Client(String code_client, String enseigne_client, List<Profil> client_profil) {
-		this.code_client = code_client;
+	public Client(String enseigne_client, List<Profil> client_profil) {
 		this.enseigne_client = enseigne_client;
 		this.setClient_profil(client_profil);
 	}
 	
-	@Id
-	public String getCode_client() {
-		return code_client;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	public int getCode_client() {
+		return id;
 	}
 	
-	public void setCode_client(String code_client) {
-		this.code_client = code_client;
+	public void setCode_client(int id) {
+		this.id = id;
 	}
 	
 	public String getEnseigne_client() {
