@@ -106,6 +106,9 @@ public class RangerDonneeFichier {
 		tx.commit();
 	}
 	
+	/**
+	 * Fonction de vidage de la table Temporaire
+	 */
 	public void vidage(){
 		String vidage = "delete temp from Temporaire temp";
 		manager_.createQuery(vidage);
