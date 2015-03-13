@@ -14,6 +14,9 @@ import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
 
 /**
+ * Classe de vérification des données et de leur ajout dans la table temporaire
+ * Elle réalise aussi le vidage de la table Temporaire
+ * 
  * @author	Julie Guegnaud
  * @version 1.0
  * @since   2015-03-13
@@ -103,7 +106,8 @@ public class RangerDonneeFichier {
 		tx.commit();
 	}
 	
-	public void suppression(){
-		
+	public void vidage(){
+		String vidage = "delete temp from Temporaire temp";
+		manager_.createQuery(vidage);
 	}
 }
