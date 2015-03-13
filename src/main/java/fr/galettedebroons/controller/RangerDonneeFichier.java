@@ -32,35 +32,46 @@ public class RangerDonneeFichier {
 	 * 
 	 * @param donnees
 	 * @return 0 la donnée est présente dans la base
-	 * @return -1 le client n'exite pas
-	 * @return -2 le produit n'existe pas
-	 * @return -3 le client et le produit n'existe pas
+	 * @return 1 le client n'exite pas
+	 * @return 2 le produit n'existe pas
+	 * @return 3 le client et le produit n'existe pas
+	 * @return -1 Il manque des informations
 	 */
-	public int present(String[] donnees){
+	public int verification(String[] donnees){
 		int code_retour = 0;
 		boolean c_present = true;
 		boolean p_present = true;
 		
-		@SuppressWarnings("unchecked")
-		List<Profil> profil = manager_.createQuery("select c from Profil c where c.code_client LIKE :codeClient ")
-				.setParameter("codeClient", donnees[2])
-				.setMaxResults(1).getResultList();
-		if (profil.size() == 0)
-			c_present = false;
+		//Toutes les informations sont présentes
+		for (int i = 0; i < donnees.length; i++){
+			if (donnees[i] == "")
+				code_retour = -1;
+		}
 		
-		@SuppressWarnings("unchecked")
-		List<Produit> produit = manager_.createQuery("select p from Produit p where p.code_produit LIKE :codeProduit ")
-				.setParameter("codeProduit", donnees[4])
-				.setMaxResults(1).getResultList();
-		if (produit.size() == 0)
-			p_present = false;
-		
-		if (!(c_present && p_present))
-			code_retour = -3;
-		else if (!p_present)
-			code_retour = -2;
-		else if (!c_present)
-			code_retour = -1;
+		//Le client et le produit existe
+		if (code_retour != -1)
+		{
+			@SuppressWarnings("unchecked")
+			List<Profil> profil = manager_.createQuery("select c from Profil c where c.code_client LIKE :codeClient ")
+					.setParameter("codeClient", donnees[2])
+					.setMaxResults(1).getResultList();
+			if (profil.size() == 0)
+				c_present = false;
+			
+			@SuppressWarnings("unchecked")
+			List<Produit> produit = manager_.createQuery("select p from Produit p where p.code_produit LIKE :codeProduit ")
+					.setParameter("codeProduit", donnees[4])
+					.setMaxResults(1).getResultList();
+			if (produit.size() == 0)
+				p_present = false;
+			
+			if (!(c_present && p_present))
+				code_retour = 3;
+			else if (!p_present)
+				code_retour = 2;
+			else if (!c_present)
+				code_retour = 1;
+		}
 		
 		return code_retour;
 	}

@@ -201,18 +201,22 @@ public class LectureFichier {
 			   //Tu effectues tes traitements avec les données contenues dans le tableau
 			   //La première information se trouve à l'indice 0
 
-			   present = donneeFichier.present(tabChaine);
-			     
-			   if (present == -1)
-				   //client inexistant
-				   donneeFichier.ajout(tabChaine, "C");
-			   else if (present == -2)
-				   //produit inexistant
-				   donneeFichier.ajout(tabChaine, "P");
-			   else if (present == -3)
-				   //client et produit inexistant
-				   donneeFichier.ajout(tabChaine, "CP");
-			     
+			   present = donneeFichier.verification(tabChaine);
+			   
+			   if(present != -1){
+				   if (present == 0)
+					   //Toutes les donnees existent
+					   donneeFichier.ajout(tabChaine, "");
+				   else if (present == 1)
+					   //client inexistant
+					   donneeFichier.ajout(tabChaine, "C");
+				   else if (present == 2)
+					   //produit inexistant
+					   donneeFichier.ajout(tabChaine, "P");
+				   else if (present == 3)
+					   //client et produit inexistant
+					   donneeFichier.ajout(tabChaine, "CP");
+			   }
 		   }
 		   file.close();
 		}
