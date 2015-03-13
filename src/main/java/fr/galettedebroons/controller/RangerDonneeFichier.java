@@ -98,10 +98,17 @@ public class RangerDonneeFichier {
 	    
 	    int indice = donnee[5].indexOf(",");
 	    donnee[5] = donnee[5].substring(0, indice);
-	    
-	    Temporaire temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], Integer.parseInt(donnee[5]), code);
-	    
-		manager_.persist(temp);
+	    int qtite=Integer.parseInt(donnee[5]);
+           if(qtite>0){	    
+	    Temporaire temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], Integer.parseInt(donnee[5]), 0,code);
+           
+               manager_.persist(temp);
+           }
+           if(qtite<=0){
+              Temporaire temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], 0,Integer.parseInt(donnee[5]), code);
+                manager_.persist(temp);
+               
+           }
 		
 		tx.commit();
 	}
