@@ -16,17 +16,17 @@ public class Livraison {
 	private List<Produit> livraison_produit;
 	private Date date_livraison;
 	private int qte_livraison;
-	private int qte_reprise;
+	private int qte_eff_vendue;
 	
 	public Livraison(){}
 	
-	public Livraison(String bon_livraison, List<Produit> code_produit, Date date_livraison, int qte_livraison, int qte_reprise) {
+	public Livraison(String bon_livraison, List<Produit> code_produit, Date date_livraison, int qte_livraison, int qte_eff) {
 		super();
 		this.bon_livraison = bon_livraison;
 		this.livraison_produit = code_produit;
 		this.date_livraison = date_livraison;
 		this.qte_livraison = qte_livraison;
-		this.qte_reprise = qte_reprise;
+		this.qte_eff_vendue = qte_eff;
 	}
 	
 	@Id
@@ -63,13 +63,7 @@ public class Livraison {
 		this.qte_livraison = qte_livraison;
 	}
 	
-	public int getQte_reprise() {
-		return qte_reprise;
-	}
 	
-	public void setQte_reprise(int qte_reprise) {
-		this.qte_reprise = qte_reprise;
-	}
 
 	@ManyToOne
 	public Profil getLivraison_profil() {
@@ -79,4 +73,18 @@ public class Livraison {
 	public void setLivraison_profil(Profil profil) {
 		this.livraison_profil = profil;
 	}
+
+    /**
+     * @return the qte_eff_vendue
+     */
+    public int getQte_eff_vendue() {
+        return qte_eff_vendue;
+    }
+
+    /**
+     * @param qte_eff_vendue the qte_eff_vendue to set
+     */
+    public void setQte_eff_vendue(int qte_eff_vendue) {
+        this.qte_eff_vendue = qte_eff_vendue;
+    }
 }
