@@ -1,8 +1,10 @@
 package fr.galettedebroons.controller;
 
 import java.sql.Date;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,8 +16,8 @@ import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
 
 /**
- * Classe de vérification des données et de leur ajout dans la table temporaire
- * Elle réalise aussi le vidage de la table Temporaire
+ * Classe de verification des donnees et de leur ajout dans la table temporaire
+ * Elle realise aussi le vidage de la table Temporaire
  * 
  * @author	Julie Guegnaud
  * @version 1.0
@@ -31,10 +33,10 @@ public class RangerDonneeFichier {
 	}
 	
 	/**
-	 * vérification de la presence du client et du produit dans la base
+	 * verification de la presence du client et du produit dans la base
 	 * 
 	 * @param donnees
-	 * @return 0 la donnée est présente dans la base
+	 * @return 0 la donnee est presente dans la base
 	 * @return 1 le client n'exite pas
 	 * @return 2 le produit n'existe pas
 	 * @return 3 le client et le produit n'existe pas
@@ -90,26 +92,51 @@ public class RangerDonneeFichier {
 		tx.begin();
 		
 		Date date = null;
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-	    try {
-	    	java.util.Date d = format.parse(donnee[1]);
-			date = new Date(d.getTime());
-		} catch (Exception e) {e.printStackTrace();}
-	    
-	    int indice = donnee[5].indexOf(",");
-	    donnee[5] = donnee[5].substring(0, indice);
-	    int qtite=Integer.parseInt(donnee[5]);
-           if(qtite>0){	    
-	    Temporaire temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], Integer.parseInt(donnee[5]), 0,code);
-           
-               manager_.persist(temp);
-           }
-           if(qtite<=0){
-              Temporaire temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], 0,Integer.parseInt(donnee[5]), code);
-                manager_.persist(temp);
-               
-           }
+		int indice;
+		String dateStr;
+		SimpleDateFormat format = null;
+		DateFormatSymbols dfsFR = new DateFormatSymbols(Locale.FRENCH);
 		
+		if (donnee[1].contains("/")){
+			//Trouver le format de date dd/MM/yy ou dd/MM/yyyy
+			indice = donnee[1].indexOf("/");
+			dateStr = donnee[1].substring(indice+1, donnee[1].length());
+			indice = dateStr.indexOf("/");
+			dateStr = dateStr.substring(indice+1, dateStr.length());
+			
+			if (dateStr.length() == 4)
+				format = new SimpleDateFormat("dd/MM/yyyy");
+			else if (dateStr.length() == 2)
+				format = new SimpleDateFormat("dd/MM/yy");
+		}
+		else if (donnee[1].contains("-")) {
+			format = new SimpleDateFormat("dd-MMMM-yyyy",dfsFR);
+		}
+		
+		try {
+			java.util.Date d = format.parse(donnee[1]);
+			date = new Date(d.getTime());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (donnee[5].contains(",")){
+			indice = donnee[5].indexOf(",");
+			donnee[5] = donnee[5].substring(0, indice);
+		}
+		else if (donnee[5].contains(".")){
+			indice = donnee[5].indexOf(".");
+			donnee[5] = donnee[5].substring(0, indice);
+		}
+		int qtite = Integer.parseInt(donnee[5]);
+		
+		Temporaire temp;
+		if (qtite>0)
+			temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], qtite, 0, code);
+		else
+			temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], 0, qtite, code);
+		
+		manager_.persist(temp);
 		tx.commit();
 	}
 	

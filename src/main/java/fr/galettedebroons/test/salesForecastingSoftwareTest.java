@@ -16,11 +16,11 @@ public class salesForecastingSoftwareTest {
 	}
 
 	public static void main(String[] args) {
-		/*
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("maj");
+		
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("createAndDrop");
 		EntityManager manager = factory.createEntityManager();
 		salesForecastingSoftwareTest test = new salesForecastingSoftwareTest(manager);
-		*/
+		
 		
 		/*
 		EntityTransaction tx = manager.getTransaction();

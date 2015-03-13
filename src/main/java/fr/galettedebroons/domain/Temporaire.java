@@ -17,7 +17,7 @@ public class Temporaire {
 	private String nom_client;
 	private String code_produit;
 	private int quantite_livree;
-        private int quantite_reprise;
+    private int quantite_reprise;
 	private String code_erreur;
 	
 	public Temporaire (){}
