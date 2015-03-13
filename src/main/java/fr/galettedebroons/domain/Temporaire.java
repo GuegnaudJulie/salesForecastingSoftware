@@ -16,18 +16,20 @@ public class Temporaire {
 	private String code_profil;
 	private String nom_client;
 	private String code_produit;
-	private int quantite;
+	private int quantite_livree;
+        private int quantite_reprise;
 	private String code_erreur;
 	
 	public Temporaire (){}
 	
-	public Temporaire(String bon_livraison, Date date, String code_profil, String nom_client, String code_produit, int quantite, String code_erreur){
+	public Temporaire(String bon_livraison, Date date, String code_profil, String nom_client, String code_produit, int quantitel, int quantiter,String code_erreur){
 		this.bon_livraison = bon_livraison;
 		this.date = date;
 		this.code_profil = code_profil;
 		this.nom_client = nom_client;
 		this.code_produit = code_produit;
-		this.quantite = quantite;
+		this.quantite_livree = quantitel;
+                this.quantite_reprise = quantiter;
 		this.code_erreur = code_erreur;
 	}
 	
@@ -68,17 +70,40 @@ public class Temporaire {
 	public void setCode_produit(String code_produit) {
 		this.code_produit = code_produit;
 	}
-	public int getQuantite() {
-		return quantite;
-	}
-	public void setQuantite(int quantite) {
-		this.quantite = quantite;
-	}
+	
 	public String getCode_erreur() {
 		return code_erreur;
 	}
 	public void setCode_erreur(String code_erreur) {
 		this.code_erreur = code_erreur;
 	}
+
+    /**
+     * @return the quantite_livree
+     */
+    public int getQuantite_livree() {
+        return quantite_livree;
+    }
+
+    /**
+     * @param quantite_livree the quantite_livree to set
+     */
+    public void setQuantite_livree(int quantite_livree) {
+        this.quantite_livree = quantite_livree;
+    }
+
+    /**
+     * @return the quantite_reprise
+     */
+    public int getQuantite_reprise() {
+        return quantite_reprise;
+    }
+
+    /**
+     * @param quantite_reprise the quantite_reprise to set
+     */
+    public void setQuantite_reprise(int quantite_reprise) {
+        this.quantite_reprise = quantite_reprise;
+    }
 	
 }
