@@ -180,6 +180,7 @@ public class LectureFichier {
 	
 	/**
 	 * Récupération des données d'un fichier texte
+	 * 
 	 * @param file fichier .csv ou .txt
 	 * @return rien
 	 */
@@ -189,9 +190,7 @@ public class LectureFichier {
 		   BufferedReader file = new BufferedReader(new FileReader(nomFichier));
 		   String chaine;
 		   int present;
-		   VerificationDonnee verif = new VerificationDonnee();
-		   
-		   DonneeInnexistante temp = new DonneeInnexistante();
+		   RangerDonneeFichier donneeFichier = new RangerDonneeFichier();
 		   
 		   file.readLine();
 		   while((chaine = file.readLine())!= null)
@@ -202,17 +201,17 @@ public class LectureFichier {
 			   //Tu effectues tes traitements avec les données contenues dans le tableau
 			   //La première information se trouve à l'indice 0
 
-			   present = verif.present(tabChaine);
+			   present = donneeFichier.present(tabChaine);
 			     
 			   if (present == -1)
 				   //client inexistant
-				   temp.ajout(tabChaine, "C");
+				   donneeFichier.ajout(tabChaine, "C");
 			   else if (present == -2)
 				   //produit inexistant
-				   temp.ajout(tabChaine, "P");
+				   donneeFichier.ajout(tabChaine, "P");
 			   else if (present == -3)
 				   //client et produit inexistant
-				   temp.ajout(tabChaine, "CP");
+				   donneeFichier.ajout(tabChaine, "CP");
 			     
 		   }
 		   file.close();
@@ -222,36 +221,6 @@ public class LectureFichier {
 			System.out.println("Le fichier est introuvable !");
 		}
 	}
-	
-	/*public static void insertLigneClient(){
-		// Verification si le client n'est pas dans la base
-		@SuppressWarnings("unchecked")
-		List<Client> client = manager_.createQuery("select c from Client c where c.code_client LIKE :codeClient ").setParameter("codeClient", codeClient_).setMaxResults(10).getResultList();
-		
-		// Verif que le produit est bien en base
-		@SuppressWarnings("unchecked")
-		List<Produit> produit = manager_.createQuery("select p from Produit p where p.code_produit LIKE :codeProduit ").setParameter("codeProduit", codeArticle_).setMaxResults(10).getResultList();
-		System.out.println("LA taille de ma liste de produit : " +produit.size());
-		
-		if (client.size() == 0){
-			// Afficher la fenetre créer un client
-			// Vous devez renseigner les champs du nouveau client
-			System.out.println("LE CLIENT N'EXISTE PAS !!!!!!");
-			AjoutClientForm nouveauClient = new AjoutClientForm(nomClient_);
-			nouveauClient.setVisible(true);
-			
-		}
-		if (produit.size() == 0){
-			System.out.println("Le client n'existe pas !!!");
-			AjoutPForm nouveauProd = new AjoutPForm(codeArticle_);
-			nouveauProd.setVisible(true);
-			
-		}
-		// J'ajoute ma ligne de livraison
-		// Livraison_Effective lf = new Livraison_Effective(nomDocument_, date_, codeClient_, nomClient_, codeArticle_,quantite_);
-		
-		
-	}*/
 	
 /*	public static void createClient(String code_client, String enseigne_client, String profil){
 		// Ajout du client en base
