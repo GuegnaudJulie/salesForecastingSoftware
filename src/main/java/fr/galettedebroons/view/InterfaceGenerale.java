@@ -30,8 +30,7 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         panelAccueil = new javax.swing.JPanel();
         jTextField5 = new javax.swing.JTextField();
-        panelEdition = new javax.swing.JPanel();
-        jTextField4 = new javax.swing.JTextField();
+        panelEdition = new FormulaireAjoutDonnees();
         panelPrevision = new javax.swing.JPanel();
         jTextField3 = new javax.swing.JTextField();
         panelProduction = new javax.swing.JPanel();
@@ -63,25 +62,6 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Accueil", panelAccueil);
-
-        jTextField4.setText("Je suis dans l'édition");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(panelEdition);
-        panelEdition.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(581, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(393, Short.MAX_VALUE))
-        );
 
         jTabbedPane1.addTab("Editer", panelEdition);
 
@@ -238,7 +218,6 @@ public class InterfaceGenerale extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JToggleButton jToggleButton1; // Il peut y avoir plusieurs sociétés ;) Donc, ce bouton est modifier
     // End of variables declaration                   

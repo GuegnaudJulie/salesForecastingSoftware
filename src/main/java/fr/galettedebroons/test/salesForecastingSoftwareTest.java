@@ -26,6 +26,7 @@ public class salesForecastingSoftwareTest {
 		EntityTransaction tx = manager.getTransaction();
 		tx.begin();
 		*/
+		
 		InterfaceGenerale IHM = new InterfaceGenerale();
 		IHM.setLocationRelativeTo(null);
 		IHM.setVisible(true);
