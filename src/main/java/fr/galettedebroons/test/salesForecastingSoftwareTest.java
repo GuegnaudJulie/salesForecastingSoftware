@@ -1,7 +1,7 @@
 package fr.galettedebroons.test;
 
 import fr.galettedebroons.controller.RemplissageLivraison;
-import fr.galettedebroons.view.FormulaireGalette;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
