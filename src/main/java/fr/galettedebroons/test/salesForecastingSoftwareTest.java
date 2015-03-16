@@ -1,11 +1,12 @@
 package fr.galettedebroons.test;
 
+import fr.galettedebroons.controller.RemplissageLivraison;
+import fr.galettedebroons.view.FormulaireGalette;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-import fr.galettedebroons.view.FormulaireGalette;
 
 public class salesForecastingSoftwareTest {
 
@@ -17,17 +18,19 @@ public class salesForecastingSoftwareTest {
 
 	public static void main(String[] args) {
 		
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("createAndDrop");
+		/*EntityManagerFactory factory = Persistence.createEntityManagerFactory("create");
 		EntityManager manager = factory.createEntityManager();
 		salesForecastingSoftwareTest test = new salesForecastingSoftwareTest(manager);
 		
-		
-		/*
+	
 		EntityTransaction tx = manager.getTransaction();
 		tx.begin();
-		*/
 		
-		new FormulaireGalette().setVisible(true);
+		
+		new FormulaireGalette().setVisible(true);*/
+                
+               //RemplissageLivraison rl=new RemplissageLivraison();
+                //rl.remplissage();
 		
 		// TODO create entity
 
