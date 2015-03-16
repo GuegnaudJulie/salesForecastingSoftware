@@ -7,16 +7,17 @@
      <!-- <class>org.hibernate.ejb.test.Cat</class> -->
      <!--  <class>org.hibernate.ejb.test.Distributor</class> -->
      <!--  <class>org.hibernate.ejb.test.Item</class> -->
+    
       <properties>
       
 	    <property name="hibernate.hbm2ddl.auto" value="update"/>
-		<property name="toplink.target-database" value="HSQL"/>
+		<property name="toplink.target-database" value="MySQL"/>
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 		<property name="hibernate.show_sql" value="true"/>
 		<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-		<property name="hibernate.connection.url" value="jdbc:mysql://anteros.istic.univ-rennes1.fr/base_14010287"/>
-		<property name="hibernate.connection.username" value="user_14010287"/>
-		<property name="hibernate.connection.password" value="toor"/>
+		<property name="hibernate.connection.url" value="jdbc:mysql://localhost/broons"/>
+		<property name="hibernate.connection.username" value="root"/>
+		<property name="hibernate.connection.password" value=""/>
         
          <!-- cache configuration -->
          <!-- <property name="hibernate.ejb.classcache.org.hibernate.ejb.test.Item" value="read-write"/>-->
@@ -35,13 +36,13 @@
       <properties>
       
 	    <property name="hibernate.hbm2ddl.auto" value="create"/>
-		<property name="toplink.target-database" value="HSQL"/>
+		<property name="toplink.target-database" value="MySQL"/>
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 		<property name="hibernate.show_sql" value="true"/>
 		<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-		<property name="hibernate.connection.url" value="jdbc:mysql://anteros.istic.univ-rennes1.fr/base_14010287"/>
-		<property name="hibernate.connection.username" value="user_14010287"/>
-		<property name="hibernate.connection.password" value="toor"/>
+		<property name="hibernate.connection.url" value="jdbc:mysql://localhost/broons"/>
+		<property name="hibernate.connection.username" value="root"/>
+		<property name="hibernate.connection.password" value=""/>
         
          <!-- cache configuration -->
          <!-- <property name="hibernate.ejb.classcache.org.hibernate.ejb.test.Item" value="read-write"/>-->
@@ -60,13 +61,37 @@
       <properties>
       
 	    <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
-		<property name="toplink.target-database" value="HSQL"/>
+		<property name="toplink.target-database" value="MySQL"/>
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 		<property name="hibernate.show_sql" value="true"/>
 		<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-		<property name="hibernate.connection.url" value="jdbc:mysql://anteros.istic.univ-rennes1.fr/base_14010287"/>
-		<property name="hibernate.connection.username" value="user_14010287"/>
-		<property name="hibernate.connection.password" value="toor"/>
+		<property name="hibernate.connection.url" value="jdbc:mysql://localhost/broons"/>
+		<property name="hibernate.connection.username" value="root"/>
+		<property name="hibernate.connection.password" value=""/>
+        
+         <!-- cache configuration -->
+         <!-- <property name="hibernate.ejb.classcache.org.hibernate.ejb.test.Item" value="read-write"/>-->
+         <!-- <property name="hibernate.ejb.collectioncache.org.hibernate.ejb.test.Item.distributors" value="read-write, RegionName"/>-->
+
+         <!-- alternatively to <class> and <property> declarations, you can use a regular hibernate.cfg.xml file -->
+         <!-- property name="hibernate.ejb.cfgfile" value="/org/hibernate/ejb/test/hibernate.cfg.xml"/ -->
+         
+      </properties>
+   </persistence-unit>
+   <persistence-unit name="chargement" transaction-type="RESOURCE_LOCAL">
+     <!-- <class>org.hibernate.ejb.test.Cat</class> -->
+   <!-- <class>fr.galettedebroonsfr.galettedebroons.domain.Temporaire</class> -->
+     <!--  <class>org.hibernate.ejb.test.Distributor</class> -->
+     <!--  <class>org.hibernate.ejb.test.Item</class> -->
+     <properties>   
+	       
+		<property name="toplink.target-database" value="MySQL"/>
+		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+		<property name="hibernate.show_sql" value="true"/>
+		<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+		<property name="hibernate.connection.url" value="jdbc:mysql://localhost/broons"/>
+		<property name="hibernate.connection.username" value="root"/>
+		<property name="hibernate.connection.password" value=""/> 
         
          <!-- cache configuration -->
          <!-- <property name="hibernate.ejb.classcache.org.hibernate.ejb.test.Item" value="read-write"/>-->

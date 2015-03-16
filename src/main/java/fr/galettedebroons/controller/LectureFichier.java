@@ -162,37 +162,10 @@ public class LectureFichier {
 				   //client et produit inexistant
 				   donneeFichier.ajout(donnees, "CP");
 		   }
+                   
 	}
 	
-	/*	
-	public static void createClient(String code_client, String enseigne_client, String profil){
-		// Ajout du client en base
-		System.out.println("Ajout du nouveau client");
-		System.out.println("mon code client " +code_client);
-		System.out.println("mon enseigne client " +enseigne_client);
-		
-		Client c = new Client(code_client, enseigne_client, null);
-		System.out.println("Mon objetc client " +c.getCode_client());
-		manager_.persist(c);
-		tx.commit();
-	}
-	*/
 	
-	/*
-	public static void createProduit(String nomProduit, String typeProduit, String dureeValidite){
-		// Ajout du client en base
-		System.out.println("Ajout du nouveau produit");
-		System.out.println("mon nom produit " +nomProduit);
-		System.out.println("mon type produit " +typeProduit);
-		System.out.println("ma duree validite " +dureeValidite);
-		
-		//String code_produit, String nom_produit,
-		//String presentation_produit, Gamme code_gamme, int qte_lot
-		//Produit p = new Produit(code_client, enseigne_client, null);
-		//System.out.println("Mon objetc client " +c.getCode_client());
-		//manager_.persist(c);
-		System.out.println("Mon client est créé");
-		tx.commit();
-	}
-	*/
+	
+	
 }

@@ -14,6 +14,8 @@ import javax.persistence.Persistence;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
+import java.util.ArrayList;
+import javax.persistence.Query;
 
 /**
  * Classe de verification des donnees et de leur ajout dans la table temporaire
@@ -137,10 +139,14 @@ public class RangerDonneeFichier {
 			temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], 0, qtite, code);
 		
 		manager_.persist(temp);
+               
 		tx.commit();
 	}
 	
-	/**
+	
+         
+        
+        /**
 	 * Fonction de vidage de la table Temporaire
 	 */
 	public void vidage(){

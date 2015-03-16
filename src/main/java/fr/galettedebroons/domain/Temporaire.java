@@ -3,9 +3,11 @@ package fr.galettedebroons.domain;
 import java.sql.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Query;
 
 @Entity
 public class Temporaire {
@@ -105,5 +107,8 @@ public class Temporaire {
     public void setQuantite_reprise(int quantite_reprise) {
         this.quantite_reprise = quantite_reprise;
     }
+    
+    
+    
 	
 }
