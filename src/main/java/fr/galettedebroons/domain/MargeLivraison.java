@@ -2,6 +2,7 @@ package fr.galettedebroons.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,7 +41,7 @@ public class MargeLivraison {
 		this.id = id;
 	}
 
-	@OneToMany(mappedBy="marge_profil")
+	@OneToMany(mappedBy="marge_profil", cascade=CascadeType.PERSIST)
 	public List<Profil> getMarge_profil() {
 		return marge_profil;
 	}
@@ -49,7 +50,7 @@ public class MargeLivraison {
 		this.marge_profil = marge_profil;
 	}
 
-	@OneToOne(mappedBy="gamme_marge")
+	@OneToOne(mappedBy="gamme_marge", cascade=CascadeType.PERSIST)
 	public Gamme getGamme_marge() {
 		return gamme_marge;
 	}
