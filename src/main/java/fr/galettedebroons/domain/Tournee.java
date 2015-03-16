@@ -1,6 +1,8 @@
 package fr.galettedebroons.domain;
 
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -49,7 +51,7 @@ public class Tournee {
 		this.jour_tournee = jour_tournee;
 	}
 
-	@OneToMany(mappedBy="profil_tournee")
+	@OneToMany(mappedBy="profil_tournee", cascade=CascadeType.PERSIST)
 	public List<Profil> getProfil_tournee() {
 		return profil_tournee;
 	}

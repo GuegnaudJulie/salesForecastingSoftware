@@ -2,6 +2,7 @@ package fr.galettedebroons.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -43,7 +44,7 @@ public class Gamme {
 		this.duree_conservation = duree_conservation;
 	}
 
-	@OneToMany(mappedBy="produit_gamme")
+	@OneToMany(mappedBy="produit_gamme", cascade=CascadeType.PERSIST)
 	public List<Produit> getProduit_gamme() {
 		return produit_gamme;
 	}
@@ -52,7 +53,7 @@ public class Gamme {
 		this.produit_gamme = code_prod;
 	}
 
-	@OneToMany(mappedBy="gamme_profil")
+	@OneToMany(mappedBy="gamme_profil", cascade=CascadeType.PERSIST)
 	public List<Profil> getGamme_profil() {
 		return gamme_profil;
 	}

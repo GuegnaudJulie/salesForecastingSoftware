@@ -3,6 +3,7 @@ package fr.galettedebroons.domain;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -38,7 +39,7 @@ public class Livraison {
 		this.bon_livraison = bon_livraison;
 	}
 	
-	@ManyToMany(mappedBy="livraison_produit")
+	@ManyToMany(mappedBy="livraison_produit", cascade=CascadeType.PERSIST)
 	public List<Produit> getLivraison_produit() {
 		return livraison_produit;
 	}

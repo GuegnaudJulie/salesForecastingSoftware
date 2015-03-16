@@ -1,6 +1,8 @@
 package fr.galettedebroons.domain;
 
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,7 +12,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Client {
 	
-	private int id;
+	private int id_client;
 	private String enseigne_client;
 	private List<Profil> client_profil;
 
@@ -23,11 +25,11 @@ public class Client {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public int getCode_client() {
-		return id;
+		return id_client;
 	}
 	
 	public void setCode_client(int id) {
-		this.id = id;
+		this.id_client = id;
 	}
 	
 	public String getEnseigne_client() {
@@ -38,12 +40,16 @@ public class Client {
 		this.enseigne_client = enseigne_client;
 	}
 	
-	@OneToMany(mappedBy="client_profil")
+	@OneToMany(mappedBy="client_profil", cascade=CascadeType.PERSIST)
 	public List<Profil> getClient_profil() {
 		return client_profil;
 	}
 
 	public void setClient_profil(List<Profil> client_profil) {
 		this.client_profil = client_profil;
+	}
+	
+	public void addProfil(Profil profil){
+		client_profil.add(profil);
 	}
 }
