@@ -66,24 +66,21 @@ public class LectureFichier {
 	 */
 	public void lectureExcel(File file) throws InvalidFormatException, IOException{	
 		String[] tabChaine = new String[6];
-		try {
-			Workbook workbook = WorkbookFactory.create(file);
-			final Sheet sheet = workbook.getSheetAt(0);
+		
+		Workbook workbook = WorkbookFactory.create(file);
+		final Sheet sheet = workbook.getSheetAt(0);
+		
+		// Lecture du fichier commence a la ligne 2 car titre ligne 0 et entete du tableau a la ligne 1
+		int index = 2;
+		Row row = sheet.getRow(index);
+		//System.out.println("Valeur de row :" +row);
 			
-			// Lecture du fichier commence a la ligne 2 car titre ligne 0 et entete du tableau a la ligne 1
-			int index = 2;
-			Row row = sheet.getRow(index);
-			//System.out.println("Valeur de row :" +row);
-			
-			while (row != null){
-				for (int i = 0; i<tabChaine.length; i++){
-					tabChaine[i] = row.getCell(i).toString();
-				}
-				remplissageTemp(tabChaine);
-				row = sheet.getRow(index++);
+		while (row != null){
+			for (int i = 0; i<tabChaine.length; i++){
+				tabChaine[i] = row.getCell(i).toString();
 			}
-		} catch (InvalidFormatException e) {
-			e.printStackTrace();
+			remplissageTemp(tabChaine);
+			row = sheet.getRow(index++);
 		}
 	}
 	
@@ -164,8 +161,5 @@ public class LectureFichier {
 		   }
                    
 	}
-	
-	
-	
 	
 }

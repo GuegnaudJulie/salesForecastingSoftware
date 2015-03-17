@@ -64,6 +64,8 @@ public class PanelEdition extends javax.swing.JPanel {
 
         labelInfo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         labelInfo.setText("Renseigner les informations dans les champs ci-dessous ou indiquer le fichier");
+        
+        valFichier.setText("Fichier .xslx, .ods, .txt, .csv");
 
         boutonParcourir.setText("Parcourir");
         boutonParcourir.addActionListener(new java.awt.event.ActionListener() {
@@ -102,8 +104,6 @@ public class PanelEdition extends javax.swing.JPanel {
                 boutonAjoutClientActionPerformed(evt);
             }
         });
-
-        valNomClient.setText("Ici le nom du client");
 
         tableauLivraison.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         tableauLivraison.setModel(new javax.swing.table.DefaultTableModel(
@@ -282,7 +282,6 @@ public class PanelEdition extends javax.swing.JPanel {
     }// </editor-fold>                        
 
     private void boutonParcourirActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        /*
         JFileChooser choix = new JFileChooser();
         int retour=choix.showOpenDialog(getParent());
         if(retour==JFileChooser.APPROVE_OPTION){
@@ -292,11 +291,9 @@ public class PanelEdition extends javax.swing.JPanel {
         // pas de fichier choisi
         else
             System.out.println("Aucun fichier choisi") ;
-        */
     }                                               
 
     private void valListeClientActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        /*
         String enseigne = "";
     	for (Object[] cl : client){
     		if (cl[0] == valListeClient.getSelectedItem().toString()){
@@ -304,7 +301,6 @@ public class PanelEdition extends javax.swing.JPanel {
     		}
     	}
     	valNomClient.setText(enseigne);
-        */
     }                                              
 
     private void boutonAjoutClientActionPerformed(java.awt.event.ActionEvent evt) {                                                  
@@ -316,8 +312,7 @@ public class PanelEdition extends javax.swing.JPanel {
     }                                                
 
     private void boutonEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-        /*
-        if (valFichier.getText() != "" || valFichier.getText() != "Fichier .xslx, .ods, .txt, .csv"){
+        if ( !valFichier.getText().isEmpty() && !valFichier.getText().equalsIgnoreCase("Fichier .xslx, .ods, .txt, .csv")){
         	//Vérifier l'extention du fichier
         	String extention = "^.+\\.(xlsx|ods|txt|csv)$";
         	if (valFichier.getText().matches(extention)){
@@ -327,8 +322,10 @@ public class PanelEdition extends javax.swing.JPanel {
                     lfe.ouverture_fichier(valFichier.getText());
                 } catch (IOException e) {
                     e.printStackTrace();
+                    messageErreur.setText("Erreur : le fichier renseigné n'a pas un bon format de données");
                 } catch (InvalidFormatException e) {
                     e.printStackTrace();
+                    messageErreur.setText("Erreur : le fichier renseigné n'a pas été trouvé");
                 }
         	}
         	else{
@@ -337,9 +334,29 @@ public class PanelEdition extends javax.swing.JPanel {
         	}
         }
         else{
-        	//On vérifie que tous les champs ont été renseigné
-        	if(valBonLivraison.getText() == "" | valListeClient.getSelectedItem() == "" | valDate.getDate() == null ){
-        		
+        	String DebutMessErreur = "Erreur : Vous n'avez pas renseigner le/les champs : ";
+        	String contenuErreur = "";
+        	
+        	if (valBonLivraison.getText().isEmpty())
+        		contenuErreur += "bon de livraison";
+        	if (valListeClient.getSelectedItem().equals("selectionner")){
+        		if (contenuErreur != "")
+        			contenuErreur += ", client";
+        		else
+        			contenuErreur += "client";
+        	}
+        	if (valDate.getDate() == null){
+        		if (contenuErreur != "")
+        			contenuErreur += ", date de livraison";
+        		else
+        			contenuErreur += "date de livraison";
+        	}
+        	
+        	if (contenuErreur != ""){
+        		messageErreur.setText(DebutMessErreur + contenuErreur);
+        	}
+        	else{
+        		//on envoye à la base de données
         	}
         	
         	//valBonLivraison
@@ -347,12 +364,17 @@ public class PanelEdition extends javax.swing.JPanel {
         	//valDate
         	//tableauLivraison
         }
-        */
     }                                                 
 
     private void boutonAnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // Remettre tout les champs à null !
-    }                                             
+    	messageErreur.setText("");
+    	valFichier.setText("Fichier .xslx, .ods, .txt, .csv");
+    	valBonLivraison.setText("");
+    	valNomClient.setText("");
+    	valListeClient.setSelectedIndex(0);
+    	valDate.setDate(null);
+    }
 
     private List<Object[]> client;
 
