@@ -11,7 +11,7 @@ public class RecuperationDonnees {
 	private EntityManagerFactory factory_;
 	
 	public RecuperationDonnees(){
-		factory_ = Persistence.createEntityManagerFactory("maj");
+		factory_ = Persistence.createEntityManagerFactory("majAnteros");
 		manager_ = factory_.createEntityManager();
 	}
 	

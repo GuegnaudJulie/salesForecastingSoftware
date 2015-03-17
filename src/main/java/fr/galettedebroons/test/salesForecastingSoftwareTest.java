@@ -24,7 +24,7 @@ public class salesForecastingSoftwareTest {
 
 	public static void main(String[] args) {
 		
-		/*EntityManagerFactory factory = Persistence.createEntityManagerFactory("create");
+		/*EntityManagerFactory factory = Persistence.createEntityManagerFactory("createAnteros"); // majAnteros, createAnteros, ...
 		EntityManager manager = factory.createEntityManager();
 		salesForecastingSoftwareTest test = new salesForecastingSoftwareTest(manager);
 		
