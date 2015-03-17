@@ -5,6 +5,8 @@
  */
 package fr.galettedebroons.view;
 
+import fr.galettedebroons.test.Main;
+
 /**
  *
  * @author Julie
@@ -14,8 +16,9 @@ public class InterfaceGenerale extends javax.swing.JFrame {
     /**
      * Creates new form InterfaceGenerale
      */
-    public InterfaceGenerale() {
+    public InterfaceGenerale(Main main) {
         initComponents();
+        main_ = main;
     }
 
     /**
@@ -32,7 +35,7 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         panelOnglet = new javax.swing.JTabbedPane();
         panelAccueil = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        panelEdition = new fr.galettedebroons.view.PanelEdition();
+        panelEdition = new fr.galettedebroons.view.PanelEdition(main_);
         panelPrevision = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         panelProduction = new javax.swing.JPanel();
@@ -165,6 +168,7 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
+    private Main main_;
     // Variables declaration - do not modify                     
     private javax.swing.JButton boutonSocieteBroons;
     private javax.swing.JLabel jLabel1;

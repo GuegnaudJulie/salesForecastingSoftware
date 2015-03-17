@@ -14,6 +14,9 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jopendocument.dom.spreadsheet.MutableCell;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
+import fr.galettedebroons.model.RangerDonneeFichier;
+import fr.galettedebroons.test.Main;
+
 /**
  * Classe permettant la lecture d'un fichier d'extension .xls, .ods, .csv ou .txt
  * Celui devra contenir les champs suivants : 
@@ -32,7 +35,11 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  */
 public class LectureFichier {
 
-	public LectureFichier(){}
+	private Main main_;
+	
+	public LectureFichier(Main main){
+		main_ = main;
+	}
 	
 	/**
 	 * Recupere l'extention d'un fichier et renvoie le fichier sur la bonne methode de traitement
@@ -142,24 +149,24 @@ public class LectureFichier {
 	 * @param	donnees donnees du fichier
 	 */
 	public void remplissageTemp(String[] donnees){
-		RangerDonneeFichier donneeFichier = new RangerDonneeFichier();
-		int present = donneeFichier.verification(donnees);
-		   
-		   if(present != -1){
-			   if (present == 0)
-				   //Toutes les donnees existent
-				   donneeFichier.ajout(donnees, "");
-			   else if (present == 1)
-				   //client inexistant
-				   donneeFichier.ajout(donnees, "C");
-			   else if (present == 2)
-				   //produit inexistant
-				   donneeFichier.ajout(donnees, "P");
-			   else if (present == 3)
-				   //client et produit inexistant
-				   donneeFichier.ajout(donnees, "CP");
-		   }
-                   
+		ControllerFichier cf = new ControllerFichier(main_);
+		int present = cf.verification(donnees);
+		
+		RangerDonneeFichier donneeFichier = new RangerDonneeFichier(main_);
+		if(present != -1){
+			if (present == 0)
+				//Toutes les donnees existent
+				donneeFichier.ajout(donnees, "");
+			else if (present == 1)
+				//client inexistant
+				donneeFichier.ajout(donnees, "C");
+			else if (present == 2)
+				//produit inexistant
+				donneeFichier.ajout(donnees, "P");
+			else if (present == 3)
+				//client et produit inexistant
+				donneeFichier.ajout(donnees, "CP");
+		}
 	}
 	
 }

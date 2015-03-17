@@ -1,28 +1,25 @@
 package fr.galettedebroons.test;
 
-import fr.galettedebroons.controller.RemplissageLivraison;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-
-import fr.galettedebroons.domain.Client;
-import fr.galettedebroons.domain.Profil;
-import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.view.InterfaceGenerale;
 
-public class salesForecastingSoftwareTest {
-
+public class Main {
+	
 	private EntityManager manager_;
-
-	public salesForecastingSoftwareTest(EntityManager manager) {
-		this.manager_ = manager;
+	
+	public Main(EntityManager manager) {
+		manager_ = manager;
+	}
+	
+	public EntityManager getManager(){
+		return manager_;
 	}
 
 	public static void main(String[] args) {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("majAnteros"); // majAnteros, createAnteros, ...
+		EntityManager manager = factory.createEntityManager();
 		
 		/*EntityManagerFactory factory = Persistence.createEntityManagerFactory("createAnteros"); // majAnteros, createAnteros, ...
 		EntityManager manager = factory.createEntityManager();
@@ -64,7 +61,7 @@ public class salesForecastingSoftwareTest {
 		tx.commit();
 		*/
 		
-		InterfaceGenerale IHM = new InterfaceGenerale();
+		InterfaceGenerale IHM = new InterfaceGenerale(new Main(manager));
 		IHM.setLocationRelativeTo(null);
 		IHM.setVisible(true);
 		

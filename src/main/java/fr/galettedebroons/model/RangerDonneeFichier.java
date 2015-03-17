@@ -1,4 +1,4 @@
-package fr.galettedebroons.controller;
+package fr.galettedebroons.model;
 
 import java.sql.Date;
 import java.text.DateFormatSymbols;
@@ -14,7 +14,10 @@ import javax.persistence.Persistence;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
+import fr.galettedebroons.test.Main;
+
 import java.util.ArrayList;
+
 import javax.persistence.Query;
 
 /**
@@ -27,60 +30,9 @@ import javax.persistence.Query;
  */
 public class RangerDonneeFichier {
 	private EntityManager manager_;
-	private EntityManagerFactory factory_;
 	
-	public RangerDonneeFichier(){
-		factory_ = Persistence.createEntityManagerFactory("majAnteros");
-		manager_ = factory_.createEntityManager();
-	}
-	
-	/**
-	 * verification de la presence du client et du produit dans la base
-	 * 
-	 * @param donnees
-	 * @return 0 la donnee est presente dans la base
-	 * @return 1 le client n'exite pas
-	 * @return 2 le produit n'existe pas
-	 * @return 3 le client et le produit n'existe pas
-	 * @return -1 Il manque des informations
-	 */
-	public int verification(String[] donnees){
-		int code_retour = 0;
-		boolean c_present = true;
-		boolean p_present = true;
-		
-		//Toutes les informations sont présentes
-		for (int i = 0; i < donnees.length; i++){
-			if (donnees[i] == "")
-				code_retour = -1;
-		}
-		
-		//Le client et le produit existe
-		if (code_retour != -1)
-		{
-			@SuppressWarnings("unchecked")
-			List<Profil> profil = manager_.createQuery("select c from Profil c where c.code_client LIKE :codeClient ")
-					.setParameter("codeClient", donnees[2])
-					.setMaxResults(1).getResultList();
-			if (profil.size() == 0)
-				c_present = false;
-			
-			@SuppressWarnings("unchecked")
-			List<Produit> produit = manager_.createQuery("select p from Produit p where p.code_produit LIKE :codeProduit ")
-					.setParameter("codeProduit", donnees[4])
-					.setMaxResults(1).getResultList();
-			if (produit.size() == 0)
-				p_present = false;
-			
-			if (!(c_present && p_present))
-				code_retour = 3;
-			else if (!p_present)
-				code_retour = 2;
-			else if (!c_present)
-				code_retour = 1;
-		}
-		
-		return code_retour;
+	public RangerDonneeFichier(Main main){
+		manager_ = main.getManager();
 	}
 	
 	/**
@@ -143,10 +95,7 @@ public class RangerDonneeFichier {
 		tx.commit();
 	}
 	
-	
-         
-        
-        /**
+	/**
 	 * Fonction de vidage de la table Temporaire
 	 */
 	public void vidage(){

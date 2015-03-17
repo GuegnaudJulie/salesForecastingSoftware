@@ -2,11 +2,14 @@ package fr.galettedebroons.view;
 
 import java.util.List;
 import java.io.IOException;
+
 import javax.swing.JFileChooser;
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import fr.galettedebroons.controller.LectureFichier;
 import fr.galettedebroons.model.RecuperationDonnees;
+import fr.galettedebroons.test.Main;
 
 /**
  * @author  Julie Guegnaud
@@ -18,8 +21,9 @@ public class PanelEdition extends javax.swing.JPanel {
     /**
      * Creates new form panelEdition
      */
-    public PanelEdition() {
+    public PanelEdition(Main main) {
         initComponents();
+        main_ = main;
     }
 
     /**
@@ -317,7 +321,7 @@ public class PanelEdition extends javax.swing.JPanel {
         	String extention = "^.+\\.(xlsx|ods|txt|csv)$";
         	if (valFichier.getText().matches(extention)){
         		System.out.println("fichier valide !");
-        		LectureFichier lfe = new LectureFichier();
+        		LectureFichier lfe = new LectureFichier(main_);
                 try {
                     lfe.ouverture_fichier(valFichier.getText());
                 } catch (IOException e) {
@@ -377,7 +381,7 @@ public class PanelEdition extends javax.swing.JPanel {
     }
 
     private List<Object[]> client;
-
+    private Main main_;
     // Variables declaration - do not modify                     
     private javax.swing.JButton boutonAjoutClient;
     private javax.swing.JButton boutonAjoutLigne;
