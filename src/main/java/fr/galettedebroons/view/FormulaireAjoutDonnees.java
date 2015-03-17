@@ -1,10 +1,12 @@
 package fr.galettedebroons.view;
 
+
 import java.io.IOException;
+import java.util.List;
 import javax.swing.JFileChooser;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
 import fr.galettedebroons.controller.LectureFichier;
+import fr.galettedebroons.model.RecuperationDonnees;
 
 /**
  *
@@ -69,10 +71,23 @@ public class FormulaireAjoutDonnees extends javax.swing.JPanel {
         labelDate.setText("Date de livraison");
 
         codeClient.setText("Code client");
-
-        valCodeClient.setModel(new javax.swing.DefaultComboBoxModel(
-        		
-        		new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        
+        RecuperationDonnees rd = new RecuperationDonnees();
+        client = rd.recuperationCodeClient();
+        String[] code_client = new String[client.size()+1];
+        code_client[0] = "selection";
+        int indice = 1;
+        for (Object[] cl : client){
+        	code_client[indice] = cl[0].toString();
+        	indice++;
+        }
+        
+        valCodeClient.setModel(new javax.swing.DefaultComboBoxModel(code_client));
+        valCodeClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                valCodeClientActionPerformed(evt);
+            }
+        });
 
         boutonEnregistrer.setText("Enregistrer");
         boutonEnregistrer.addActionListener(new java.awt.event.ActionListener() {
@@ -224,6 +239,7 @@ public class FormulaireAjoutDonnees extends javax.swing.JPanel {
     }// </editor-fold>                        
 
     private void boutonParcourirActionPerformed(java.awt.event.ActionEvent evt) {                                                
+        
         JFileChooser choix = new JFileChooser();
         int retour=choix.showOpenDialog(getParent());
         if(retour==JFileChooser.APPROVE_OPTION){
@@ -237,9 +253,11 @@ public class FormulaireAjoutDonnees extends javax.swing.JPanel {
         // pas de fichier choisi
         else
             System.out.println("Aucun fichier choisi") ;
+        
     }                                               
 
     private void boutonEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+        
         LectureFichier lfe = new LectureFichier();
         try {
             lfe.ouverture_fichier(valFichier.getText());
@@ -248,12 +266,25 @@ public class FormulaireAjoutDonnees extends javax.swing.JPanel {
         } catch (InvalidFormatException e) {
             e.printStackTrace();
         }
+        
     }                                                 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
     }                                        
 
+    private void valCodeClientActionPerformed(java.awt.event.ActionEvent evt) {
+    	String enseigne = "";
+    	for (Object[] cl : client){
+    		System.out.println(valCodeClient);
+    		if (cl[0] == valCodeClient.getSelectedItem().toString()){
+    			enseigne = cl[1].toString();
+    		}
+    	}
+    	nomClient.setText(enseigne);
+    }                                             
+
+    private List<Object[]> client;
 
     // Variables declaration - do not modify                     
     private javax.swing.JLabel Titre;

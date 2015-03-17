@@ -1,16 +1,9 @@
 package fr.galettedebroons.model;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
-import org.hsqldb.lib.Iterator;
-
-import fr.galettedebroons.domain.Client;
-import fr.galettedebroons.domain.Profil;
 
 public class RecuperationDonnees {
 	
@@ -22,10 +15,16 @@ public class RecuperationDonnees {
 		manager_ = factory_.createEntityManager();
 	}
 	
-	public void recuperationCodeClient(){
-		List<Client> profil = manager_.createQuery("select c from Client c").getResultList();
+	/**
+	 * Recuperation du code d'un client et de son enseigne
+	 * @return [0] => code du client
+	 * @return [1] => l'enseigne du client
+	 */
+	public List<Object[]> recuperationCodeClient(){
+		List<Object[]> profil = manager_.createQuery("select p.code_client, c.enseigne_client " +
+				"from Client c, Profil p " +
+				"where p.client_profil = c", Object[].class).getResultList();
 		
-		System.out.println("le code client est " + profil.toString());
-		//return profil;
+		return profil;
 	}
 }

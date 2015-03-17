@@ -68,11 +68,6 @@ public class salesForecastingSoftwareTest {
 		IHM.setLocationRelativeTo(null);
 		IHM.setVisible(true);
 		
-		/*
-		RecuperationDonnees rd = new RecuperationDonnees();
-		rd.recuperationCodeClient();
-		*/
-		
 		System.out.println(".. done");
 	}
 
