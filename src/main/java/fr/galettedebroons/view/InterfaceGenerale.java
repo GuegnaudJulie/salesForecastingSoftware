@@ -1,9 +1,13 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package fr.galettedebroons.view;
 
 /**
  *
- * @author	Julie Guegnaud
- * @since	16/03/2015
+ * @author Julie
  */
 public class InterfaceGenerale extends javax.swing.JFrame {
 
@@ -23,154 +27,156 @@ public class InterfaceGenerale extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        panelAccueil = new javax.swing.JPanel();
-        jTextField5 = new javax.swing.JTextField();
-        panelEdition = new FormulaireAjoutDonnees();
-        panelPrevision = new javax.swing.JPanel();
-        jTextField3 = new javax.swing.JTextField();
-        panelProduction = new javax.swing.JPanel();
-        jTextField2 = new javax.swing.JTextField();
-        panelManuel = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
         panelSociete = new javax.swing.JPanel();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        boutonSocieteBroons = new javax.swing.JButton();
+        panelOnglet = new javax.swing.JTabbedPane();
+        panelAccueil = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        panelEdition = new fr.galettedebroons.view.PanelEdition();
+        panelPrevision = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        panelProduction = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        panelManuel = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField5.setText("Je suis dans l'accueil de notre futur application ;)");
+        boutonSocieteBroons.setText("Broons");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(panelAccueil);
-        panelAccueil.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(443, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(386, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Accueil", panelAccueil);
-
-        jTabbedPane1.addTab("Editer", panelEdition);
-
-        jTextField3.setText("Je suis dans les previsions");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(panelPrevision);
-        panelPrevision.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(560, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(391, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Prévision semaine", panelPrevision);
-
-        jTextField2.setText("Je suis dans la prod.");
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(panelProduction);
-        panelProduction.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(559, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(393, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Production", panelProduction);
-
-        jTextField1.setText("Je suis dans le manuel");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(panelManuel);
-        panelManuel.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(575, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(384, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Manuel d'utilisation", panelManuel);
-
-        jToggleButton1.setText("Broons");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(panelSociete);
-        panelSociete.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jToggleButton1)
+        javax.swing.GroupLayout panelSocieteLayout = new javax.swing.GroupLayout(panelSociete);
+        panelSociete.setLayout(panelSocieteLayout);
+        panelSocieteLayout.setHorizontalGroup(
+            panelSocieteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSocieteLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(boutonSocieteBroons)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToggleButton1)
+        panelSocieteLayout.setVerticalGroup(
+            panelSocieteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSocieteLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(boutonSocieteBroons)
+                .addContainerGap())
         );
+
+        jLabel1.setText("Bienvenue dans l'acceuil de l'application !");
+
+        javax.swing.GroupLayout panelAccueilLayout = new javax.swing.GroupLayout(panelAccueil);
+        panelAccueil.setLayout(panelAccueilLayout);
+        panelAccueilLayout.setHorizontalGroup(
+            panelAccueilLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAccueilLayout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addComponent(jLabel1)
+                .addContainerGap(763, Short.MAX_VALUE))
+        );
+        panelAccueilLayout.setVerticalGroup(
+            panelAccueilLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAccueilLayout.createSequentialGroup()
+                .addGap(91, 91, 91)
+                .addComponent(jLabel1)
+                .addContainerGap(475, Short.MAX_VALUE))
+        );
+
+        panelOnglet.addTab("Accueil", panelAccueil);
+        
+        panelOnglet.addTab("Edition", panelEdition);
+
+        jLabel2.setText("Bienvenue dans notre onglet \"prévision\". Vous y trouverez la prévision des ventes de la semaine par client et par produit");
+
+        javax.swing.GroupLayout panelPrevisionLayout = new javax.swing.GroupLayout(panelPrevision);
+        panelPrevision.setLayout(panelPrevisionLayout);
+        panelPrevisionLayout.setHorizontalGroup(
+            panelPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPrevisionLayout.createSequentialGroup()
+                .addGap(91, 91, 91)
+                .addComponent(jLabel2)
+                .addContainerGap(369, Short.MAX_VALUE))
+        );
+        panelPrevisionLayout.setVerticalGroup(
+            panelPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPrevisionLayout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(468, Short.MAX_VALUE))
+        );
+
+        panelOnglet.addTab("Prévision semaine", panelPrevision);
+
+        jLabel3.setText("Bienvenue dans l'onglet production. Vous y trouver le nombre de galette à produire et la quantité de chaque ingrédient à prévoir soit pour la journée soit pour la semaine soit pour la semaine prochaine");
+
+        javax.swing.GroupLayout panelProductionLayout = new javax.swing.GroupLayout(panelProduction);
+        panelProduction.setLayout(panelProductionLayout);
+        panelProductionLayout.setHorizontalGroup(
+            panelProductionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelProductionLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(jLabel3)
+                .addContainerGap(47, Short.MAX_VALUE))
+        );
+        panelProductionLayout.setVerticalGroup(
+            panelProductionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelProductionLayout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(501, Short.MAX_VALUE))
+        );
+
+        panelOnglet.addTab("Production", panelProduction);
+
+        jLabel4.setText("Bienvenue dans le manuel de notre application. Que serait une application sans un bon vieux manuel d'utilisation ? Et puis, ça ne serait pas sérieux s'il n'y en avait pas un XD");
+
+        javax.swing.GroupLayout panelManuelLayout = new javax.swing.GroupLayout(panelManuel);
+        panelManuel.setLayout(panelManuelLayout);
+        panelManuelLayout.setHorizontalGroup(
+            panelManuelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelManuelLayout.createSequentialGroup()
+                .addGap(62, 62, 62)
+                .addComponent(jLabel4)
+                .addContainerGap(151, Short.MAX_VALUE))
+        );
+        panelManuelLayout.setVerticalGroup(
+            panelManuelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelManuelLayout.createSequentialGroup()
+                .addGap(72, 72, 72)
+                .addComponent(jLabel4)
+                .addContainerGap(494, Short.MAX_VALUE))
+        );
+
+        panelOnglet.addTab("Manuel d'utilisation", panelManuel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelSociete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
+            .addComponent(panelOnglet)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panelSociete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(panelOnglet)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelSociete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>
 
     // Variables declaration - do not modify                     
-    private javax.swing.JPanel panelSociete;
+    private javax.swing.JButton boutonSocieteBroons;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel panelAccueil;
     private javax.swing.JPanel panelEdition;
+    private javax.swing.JPanel panelManuel;
+    private javax.swing.JTabbedPane panelOnglet;
     private javax.swing.JPanel panelPrevision;
     private javax.swing.JPanel panelProduction;
-    private javax.swing.JPanel panelManuel;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JToggleButton jToggleButton1; // Il peut y avoir plusieurs sociétés ;) Donc, ce bouton est modifier
+    private javax.swing.JPanel panelSociete;
     // End of variables declaration                   
 }

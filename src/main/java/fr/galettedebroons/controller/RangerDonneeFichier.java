@@ -30,7 +30,7 @@ public class RangerDonneeFichier {
 	private EntityManagerFactory factory_;
 	
 	public RangerDonneeFichier(){
-		factory_ = Persistence.createEntityManagerFactory("maj");
+		factory_ = Persistence.createEntityManagerFactory("majAnteros");
 		manager_ = factory_.createEntityManager();
 	}
 	
