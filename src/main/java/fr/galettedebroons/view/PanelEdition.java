@@ -7,14 +7,16 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import javax.swing.JFileChooser;
 import javax.swing.DefaultCellEditor;
 
+import fr.galettedebroons.controller.ControllerFichier;
 import fr.galettedebroons.controller.LectureFichier;
+import fr.galettedebroons.model.RangerDonneeFichier;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.test.Main;
 
 /**
  * @author  Julie Guegnaud
  * @author  Oumoul Sy
- * @since   17/03/2015
+ * @since   18/03/2015
  */
 public class PanelEdition extends javax.swing.JPanel {
 
@@ -22,8 +24,8 @@ public class PanelEdition extends javax.swing.JPanel {
      * Creates new form panelEdition
      */
     public PanelEdition(Main main) {
-        initComponents();
         main_ = main;
+        initComponents();
     }
 
     /**
@@ -51,12 +53,13 @@ public class PanelEdition extends javax.swing.JPanel {
         boutonAjoutClient = new javax.swing.JButton();
         valNomClient = new javax.swing.JLabel();
         scrollLivraison = new javax.swing.JScrollPane();
-        tableauLivraison = new javax.swing.JTable();
         valListeProduit = new javax.swing.JComboBox();
+        tableauLivraison = new javax.swing.JTable();
         boutonAjoutLigne = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         boutonEnregistrer = new javax.swing.JButton();
         boutonAnnuler = new javax.swing.JButton();
+        boutonAjoutArticle = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1038, 580));
 
@@ -66,11 +69,10 @@ public class PanelEdition extends javax.swing.JPanel {
         labelTitre.setText("Ajouter les dernières livraisons");
 
         messageErreur.setForeground(new java.awt.Color(204, 0, 0));
+        messageErreur.setText(" ");
 
         labelInfo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         labelInfo.setText("Renseigner les informations dans les champs ci-dessous ou indiquer le fichier");
-        
-        valFichier.setText("Fichier .xslx, .ods, .txt, .csv");
 
         boutonParcourir.setText("Parcourir");
         boutonParcourir.addActionListener(new java.awt.event.ActionListener() {
@@ -109,53 +111,43 @@ public class PanelEdition extends javax.swing.JPanel {
                 boutonAjoutClientActionPerformed(evt);
             }
         });
-        
+
+        valNomClient.setText(" ");
+
         produit = rd.recuperationCodeProduit();
         String[] code_produit = new String[produit.size()+1];
         code_produit[0] = "selectionner";
         indice = 1;
         for (Object[] pr : produit){
-        	code_produit[indice] = pr[0].toString() + " ," + pr[1];
+            code_produit[indice] = pr[0].toString() + " ," + pr[1];
             indice++;
         }
         valListeProduit.setModel(new javax.swing.DefaultComboBoxModel(code_produit));
-
-        
-        data = new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-        	};
-        
         tableauLivraison.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        tableauLivraison.setModel(
-        		new javax.swing.table.DefaultTableModel(data, title)
-        		{
-		            Class[] types = new Class [] {
-		                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
-		        };
-		        
-	            public Class getColumnClass(int columnIndex) {
-	                return types [columnIndex];
-	            }
+        data = new Object [][] {
+            {null, null, null},
+            {null, null, null},
+            {null, null, null},
+            {null, null, null},
+            {null, null, null},
+            {null, null, null},
+            {null, null, null},
+            {null, null, null},
+            {null, null, null}
+        };
+
+        title = new String[] {"Article", "Quantité livrée", "Quantité reprise"};
+        tableauLivraison.setModel(new javax.swing.table.DefaultTableModel(data, title) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
         });
-        
         tableauLivraison.getColumn("Article").setCellEditor(new DefaultCellEditor(valListeProduit));
-        
         scrollLivraison.setViewportView(tableauLivraison);
-        if (tableauLivraison.getColumnModel().getColumnCount() > 0) {
-            tableauLivraison.getColumnModel().getColumn(0).setResizable(false);
-            tableauLivraison.getColumnModel().getColumn(1).setResizable(false);
-            tableauLivraison.getColumnModel().getColumn(1).setPreferredWidth(30);
-            tableauLivraison.getColumnModel().getColumn(2).setResizable(false);
-            tableauLivraison.getColumnModel().getColumn(2).setPreferredWidth(30);
-        }
 
         boutonAjoutLigne.setBackground(new java.awt.Color(0, 153, 102));
         boutonAjoutLigne.setText("+");
@@ -176,6 +168,13 @@ public class PanelEdition extends javax.swing.JPanel {
         boutonAnnuler.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 boutonAnnulerActionPerformed(evt);
+            }
+        });
+
+        boutonAjoutArticle.setText("Ajouter un article");
+        boutonAjoutArticle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boutonAjoutArticleActionPerformed(evt);
             }
         });
 
@@ -206,13 +205,15 @@ public class PanelEdition extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(boutonParcourir))
                     .addComponent(messageErreur, javax.swing.GroupLayout.PREFERRED_SIZE, 878, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 91, Short.MAX_VALUE))
             .addGroup(panelEditionLayout.createSequentialGroup()
-                .addGap(321, 321, 321)
+                .addGap(188, 188, 188)
+                .addComponent(boutonAjoutArticle)
+                .addGap(18, 18, 18)
                 .addGroup(panelEditionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelEditionLayout.createSequentialGroup()
                         .addGroup(panelEditionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelDate, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
+                            .addComponent(labelDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(panelEditionLayout.createSequentialGroup()
                                 .addComponent(labelBonLivraison, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(5, 5, 5))
@@ -230,8 +231,8 @@ public class PanelEdition extends javax.swing.JPanel {
                                         .addComponent(valListeClient, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(boutonAjoutClient, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 35, Short.MAX_VALUE)))
-                        .addGap(403, 403, 403))
+                                .addGap(0, 5, Short.MAX_VALUE)))
+                        .addGap(445, 445, 445))
                     .addGroup(panelEditionLayout.createSequentialGroup()
                         .addGroup(panelEditionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelEditionLayout.createSequentialGroup()
@@ -275,15 +276,18 @@ public class PanelEdition extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(valNomClient)
                 .addGap(18, 18, 18)
-                .addGroup(panelEditionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scrollLivraison, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonAjoutLigne, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelEditionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(boutonAnnuler)
-                    .addComponent(boutonEnregistrer))
+                .addGroup(panelEditionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelEditionLayout.createSequentialGroup()
+                        .addGroup(panelEditionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(scrollLivraison, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(boutonAjoutLigne, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelEditionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(boutonAnnuler)
+                            .addComponent(boutonEnregistrer)))
+                    .addComponent(boutonAjoutArticle))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -401,13 +405,31 @@ public class PanelEdition extends javax.swing.JPanel {
         		messageErreur.setText(DebutMessErreur + contenuErreur);
         	}
         	else{
-        		//on envoye à la base de données
+        		String[] donnee = new String[6];
+        		int present = 0;
+        		ControllerFichier cf = new ControllerFichier(main_);
+        		RangerDonneeFichier rdf = new RangerDonneeFichier(main_);
+        		for (int ligne = 0; ligne<tableauLivraison.getRowCount(); ligne++){
+        			for (int colonne = 0; colonne<tableauLivraison.getColumnCount(); colonne++)
+        				donnee[colonne] = tableauLivraison.getValueAt(ligne, colonne).toString();
+        			present = cf.verification(donnee);
+        			if(present != -1){
+        				if (present == 0)
+        					//Toutes les donnees existent
+        					rdf.ajout(donnee, "");
+        				else if (present == 1)
+        					//client inexistant
+        					rdf.ajout(donnee, "C");
+        				else if (present == 2)
+        					//produit inexistant
+        					rdf.ajout(donnee, "P");
+        				else if (present == 3)
+        					//client et produit inexistant
+        					rdf.ajout(donnee, "CP");
+        			}
+        			donnee = new String[6];
+        		} //Fin lecture de la JTable
         	}
-        	
-        	//valBonLivraison
-        	//valCodeClient
-        	//valDate
-        	//tableauLivraison
         }
     }                                                 
 
@@ -436,14 +458,20 @@ public class PanelEdition extends javax.swing.JPanel {
         	};
     	tableauLivraison.removeRowSelectionInterval(9, tableauLivraison.getRowCount()-1);
     	tableauLivraison.getColumn("Article").setCellEditor(new DefaultCellEditor(valListeProduit));
-    }
+    }                                             
+
+    private void boutonAjoutArticleActionPerformed(java.awt.event.ActionEvent evt) {                                                   
+        // TODO add your handling code here:
+    }                                                  
 
     private Object[][] data;
     private String[] title = {"Article", "Quantité livrée", "Quantité reprise"};
     private List<Object[]> produit;
     private List<Object[]> client;
     private Main main_;
+    private javax.swing.JComboBox valListeProduit;
     // Variables declaration - do not modify                     
+    private javax.swing.JButton boutonAjoutArticle;
     private javax.swing.JButton boutonAjoutClient;
     private javax.swing.JButton boutonAjoutLigne;
     private javax.swing.JButton boutonAnnuler;
@@ -465,6 +493,5 @@ public class PanelEdition extends javax.swing.JPanel {
     private javax.swing.JTextField valFichier;
     private javax.swing.JComboBox valListeClient;
     private javax.swing.JLabel valNomClient;
-    private javax.swing.JComboBox valListeProduit;
     // End of variables declaration                   
 }
