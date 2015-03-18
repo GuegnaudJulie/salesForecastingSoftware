@@ -66,7 +66,7 @@ public class VueGlobalNvClient extends Frame{
 		fenetre.setSize(700,500);
 		
 		
-		factory = Persistence.createEntityManagerFactory("maj");
+		factory = Persistence.createEntityManagerFactory("majAnteros");
     	manager = factory.createEntityManager();
     	this.setManager(manager);
     	
