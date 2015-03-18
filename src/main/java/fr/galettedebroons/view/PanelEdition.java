@@ -2,10 +2,10 @@ package fr.galettedebroons.view;
 
 import java.util.List;
 import java.io.IOException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import javax.swing.JFileChooser;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import javax.swing.DefaultCellEditor;
 
 import fr.galettedebroons.controller.LectureFichier;
 import fr.galettedebroons.model.RecuperationDonnees;
@@ -52,6 +52,7 @@ public class PanelEdition extends javax.swing.JPanel {
         valNomClient = new javax.swing.JLabel();
         scrollLivraison = new javax.swing.JScrollPane();
         tableauLivraison = new javax.swing.JTable();
+        valListeProduit = new javax.swing.JComboBox();
         boutonAjoutLigne = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         boutonEnregistrer = new javax.swing.JButton();
@@ -108,10 +109,19 @@ public class PanelEdition extends javax.swing.JPanel {
                 boutonAjoutClientActionPerformed(evt);
             }
         });
+        
+        produit = rd.recuperationCodeProduit();
+        String[] code_produit = new String[produit.size()+1];
+        code_produit[0] = "selectionner";
+        indice = 1;
+        for (Object[] pr : produit){
+        	code_produit[indice] = pr[0].toString() + " ," + pr[1];
+            indice++;
+        }
+        valListeProduit.setModel(new javax.swing.DefaultComboBoxModel(code_produit));
 
-        tableauLivraison.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        tableauLivraison.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        
+        data = new Object [][] {
                 {null, null, null},
                 {null, null, null},
                 {null, null, null},
@@ -121,19 +131,23 @@ public class PanelEdition extends javax.swing.JPanel {
                 {null, null, null},
                 {null, null, null},
                 {null, null, null}
-            },
-            new String [] {
-                "Article", "Quantité livrée", "Quantité reprise"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+        	};
+        
+        tableauLivraison.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        tableauLivraison.setModel(
+        		new javax.swing.table.DefaultTableModel(data, title)
+        		{
+		            Class[] types = new Class [] {
+		                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+		        };
+		        
+	            public Class getColumnClass(int columnIndex) {
+	                return types [columnIndex];
+	            }
         });
+        
+        tableauLivraison.getColumn("Article").setCellEditor(new DefaultCellEditor(valListeProduit));
+        
         scrollLivraison.setViewportView(tableauLivraison);
         if (tableauLivraison.getColumnModel().getColumnCount() > 0) {
             tableauLivraison.getColumnModel().getColumn(0).setResizable(false);
@@ -313,6 +327,33 @@ public class PanelEdition extends javax.swing.JPanel {
 
     private void boutonAjoutLigneActionPerformed(java.awt.event.ActionEvent evt) {                                                 
         // ajouter une ligne au tableau de livraison
+    	int taille = tableauLivraison.getRowCount();
+   
+    	Object[][] dataNew = new Object[data.length+1][data[0].length];
+    	for (int ligne = 0; ligne < data.length; ligne++){
+    		for (int colonne = 0; colonne < data[ligne].length; colonne++){
+    			dataNew[ligne][colonne] = tableauLivraison.getValueAt(ligne, colonne);
+        	}
+    	}
+    	dataNew[data.length][0] = "test";
+		dataNew[data.length][1] = null;
+		dataNew[data.length][2] = null;
+    	data = dataNew;
+    	taille = tableauLivraison.getRowCount();
+    	
+    	tableauLivraison.setModel(
+        		new javax.swing.table.DefaultTableModel(data, title)
+        		{
+		            Class[] types = new Class [] {
+		                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+		        };
+		        
+	            public Class getColumnClass(int columnIndex) {
+	                return types [columnIndex];
+	            }
+        });
+    	
+    	tableauLivraison.getColumn("Article").setCellEditor(new DefaultCellEditor(valListeProduit));
     }                                                
 
     private void boutonEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {                                                  
@@ -378,8 +419,28 @@ public class PanelEdition extends javax.swing.JPanel {
     	valNomClient.setText("");
     	valListeClient.setSelectedIndex(0);
     	valDate.setDate(null);
+    	for(int ligne = 0 ; ligne < tableauLivraison.getRowCount(); ligne++){
+    		for (int colonne = 0; colonne < tableauLivraison.getColumnCount(); colonne++)
+    			tableauLivraison.setValueAt(null, ligne, colonne);
+    	}
+    	data = new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+        	};
+    	tableauLivraison.removeRowSelectionInterval(9, tableauLivraison.getRowCount()-1);
+    	tableauLivraison.getColumn("Article").setCellEditor(new DefaultCellEditor(valListeProduit));
     }
 
+    private Object[][] data;
+    private String[] title = {"Article", "Quantité livrée", "Quantité reprise"};
+    private List<Object[]> produit;
     private List<Object[]> client;
     private Main main_;
     // Variables declaration - do not modify                     
@@ -404,5 +465,6 @@ public class PanelEdition extends javax.swing.JPanel {
     private javax.swing.JTextField valFichier;
     private javax.swing.JComboBox valListeClient;
     private javax.swing.JLabel valNomClient;
+    private javax.swing.JComboBox valListeProduit;
     // End of variables declaration                   
 }

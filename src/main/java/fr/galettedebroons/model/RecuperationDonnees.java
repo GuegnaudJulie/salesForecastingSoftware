@@ -27,4 +27,10 @@ public class RecuperationDonnees {
 		
 		return profil;
 	}
+	
+	public List<Object[]> recuperationCodeProduit(){
+		List<Object[]> produit = manager_.createQuery("select p.code_produit, p.nom_produit " +
+				"from Produit p ", Object[].class).getResultList();
+		return produit;
+	}
 }
