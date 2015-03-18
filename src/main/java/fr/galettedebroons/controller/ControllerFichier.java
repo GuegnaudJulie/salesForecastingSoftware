@@ -12,7 +12,7 @@ public class ControllerFichier {
 
 	private EntityManager manager_;
 	
-	ControllerFichier(Main main){
+	public ControllerFichier(Main main){
 		manager_ = main.getManager();
 	}
 	
