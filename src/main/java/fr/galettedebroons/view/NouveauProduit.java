@@ -1,6 +1,7 @@
 package fr.galettedebroons.view;
 
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 
 
 /*
@@ -51,6 +52,8 @@ public class NouveauProduit extends java.awt.Panel {
         jLabel6 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
+        
+        fenetreNvGamme = new JFrame();
 
         jLabel1.setText("Code Produit");
 
@@ -80,6 +83,11 @@ public class NouveauProduit extends java.awt.Panel {
         jLabel6.setText("Gamme");
 
         jButton1.setText("+");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -116,7 +124,7 @@ public class NouveauProduit extends java.awt.Panel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jButton1)))
                         .addGap(34, 34, 34))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -157,9 +165,26 @@ public class NouveauProduit extends java.awt.Panel {
     }// </editor-fold>
                                         
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+    	System.out.println("je passssse");
+    	ajoutGamme nvGamme = new ajoutGamme(this);
+    	fenetreNvGamme.setSize(500, 200);
+    	fenetreNvGamme.add(nvGamme);
+    	fenetreNvGamme.setVisible(true);
+    }
+    
     public JComboBox getCombo(){
     	return this.jComboBox1;
     }
+    
+    public JFrame getJFrame(){
+    	return fenetreNvGamme;
+    }
+    
+    public void methode(){
+    	fenetreNvGamme.setVisible(false);
+    	
+	}
     
     // Variables declaration - do not modify
     @SuppressWarnings("rawtypes")
@@ -178,6 +203,7 @@ public class NouveauProduit extends java.awt.Panel {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JSeparator jSeparator1;
+    private JFrame fenetreNvGamme;
     // End of variables declaration
 
 }

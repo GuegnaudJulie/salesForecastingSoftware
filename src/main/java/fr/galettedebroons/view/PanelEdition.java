@@ -87,7 +87,7 @@ public class PanelEdition extends javax.swing.JPanel {
 
         labelClient.setText("Code client");
 
-        RecuperationDonnees rd = new RecuperationDonnees();
+        RecuperationDonnees rd = new RecuperationDonnees(main_);
         client = rd.recuperationCodeClient();
         String[] code_client = new String[client.size()+1];
         code_client[0] = "selectionner";

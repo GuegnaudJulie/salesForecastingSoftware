@@ -28,18 +28,21 @@ import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Temporaire;
+import fr.galettedebroons.model.RecuperationDonnees;
+import fr.galettedebroons.test.Main;
 
 public class VueGlobalNvProduit {
 	private static EntityManager manager_;
 	static EntityManagerFactory factory;
 	static EntityManager manager;
+	static EntityTransaction tx;
 	static List<Object[]> results;
 	
 	static JPanel panelGeneral;
 	static JPanel panelGlobal;
 	static JPanel panelBouton;
 	static JFrame fenetre;
-	static JComboBox comboGamme;
+	static JComboBox[] comboGamme;
 	static List<NouveauProduit> listnvproduit;
 	
 	static String code_produit;
@@ -48,6 +51,7 @@ public class VueGlobalNvProduit {
 	static int qte_produit;
 	static String presentation_produit;
 	static String gamme_produit;
+	static String textCombo;
 	
 	/**
 	 * constructeur appel methode dynamique creation panel nouveau client
@@ -64,7 +68,7 @@ public class VueGlobalNvProduit {
 		panelGlobal = new JPanel();
 		panelBouton = new JPanel();
 		fenetre = new JFrame();
-		comboGamme = new JComboBox();
+		
 		listnvproduit = new ArrayList<NouveauProduit>();
 		fenetre = new JFrame();
 		fenetre.setSize(700,500);
@@ -73,10 +77,12 @@ public class VueGlobalNvProduit {
 		factory = Persistence.createEntityManagerFactory("majAnteros");
     	manager = factory.createEntityManager();
     	setManager(manager);
-    	EntityTransaction tx = manager_.getTransaction();
+    	tx = manager_.getTransaction();
 		tx.begin();
     	
+		RecuperationDonnees rd = new RecuperationDonnees(new Main(manager));
     	// recupere les produits dans la table temporaire -----
+		/*
     	CriteriaBuilder cb = manager_.getCriteriaBuilder();
 		CriteriaQuery<Object[]> q = cb.createQuery(Object[].class);
     	Root<Temporaire> t = q.from(Temporaire.class);
@@ -86,34 +92,40 @@ public class VueGlobalNvProduit {
 		
 		for(Object[] result : results) {
 			System.out.println("Test recupère Code produit ?!" +result[0].toString());
-		}
+		}*/
+		List<String> produits = rd.recuperationProduitTemp();
+		int nbNewProd = produits.size();
 		// fin recupere produits -----
 		
 		
 		
 		// recupere les gammes existantes pour comboBox -----
+		/*
 		List<Gamme> gammes = new ArrayList<Gamme>();
 		gammes = manager_.createQuery("select g from Gamme g", Gamme.class).getResultList();
 		System.out.println("MA LISTE DEROULANTE !!!! " +gammes.size());
 		int k=0;
     	List<String> lagamme = new ArrayList<String>();
     	for(Gamme gamme : gammes){
-    		String magamme = gammes.get(k).getCode_gamme() + " " +gammes.get(k).getDuree_conservation() + " " 
-    				+ gammes.get(k).getGamme_marge();
+    		String magamme = gammes.get(k).getCode_gamme() + " " +gammes.get(k).getDuree_conservation();
     		System.out.println("Ma gamme : " +magamme);
     		lagamme.add(magamme);
     		comboGamme.addItem(magamme);
     		k++;
-    		
-    	}
+    	}*/
+		String[] gamme = rd.recuperationGamme();
 		// fin recupere gammes existantes -----
     	
-    	for(Object[] result : results) {
-    		panelGeneral.setLayout(new GridLayout(results.size()*2,0));
-    		NouveauProduit np = new NouveauProduit(result[0].toString(), comboGamme);
+    	comboGamme = new JComboBox[nbNewProd];
+    	int indice = 0;
+    	for(String prod : produits) {
+    		JComboBox jb = new JComboBox(gamme);
+    		comboGamme[indice] = jb;
+    		panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
+    		NouveauProduit np = new NouveauProduit(prod.toString(), jb);
     		panelGeneral.add(np);
     		listnvproduit.add(np);
-    		
+    		indice ++;
     	}
     	
 		
@@ -158,6 +170,7 @@ public class VueGlobalNvProduit {
 			qte_produit = 0;
 			presentation_produit = "";
 			gamme_produit = "";
+			textCombo = "";
 			
 			
 			System.out.println("Nombre de composants" +listprod.getComponentCount());
@@ -196,16 +209,26 @@ public class VueGlobalNvProduit {
 			//gamme label
 			gamme_produit = ((JLabel) listprod.getComponent(9)).getText();
 			
-			listprod.getCombo();
+			// gamme
+			textCombo = (String) listprod.getCombo().getSelectedItem();
+			String[] t = textCombo.split(" ");
+			for(int i = 0; i < t.length; i++){
+				System.out.println("mon elmt : " +t[i]);
+			}
+			Gamme gamme = new Gamme(t[0], Integer.parseInt(t[1]), null, null);
 			System.out.println(listprod.getCombo().getSelectedItem());
 			
 			
 			// ajoute en base les elements recuperes
 			
-			/*Produit temp;
-			temp = new Produit(code_produit, nom_produit, presentation_produit, new Gamme(), qte_produit);
-			manager_.persist(temp);
-			tx.commit();*/
+			Produit temp;
+			try{
+				temp = new Produit(code_produit, nom_produit, presentation_produit, gamme, qte_produit);
+				manager_.persist(temp);
+				tx.commit();
+			} catch(Exception e){
+				e.printStackTrace();
+			}
 			
 		}
 		JOptionPane.showMessageDialog(panelGeneral, "Les nouveaux produits ont été ajouté");
