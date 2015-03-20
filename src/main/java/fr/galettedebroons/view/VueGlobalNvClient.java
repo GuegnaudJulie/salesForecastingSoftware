@@ -116,6 +116,7 @@ public class VueGlobalNvClient extends Frame{
 		// fin de traitement de ma liste de gamme
 		
     	int i = 0;
+    	
 		for(Object[] result : results) {
 			panelGeneral.setLayout(new GridLayout(results.size()*2,0));
 			System.out.println("Je passe dans le for :");
