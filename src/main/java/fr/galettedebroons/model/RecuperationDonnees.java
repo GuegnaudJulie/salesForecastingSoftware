@@ -5,14 +5,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import fr.galettedebroons.test.Main;
+
 public class RecuperationDonnees {
 	
 	private EntityManager manager_;
-	private EntityManagerFactory factory_;
 	
-	public RecuperationDonnees(){
-		factory_ = Persistence.createEntityManagerFactory("majAnteros");
-		manager_ = factory_.createEntityManager();
+	public RecuperationDonnees(Main main){
+		manager_ = main.getManager();
 	}
 	
 	/**
@@ -24,7 +24,6 @@ public class RecuperationDonnees {
 		List<Object[]> profil = manager_.createQuery("select p.code_client, c.enseigne_client " +
 				"from Client c, Profil p " +
 				"where p.client_profil = c", Object[].class).getResultList();
-		
 		return profil;
 	}
 	
@@ -32,5 +31,25 @@ public class RecuperationDonnees {
 		List<Object[]> produit = manager_.createQuery("select p.code_produit, p.nom_produit " +
 				"from Produit p ", Object[].class).getResultList();
 		return produit;
+	}
+	
+	public List<String> recuperationProduitTemp(){
+		List<String> produit = manager_.createQuery("select distinct t.code_produit " +
+				"from Temporaire t where code_erreur = 'CP' or  code_erreur = 'P'", String.class).getResultList();
+		return produit;
+	}
+	
+	public String[] recuperationGamme(){
+		List<String> ListGamme = manager_.createQuery("select g.code_gamme " +
+				"from Gamme g ", String.class).getResultList();
+		
+		String[] gamme = new String[ListGamme.size()];
+		int i = 0;
+		for (String g : ListGamme){
+			gamme[i] = g;
+			i++;
+		}
+		
+		return gamme;
 	}
 }
