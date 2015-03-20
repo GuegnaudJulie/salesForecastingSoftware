@@ -69,5 +69,7 @@ public class TraitementDonneesTemporaire {
 	
 	public void insertionDonneeFin(){
 		new RemplissageLivraison(main_);
+		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
+		rdt.vidage();
 	}
 }

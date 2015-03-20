@@ -384,10 +384,8 @@ public class PanelEdition extends javax.swing.JPanel {
     	if (messageErreur.getText() == ""){
     		TraitementDonneesTemporaire tdt = new TraitementDonneesTemporaire(main_);
     		tdt.insertionDonnee();
-    		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
-    		rdt.vidage();
     	}
-    }                                                 
+    }
 
     private void traitementManuel() {
     	String[] donnee = new String[6];

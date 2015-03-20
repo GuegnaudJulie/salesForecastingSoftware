@@ -112,7 +112,16 @@ public class RangerDonneeTemporaire {
 	 * Fonction de vidage de la table Temporaire
 	 */
 	public void vidage(){
-		String vidage = "delete temp from Temporaire temp";
-		manager_.createQuery(vidage);
+		System.out.println("je suis dans la fonction de vidage !");
+		
+		EntityTransaction tx = manager_.getTransaction();
+		tx.begin();
+		
+		String vidage = "delete from Temporaire";
+		Query viderTemp = manager_.createQuery(vidage);
+		
+		viderTemp.executeUpdate();
+		
+		tx.commit();
 	}
 }
