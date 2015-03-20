@@ -17,8 +17,8 @@ public class InterfaceGenerale extends javax.swing.JFrame {
      * Creates new form InterfaceGenerale
      */
     public InterfaceGenerale(Main main) {
-        initComponents();
         main_ = main;
+        initComponents();
     }
 
     /**

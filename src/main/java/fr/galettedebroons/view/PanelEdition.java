@@ -116,7 +116,7 @@ public class PanelEdition extends javax.swing.JPanel {
 
         produit = rd.recuperationCodeProduit();
         String[] code_produit = new String[produit.size()+1];
-        code_produit[0] = "selectionner";
+        code_produit[0] = "";
         indice = 1;
         for (Object[] pr : produit){
             code_produit[indice] = pr[0].toString() + " ," + pr[1];
@@ -339,7 +339,7 @@ public class PanelEdition extends javax.swing.JPanel {
     			dataNew[ligne][colonne] = tableauLivraison.getValueAt(ligne, colonne);
         	}
     	}
-    	dataNew[data.length][0] = "test";
+    	dataNew[data.length][0] = null;
 		dataNew[data.length][1] = null;
 		dataNew[data.length][2] = null;
     	data = dataNew;
@@ -361,79 +361,127 @@ public class PanelEdition extends javax.swing.JPanel {
     }                                                
 
     private void boutonEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-        if ( !valFichier.getText().isEmpty() && !valFichier.getText().equalsIgnoreCase("Fichier .xslx, .ods, .txt, .csv")){
-        	//Vérifier l'extention du fichier
-        	String extention = "^.+\\.(xlsx|ods|txt|csv)$";
-        	if (valFichier.getText().matches(extention)){
-        		System.out.println("fichier valide !");
-        		LectureFichier lfe = new LectureFichier(main_);
-                try {
-                    lfe.ouverture_fichier(valFichier.getText());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    messageErreur.setText("Erreur : le fichier renseigné n'a pas un bon format de données");
-                } catch (InvalidFormatException e) {
-                    e.printStackTrace();
-                    messageErreur.setText("Erreur : le fichier renseigné n'a pas été trouvé");
-                }
-        	}
-        	else{
-        		System.out.println("fichier non valide");
-        		messageErreur.setText("Merci de renseigner un ficher avec une extention .xls, .ods, .csv ou .txt");
-        	}
+        //Traitement d'un fichier
+    	if ( !valFichier.getText().isEmpty() && !valFichier.getText().equalsIgnoreCase("Fichier .xslx, .ods, .txt, .csv")){
+        	traitementFichier();
         }
+    	//Traitement manuel
         else{
         	String DebutMessErreur = "Erreur : Vous n'avez pas renseigner le/les champs : ";
-        	String contenuErreur = "";
+        	String contenuErreur = verifManuelle();
         	
-        	if (valBonLivraison.getText().isEmpty())
-        		contenuErreur += "bon de livraison";
-        	if (valListeClient.getSelectedItem().equals("selectionner")){
-        		if (contenuErreur != "")
-        			contenuErreur += ", client";
-        		else
-        			contenuErreur += "client";
-        	}
-        	if (valDate.getDate() == null){
-        		if (contenuErreur != "")
-        			contenuErreur += ", date de livraison";
-        		else
-        			contenuErreur += "date de livraison";
-        	}
-        	
+        	//Si un champs est vide
         	if (contenuErreur != ""){
         		messageErreur.setText(DebutMessErreur + contenuErreur);
         	}
+        	
+        	//Si tous les champs sont rempli
         	else{
-        		String[] donnee = new String[6];
-        		int present = 0;
-        		ControllerFichier cf = new ControllerFichier(main_);
-        		RangerDonneeFichier rdf = new RangerDonneeFichier(main_);
-        		for (int ligne = 0; ligne<tableauLivraison.getRowCount(); ligne++){
-        			for (int colonne = 0; colonne<tableauLivraison.getColumnCount(); colonne++)
-        				donnee[colonne] = tableauLivraison.getValueAt(ligne, colonne).toString();
-        			present = cf.verification(donnee);
-        			if(present != -1){
-        				if (present == 0)
-        					//Toutes les donnees existent
-        					rdf.ajout(donnee, "");
-        				else if (present == 1)
-        					//client inexistant
-        					rdf.ajout(donnee, "C");
-        				else if (present == 2)
-        					//produit inexistant
-        					rdf.ajout(donnee, "P");
-        				else if (present == 3)
-        					//client et produit inexistant
-        					rdf.ajout(donnee, "CP");
-        			}
-        			donnee = new String[6];
-        		} //Fin lecture de la JTable
+        		traitementManuel();
         	}
         }
     }                                                 
 
-    private void boutonAnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void traitementManuel() {
+    	String[] donnee = new String[6];
+		RangerDonneeFichier rdf = new RangerDonneeFichier(main_);
+		
+		donnee[0] = valBonLivraison.getText();
+		donnee[1] = String.valueOf(valDate.getDate().getTime());
+		donnee[2] = valListeClient.getSelectedItem().toString();
+		donnee[3] = valNomClient.getText();
+		
+		for (int ligne = 0; ligne<tableauLivraison.getRowCount(); ligne++){
+			String code = "NP";
+			
+			//Si un article a été rentré
+			if (tableauLivraison.getValueAt(ligne, 0) != null){
+				donnee[4] = tableauLivraison.getValueAt(ligne, 0).toString();
+				int indice = donnee[4].indexOf(",");
+				donnee[4] = donnee[4].substring(0, indice-1);
+				
+				//Quantite Livree
+				if (tableauLivraison.getValueAt(ligne, 1) != null){
+					donnee[5] = tableauLivraison.getValueAt(ligne, 1).toString();
+					
+					if (donnee[5].contains("-"))
+						donnee[5].replace("-", "");
+					
+					code = codeErreur(donnee);
+					rdf.ajout(donnee, code);
+				}
+				
+				//Quantite Reprise
+				if (tableauLivraison.getValueAt(ligne, 2) != null){
+					donnee[5] = tableauLivraison.getValueAt(ligne, 2).toString();
+					
+					if (donnee[5].contains("-"))
+						donnee[5].replace("-", "");
+					
+					if (code == "NP")
+						code = codeErreur(donnee);
+					
+					rdf.ajout(donnee, code);
+				}
+			}
+		} //Fin lecture de la JTable
+	}
+
+	private String codeErreur(String[] donnee) {
+		String code = "NP";
+		ControllerFichier cf = new ControllerFichier(main_);
+		int present = cf.verification(donnee);
+		if(present != -1){
+			if (present == 0)
+				code = "";
+			else if (present == 1)
+				code = "C";
+			else if (present == 2)
+				code = "P";
+			else if (present == 3)
+				code = "CP";
+		}
+		return code;
+	}
+
+	private String verifManuelle() {
+    	String contenuErreur = "";
+    	if (valBonLivraison.getText().isEmpty())
+    		contenuErreur += "bon de livraison";
+    	if (valListeClient.getSelectedItem().equals("selectionner")){
+    		if (contenuErreur != "")
+    			contenuErreur += ", client";
+    		else
+    			contenuErreur += "client";
+    	}
+    	if (valDate.getDate() == null){
+    		if (contenuErreur != "")
+    			contenuErreur += ", date de livraison";
+    		else
+    			contenuErreur += "date de livraison";
+    	}
+		return contenuErreur;
+	}
+
+	private void traitementFichier() {
+    	//Vérifier l'extension du fichier
+    	String extention = "^.+\\.(xlsx|ods|txt|csv)$";
+    	if (valFichier.getText().matches(extention)){
+    		LectureFichier lfe = new LectureFichier(main_);
+            try {
+                lfe.ouverture_fichier(valFichier.getText());
+            } catch (IOException e) {
+                messageErreur.setText("Erreur : le fichier renseigné n'a pas un bon format de données");
+            } catch (InvalidFormatException e) {
+                messageErreur.setText("Erreur : le fichier renseigné n'a pas été trouvé");
+            }
+    	}
+    	else{
+    		messageErreur.setText("Merci de renseigner un ficher avec une extention .xls, .ods, .csv ou .txt");
+    	}
+	}
+
+	private void boutonAnnulerActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // Remettre tout les champs à null !
     	messageErreur.setText("");
     	valFichier.setText("Fichier .xslx, .ods, .txt, .csv");

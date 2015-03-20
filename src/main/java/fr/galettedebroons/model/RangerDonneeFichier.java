@@ -2,6 +2,7 @@ package fr.galettedebroons.model;
 
 import java.sql.Date;
 import java.text.DateFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -51,6 +52,9 @@ public class RangerDonneeFichier {
 		SimpleDateFormat format = null;
 		DateFormatSymbols dfsFR = new DateFormatSymbols(Locale.FRENCH);
 		
+		/* Tranformation de la date en date SQL */
+		Long time = null;
+		
 		if (donnee[1].contains("/")){
 			//Trouver le format de date dd/MM/yy ou dd/MM/yyyy
 			indice = donnee[1].indexOf("/");
@@ -62,18 +66,26 @@ public class RangerDonneeFichier {
 				format = new SimpleDateFormat("dd/MM/yyyy");
 			else if (dateStr.length() == 2)
 				format = new SimpleDateFormat("dd/MM/yy");
+			
+			try { 
+				java.util.Date d = format.parse(donnee[1]);
+				time = d.getTime();
+			} catch (ParseException e) { e.printStackTrace(); }
 		}
 		else if (donnee[1].contains("-")) {
 			format = new SimpleDateFormat("dd-MMMM-yyyy",dfsFR);
+			try { 
+				java.util.Date d = format.parse(donnee[1]);
+				time = d.getTime();
+			} catch (ParseException e) { e.printStackTrace(); }
+		}
+		else if (donnee[1].matches("^[0-9]+$")) {
+			time = Long.parseLong(donnee[1]);
 		}
 		
-		try {
-			java.util.Date d = format.parse(donnee[1]);
-			date = new Date(d.getTime());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		date = new Date(time);
 		
+		/* Transformation de la quantite */ 
 		if (donnee[5].contains(",")){
 			indice = donnee[5].indexOf(",");
 			donnee[5] = donnee[5].substring(0, indice);
@@ -84,6 +96,7 @@ public class RangerDonneeFichier {
 		}
 		int qtite = Integer.parseInt(donnee[5]);
 		
+		/* Insertion dans la table temporaire */
 		Temporaire temp;
 		if (qtite>0)
 			temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], qtite, 0, code);
