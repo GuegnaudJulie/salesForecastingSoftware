@@ -40,6 +40,7 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         panelProduction = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        panelParametrage = new javax.swing.JPanel();
         panelManuel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -148,6 +149,8 @@ public class InterfaceGenerale extends javax.swing.JFrame {
                 .addContainerGap(494, Short.MAX_VALUE))
         );
 
+        panelOnglet.addTab("Parametrage", panelParametrage);
+
         panelOnglet.addTab("Manuel d'utilisation", panelManuel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -181,6 +184,7 @@ public class InterfaceGenerale extends javax.swing.JFrame {
     private javax.swing.JTabbedPane panelOnglet;
     private javax.swing.JPanel panelPrevision;
     private javax.swing.JPanel panelProduction;
+    private javax.swing.JPanel panelParametrage;
     private javax.swing.JPanel panelSociete;
     // End of variables declaration                   
 }

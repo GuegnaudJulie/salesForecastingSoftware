@@ -1,10 +1,13 @@
 package fr.galettedebroons.domain;
 
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Produit {
@@ -16,6 +19,8 @@ public class Produit {
 	private int qte_lot;
 	private String nature_produit;
 	private List<Livraison> livraison_produit;
+	private List<MargeLivraison> marge_produit;
+	private List<Prevision> prevision_produit;
 	
 	public Produit(){}
 	
@@ -86,5 +91,23 @@ public class Produit {
 	
 	public void setLivraison_produit(List<Livraison> livraison_produit) {
 		this.livraison_produit = livraison_produit;
+	}
+	
+	@OneToMany(mappedBy="marge_produit", cascade=CascadeType.PERSIST)
+	public List<MargeLivraison> getMarge_produit() {
+		return marge_produit;
+	}
+
+	public void setMarge_produit(List<MargeLivraison> marge_produit) {
+		this.marge_produit = marge_produit;
+	}
+
+	@OneToMany(mappedBy="prevision_produit", cascade=CascadeType.PERSIST)
+	public List<Prevision> getPrevision_produit() {
+		return prevision_produit;
+	}
+
+	public void setPrevision_produit(List<Prevision> prevision_produit) {
+		this.prevision_produit = prevision_produit;
 	}
 }

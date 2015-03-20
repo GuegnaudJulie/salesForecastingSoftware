@@ -17,7 +17,8 @@ public class Profil {
 	private List<Livraison> livraison_profil;
 	private Boolean actif;
 	private Tournee profil_tournee;
-	private MargeLivraison marge_profil;
+	private List<MargeLivraison> marge_profil;
+	private List<Prevision> prevision_profil;
 	
 	public Profil(){}
 	
@@ -80,12 +81,21 @@ public class Profil {
 		this.profil_tournee = profil_tournee;
 	}
 
-	@ManyToOne
-	public MargeLivraison getMarge_profil() {
+	@OneToMany(mappedBy="marge_profil", cascade=CascadeType.PERSIST)
+	public List<MargeLivraison> getMarge_profil() {
 		return marge_profil;
 	}
 
-	public void setMarge_profil(MargeLivraison marge_profil) {
+	public void setMarge_profil(List<MargeLivraison> marge_profil) {
 		this.marge_profil = marge_profil;
+	}
+
+	@OneToMany(mappedBy="prevision_profil", cascade=CascadeType.PERSIST)
+	public List<Prevision> getPrevision_profil() {
+		return prevision_profil;
+	}
+
+	public void setPrevision_profil(List<Prevision> prevision_profil) {
+		this.prevision_profil = prevision_profil;
 	}
 }
