@@ -15,16 +15,14 @@ public class Gamme {
 	private int duree_conservation;
 	private List<Produit> produit_gamme;
 	private List<Profil> gamme_profil;
-	private MargeLivraison gamme_marge;
 	
 	public Gamme(){}
 	
-	public Gamme(String code_gamme, int duree_conservation, List<Produit> produit_gamme, List<Profil> gamme_profil, MargeLivraison gamme_marge) {
+	public Gamme(String code_gamme, int duree_conservation, List<Produit> produit_gamme, List<Profil> gamme_profil) {
 		this.code_gamme = code_gamme;
 		this.duree_conservation = duree_conservation;
 		this.produit_gamme = produit_gamme;
 		this.gamme_profil = gamme_profil;
-		this.gamme_marge = gamme_marge;
 	}
 	
 	@Id
@@ -60,14 +58,5 @@ public class Gamme {
 
 	public void setGamme_profil(List<Profil> gamme_profil) {
 		this.gamme_profil = gamme_profil;
-	}
-
-	@OneToOne
-	public MargeLivraison getGamme_marge() {
-		return gamme_marge;
-	}
-
-	public void setGamme_marge(MargeLivraison gamme_marge) {
-		this.gamme_marge = gamme_marge;
 	}
 }

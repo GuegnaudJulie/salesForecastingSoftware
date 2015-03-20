@@ -16,7 +16,6 @@ public class MargeLivraison {
 	private int id;
 	private double taux_reprise;
 	private List<Profil> marge_profil;
-	private Gamme gamme_marge;
 	
 	public MargeLivraison(){}
 	
@@ -48,14 +47,5 @@ public class MargeLivraison {
 
 	public void setMarge_profil(List<Profil> marge_profil) {
 		this.marge_profil = marge_profil;
-	}
-
-	@OneToOne(mappedBy="gamme_marge", cascade=CascadeType.PERSIST)
-	public Gamme getGamme_marge() {
-		return gamme_marge;
-	}
-
-	public void setGamme_marge(Gamme gamme_marge) {
-		this.gamme_marge = gamme_marge;
 	}
 }
