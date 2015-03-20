@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jopendocument.dom.spreadsheet.MutableCell;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
-import fr.galettedebroons.model.RangerDonneeFichier;
+import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.test.Main;
 
 /**
@@ -152,7 +152,7 @@ public class LectureFichier {
 		ControllerFichier cf = new ControllerFichier(main_);
 		int present = cf.verification(donnees);
 		
-		RangerDonneeFichier donneeFichier = new RangerDonneeFichier(main_);
+		RangerDonneeTemporaire donneeFichier = new RangerDonneeTemporaire(main_);
 		if(present != -1){
 			if (present == 0)
 				//Toutes les donnees existent

@@ -9,8 +9,9 @@ import javax.swing.DefaultCellEditor;
 
 import fr.galettedebroons.controller.ControllerFichier;
 import fr.galettedebroons.controller.LectureFichier;
-import fr.galettedebroons.model.RangerDonneeFichier;
+import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
+import fr.galettedebroons.model.TraitementDonneesTemporaire;
 import fr.galettedebroons.test.Main;
 
 /**
@@ -360,31 +361,37 @@ public class PanelEdition extends javax.swing.JPanel {
     	tableauLivraison.getColumn("Article").setCellEditor(new DefaultCellEditor(valListeProduit));
     }                                                
 
-    private void boutonEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+    private void boutonEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {
+    	messageErreur.setText("");
+    	
         //Traitement d'un fichier
-    	if ( !valFichier.getText().isEmpty() && !valFichier.getText().equalsIgnoreCase("Fichier .xslx, .ods, .txt, .csv")){
+    	if ( !valFichier.getText().isEmpty() && !valFichier.getText().equalsIgnoreCase("Fichier .xslx, .ods, .txt, .csv"))
         	traitementFichier();
-        }
+    	
     	//Traitement manuel
         else{
         	String DebutMessErreur = "Erreur : Vous n'avez pas renseigner le/les champs : ";
         	String contenuErreur = verifManuelle();
         	
         	//Si un champs est vide
-        	if (contenuErreur != ""){
+        	if (contenuErreur != "")
         		messageErreur.setText(DebutMessErreur + contenuErreur);
-        	}
         	
         	//Si tous les champs sont rempli
-        	else{
+        	else
         		traitementManuel();
-        	}
         }
+    	if (messageErreur.getText() == ""){
+    		TraitementDonneesTemporaire tdt = new TraitementDonneesTemporaire(main_);
+    		tdt.insertionDonnee();
+    		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
+    		rdt.vidage();
+    	}
     }                                                 
 
     private void traitementManuel() {
     	String[] donnee = new String[6];
-		RangerDonneeFichier rdf = new RangerDonneeFichier(main_);
+    	RangerDonneeTemporaire rdf = new RangerDonneeTemporaire(main_);
 		
 		donnee[0] = valBonLivraison.getText();
 		donnee[1] = String.valueOf(valDate.getDate().getTime());

@@ -29,10 +29,10 @@ import javax.persistence.Query;
  * @version 1.0
  * @since   2015-03-13
  */
-public class RangerDonneeFichier {
+public class RangerDonneeTemporaire {
 	private EntityManager manager_;
 	
-	public RangerDonneeFichier(Main main){
+	public RangerDonneeTemporaire(Main main){
 		manager_ = main.getManager();
 	}
 	

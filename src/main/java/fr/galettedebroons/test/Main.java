@@ -25,7 +25,6 @@ public class Main {
 		EntityManager manager = factory.createEntityManager();
 		salesForecastingSoftwareTest test = new salesForecastingSoftwareTest(manager);
 		
-	
 		EntityTransaction tx = manager.getTransaction();
 		tx.begin();
 
