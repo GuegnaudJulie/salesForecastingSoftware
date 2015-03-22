@@ -5,16 +5,37 @@
  */
 package fr.galettedebroons.view;
 
+import java.awt.event.ActionEvent;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
+import fr.galettedebroons.domain.Gamme;
+import fr.galettedebroons.domain.Tournee;
+
 /**
  *
  * @author Oumoul
  */
-public class ajoutTournée extends javax.swing.JPanel {
+public class ajoutTournee extends javax.swing.JPanel {
+	
+	private NouveauClient nc;
+	private static EntityManager manager_;
+	static EntityTransaction tx;
+	EntityManagerFactory factory;
+	EntityManager manager;
 
     /**
      * Creates new form ajoutTournée
      */
-    public ajoutTournée() {
+    public ajoutTournee() {
+        initComponents();
+    }
+    
+    public ajoutTournee(NouveauClient nc) {
+    	this.nc = nc;
         initComponents();
     }
 
@@ -42,6 +63,12 @@ public class ajoutTournée extends javax.swing.JPanel {
         nmtourn = new javax.swing.JTextField();
         savet = new javax.swing.JButton();
         annult = new javax.swing.JButton();
+        
+        factory = Persistence.createEntityManagerFactory("majAnteros");
+    	manager = factory.createEntityManager();
+    	setManager(manager);
+    	final EntityTransaction tx = manager_.getTransaction();
+		tx.begin();
 
         jLabel1.setText("AJOUT TOURNEE");
 
@@ -74,6 +101,33 @@ public class ajoutTournée extends javax.swing.JPanel {
         });
 
         savet.setText("Enregistrer");
+        
+        savet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+
+			private void saveActionPerformed(ActionEvent evt) {
+				nomTournee = nmtourn.getText();
+				
+				String jourTournee = "";
+				if(lun.isSelected()){
+					jourTournee = "lundi";
+				}if(mar.isSelected()){
+					jourTournee = jourTournee + " " + "mardi";
+				}if(mer.isSelected()){
+					jourTournee = jourTournee + " " + "mercredi";
+				}if(jeu.isSelected()){
+					jourTournee = jourTournee + " " + "jeudi";
+				}if(ven.isSelected()){
+					jourTournee = jourTournee + " " + "vendredi";
+				}
+				Tournee nvGamme = new Tournee(1,nomTournee, jourTournee, null);
+				manager_.persist(nvGamme);
+				tx.commit();
+				nc.methode();
+			}
+        });
 
         annult.setText("Annuler");
 
@@ -174,6 +228,12 @@ public class ajoutTournée extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_nmtournActionPerformed
 
+    public EntityManager getManager(){
+		return manager_;
+	}
+	public void setManager(EntityManager manager){
+		manager_ = manager;
+	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton annult;
@@ -191,5 +251,6 @@ public class ajoutTournée extends javax.swing.JPanel {
     private javax.swing.JCheckBox sam;
     private javax.swing.JButton savet;
     private javax.swing.JCheckBox ven;
+    private String nomTournee;
     // End of variables declaration//GEN-END:variables
 }

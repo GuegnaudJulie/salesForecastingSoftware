@@ -25,6 +25,7 @@ public class ajoutGamme extends javax.swing.JPanel {
 	EntityManagerFactory factory;
 	EntityManager manager;
 	NouveauProduit np;
+	NouveauClient nc;
 	
 	static String codeGamme;
 	static int dureeConserv;
@@ -34,6 +35,11 @@ public class ajoutGamme extends javax.swing.JPanel {
      */
     public ajoutGamme(NouveauProduit np) {
     	this.np = np;
+        initComponents();
+    }
+    
+    public ajoutGamme(NouveauClient nc) {
+    	this.nc = nc;
         initComponents();
     }
 

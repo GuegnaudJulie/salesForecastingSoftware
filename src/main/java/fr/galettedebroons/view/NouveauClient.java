@@ -1,5 +1,6 @@
 package fr.galettedebroons.view;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Temporaire;
@@ -47,6 +49,8 @@ public class NouveauClient extends java.awt.Panel {
 		        jLabel4 = new javax.swing.JLabel();
 		        jComboBox2 = new javax.swing.JComboBox();
 		        jButton2 = new javax.swing.JButton();
+		        
+		        fenetreNvGamme = new JFrame();
 	
 		        jLabel1.setText("Nom Client");
 	
@@ -61,15 +65,27 @@ public class NouveauClient extends java.awt.Panel {
 		        jComboBox1 = tournee;
 		        //jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 	
-		        
-		        jButton1.setText("Ajouter Tournee");
+		        // bouton tournee
+		        jButton1.setText("+");
+		        jButton1.addActionListener(new java.awt.event.ActionListener() {
+		            public void actionPerformed(java.awt.event.ActionEvent evt) {
+		                jButton1ActionPerformed(evt);
+		            }
+		        });
 	
 		        jLabel4.setText("Gamme");
 	
 		        jComboBox2 = gamme;
 		        //jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 	
-		        jButton2.setText("Ajouter Gamme");
+		        // bouton gamme
+		        jButton2.setText("+");
+		        jButton2.addActionListener(new java.awt.event.ActionListener() {
+		            public void actionPerformed(java.awt.event.ActionEvent evt) {
+		                jButton2ActionPerformed(evt);
+		            }
+		        });
+		        
 	
 		        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		        this.setLayout(layout);
@@ -124,6 +140,28 @@ public class NouveauClient extends java.awt.Panel {
 		    }// </editor-fold>
 	    
 
+	    public JFrame getJFrame(){
+	    	return fenetreNvGamme;
+	    }
+	    
+	    public void methode(){
+	    	fenetreNvGamme.setVisible(false);
+	    	
+		}
+	    
+	    private void jButton1ActionPerformed(ActionEvent evt) {
+			ajoutTournee nvGamme = new ajoutTournee(this);
+	    	fenetreNvGamme.setSize(500, 500);
+	    	fenetreNvGamme.add(nvGamme);
+	    	fenetreNvGamme.setVisible(true);
+		}
+	    
+	    private void jButton2ActionPerformed(ActionEvent evt) {
+			ajoutGamme nvGamme = new ajoutGamme(this);
+	    	fenetreNvGamme.setSize(500, 200);
+	    	fenetreNvGamme.add(nvGamme);
+	    	fenetreNvGamme.setVisible(true);
+		}
 
 	    // Variables declaration - do not modify
 	    private javax.swing.JButton jButton1;
@@ -136,10 +174,6 @@ public class NouveauClient extends java.awt.Panel {
 	    private javax.swing.JLabel jLabel4;
 	    private javax.swing.JTextField jTextField1;
 	    private javax.swing.JTextField jTextField2;
+	    private JFrame fenetreNvGamme;
 	    // End of variables declaration
-	
-	
-	    
-	
-
 }

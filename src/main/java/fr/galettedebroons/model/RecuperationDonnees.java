@@ -1,10 +1,12 @@
 package fr.galettedebroons.model;
 
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.test.Main;
 
 public class RecuperationDonnees {
@@ -39,6 +41,12 @@ public class RecuperationDonnees {
 		return produit;
 	}
 	
+	public List<Object[]> recuperationClientTemp(){
+		List<Object[]> produit = manager_.createQuery("select distinct t.nom_client, t.code_profil " +
+				"from Temporaire t where code_erreur = 'CP' or  code_erreur = 'P'", Object[].class).getResultList();
+		return produit;
+	}
+	
 	public String[] recuperationGamme(){
 		List<String> ListGamme = manager_.createQuery("select g.code_gamme " +
 				"from Gamme g ", String.class).getResultList();
@@ -51,5 +59,19 @@ public class RecuperationDonnees {
 		}
 		
 		return gamme;
+	}
+	
+	public String[] recuperationTournee(){
+		List<String> ListTournee = manager_.createQuery("select t.nom " +
+				"from Tournee t ", String.class).getResultList();
+		
+		String[] tournee = new String[ListTournee.size()];
+		int i = 0;
+		for (String g : ListTournee){
+			tournee[i] = g;
+			i++;
+		}
+		
+		return tournee;
 	}
 }

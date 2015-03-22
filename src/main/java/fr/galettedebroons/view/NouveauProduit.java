@@ -166,7 +166,6 @@ public class NouveauProduit extends java.awt.Panel {
                                         
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-    	System.out.println("je passssse");
     	ajoutGamme nvGamme = new ajoutGamme(this);
     	fenetreNvGamme.setSize(500, 200);
     	fenetreNvGamme.add(nvGamme);

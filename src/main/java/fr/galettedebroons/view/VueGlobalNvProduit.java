@@ -121,6 +121,7 @@ public class VueGlobalNvProduit {
     	for(String prod : produits) {
     		JComboBox jb = new JComboBox(gamme);
     		comboGamme[indice] = jb;
+    		System.out.println("Ma combo gaaaaamme : " +jb);
     		panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
     		NouveauProduit np = new NouveauProduit(prod.toString(), jb);
     		panelGeneral.add(np);
