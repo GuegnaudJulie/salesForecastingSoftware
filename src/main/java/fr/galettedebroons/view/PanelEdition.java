@@ -1,9 +1,11 @@
 package fr.galettedebroons.view;
 
 import java.util.List;
+import java.awt.GridLayout;
 import java.io.IOException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
@@ -317,7 +319,7 @@ public class PanelEdition extends javax.swing.JPanel {
         valListeProduit.setModel(new javax.swing.DefaultComboBoxModel(code_produit));
     }
 
-	private void boutonParcourirActionPerformed(java.awt.event.ActionEvent evt) {                                                
+	private void boutonParcourirActionPerformed(java.awt.event.ActionEvent evt) {
         JFileChooser choix = new JFileChooser();
         int retour=choix.showOpenDialog(getParent());
         if(retour==JFileChooser.APPROVE_OPTION){
@@ -366,7 +368,17 @@ public class PanelEdition extends javax.swing.JPanel {
 			
 			...
 			
-			for(Object[] cli : clients) => devient => for(int i = 0; i<nbNewClient; i ++)
+			if (panel == null){
+				for(Object[] cli : clients){
+				...
+				}
+			else{
+				JComboBox jb = new JComboBox(gamme);
+				JComboBox jt = new JComboBox(tournee);
+				panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
+    			NouveauClient np = new NouveauClient(null, null, jt, jb);
+	    		panelGeneral.add(np);
+			}
 			
 		Méthode Enregistrer(){
 			if (panel != null)
@@ -567,7 +579,15 @@ public class PanelEdition extends javax.swing.JPanel {
 			
 			...
 			
-			for(Object[] prod : produits) => devient => for(int i = 0; i<nbNewProd; i ++)
+			if (panel == null){
+				for(Object[] prod : produits){
+				...
+				}
+			else{
+				JComboBox jb = new JComboBox(gamme);
+				panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
+				NouveauProduit np = new NouveauProduit(null, jb);
+			}
 			
 		Méthode Enregistrer(){
 			if (panel != null)
