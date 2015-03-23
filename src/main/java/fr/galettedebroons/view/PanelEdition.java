@@ -43,7 +43,7 @@ public class PanelEdition extends javax.swing.JPanel {
 
     	rd = new RecuperationDonnees(main_);
     	nouveauClient = null;
-    	nouveauProduit = new VueGlobalNvProduit();
+    	nouveauProduit = null;
         panelEdition = new javax.swing.JPanel();
         labelTitre = new javax.swing.JLabel();
         messageErreur = new javax.swing.JLabel();
@@ -358,7 +358,7 @@ public class PanelEdition extends javax.swing.JPanel {
     	nouveauClient = new VueGlobalNvClient(main_, this);
     }     
     
-    private void terminerAjoutClient(){
+    void terminerAjoutClient(){
     	//nouveauClient.setVisible(false);
     	listeClient();
     }

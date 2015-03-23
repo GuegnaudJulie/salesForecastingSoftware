@@ -152,6 +152,7 @@ public class VueGlobalNvProduit {
 				panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
 				NouveauProduit np = new NouveauProduit(null, jb);
 				panelGeneral.add(np);
+				listnvproduit.add(np);
 			}
     	
 		
@@ -185,8 +186,8 @@ public class VueGlobalNvProduit {
 	 */
 	private static void enregistrercliActionPerformed(ActionEvent evt) {
 		
-		if (panel_ != null)
-			panel_.terminerAjoutProduit();
+		/*if (panel_ != null)
+			panel_.terminerAjoutProduit();*/
 
 		JViewport viewport = new JViewport();
 		System.out.println("taille de la liste : " +listnvproduit.size());
@@ -244,7 +245,8 @@ public class VueGlobalNvProduit {
 			for(int i = 0; i < t.length; i++){
 				System.out.println("mon elmt : " +t[i]);
 			}
-			Gamme gamme = new Gamme(t[0], Integer.parseInt(t[1]), null, null);
+			//Gamme gamme = new Gamme(t[0], Integer.parseInt(t[1]), null, null);
+			Gamme gamme = new Gamme(t[0], 2, null, null);
 			System.out.println(listprod.getCombo().getSelectedItem());
 			
 			

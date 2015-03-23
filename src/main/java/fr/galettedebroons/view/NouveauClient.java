@@ -28,7 +28,6 @@ public class NouveauClient extends java.awt.Panel {
 	    /** Creates new form NouveauClient */
 	    public NouveauClient(String cc, String nc, JComboBox tournee, JComboBox gamme) {
 	        initComponents(cc, nc, tournee, gamme);
-	        System.out.println("J'initialise mes composants !!!!!!!!!!!!!!!!!!!!!");
 	    }
 	    
 	    /** This method is called from within the constructor to
@@ -162,6 +161,15 @@ public class NouveauClient extends java.awt.Panel {
 	    	fenetreNvGamme.add(nvGamme);
 	    	fenetreNvGamme.setVisible(true);
 		}
+	    
+	    public javax.swing.JTextField getTextFieldNC(){
+	    	return jTextField1;
+	    }
+	    
+	    public javax.swing.JTextField getTextFieldCC(){
+	    	return jTextField2;
+	    }
+	    
 
 	    // Variables declaration - do not modify
 	    private javax.swing.JButton jButton1;

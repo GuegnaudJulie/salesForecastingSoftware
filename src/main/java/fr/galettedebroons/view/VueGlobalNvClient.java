@@ -18,14 +18,21 @@ import javax.persistence.criteria.Root;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import fr.galettedebroons.domain.Client;
 import fr.galettedebroons.domain.Gamme;
+import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
+import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.model.RecuperationDonnees;
+import fr.galettedebroons.model.TraitementDonneesTemporaire;
 import fr.galettedebroons.test.Main;
 import fr.galettedebroons.*;
 /**
@@ -57,6 +64,11 @@ public class VueGlobalNvClient {
 	List<Object[]> clients;
 	Main main_;
 	PanelEdition panel_;
+	TraitementDonneesTemporaire ClasseTraitement_;
+	String nomClient;
+	String codeClient;
+	String textCombo;
+	String codeGamme;
 	
 	
 	public VueGlobalNvClient(){
@@ -64,12 +76,24 @@ public class VueGlobalNvClient {
 		//fenetre.setVisible(true);
 	}
 	
+	/**
+	 * Constructeur initialise composants graphiques
+	 * @param main acces au Entity Manager pour gerer la BDD
+	 * @param panel
+	 */
 	public VueGlobalNvClient(Main main, PanelEdition panel){
-		main_ = main; //Contient notre EntityManager => plus besoin de faire : new Main(manager_) et de créer le manager
+		main_ = main; 
 		panel_ = panel;
 		initialisationClients();
 	}
 
+	public VueGlobalNvClient(TraitementDonneesTemporaire traitementDonneesTemporaire) {
+		this.ClasseTraitement_ = traitementDonneesTemporaire;
+	}
+
+	/**
+	 * initialisation des composants
+	 */
 	private void initialisationClients() {
 
 		//this.comboTournee = new JComboBox();
@@ -82,9 +106,11 @@ public class VueGlobalNvClient {
 		listnvclient = new ArrayList<NouveauClient>();
 		
 		
-		/*factory = Persistence.createEntityManagerFactory("majAnteros");
+		factory = Persistence.createEntityManagerFactory("majAnteros");
     	manager = factory.createEntityManager();
-    	this.setManager(manager);*/
+    	this.setManager(manager);
+    	tx = manager_.getTransaction();
+		tx.begin();
     	
     	// recupere les clients dans la table temporaire -----
     	/*CriteriaBuilder cb = manager_.getCriteriaBuilder();
@@ -180,6 +206,7 @@ public class VueGlobalNvClient {
 			panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
 			NouveauClient np = new NouveauClient(null, null, jt, jb);
     		panelGeneral.add(np);
+    		listnvclient.add(np);
 		}
 		// fin de traitement de ma liste de gamme
 		
@@ -240,15 +267,38 @@ public class VueGlobalNvClient {
 		}
 		
 		private void enregistrercliActionPerformed(ActionEvent evt) {
-			/*Temporaire t;
-			Date d = new Date();
+			Client c = new Client();
+			Profil p;
+			//listnvclient
 			
-			t = new Temporaire(1, "B004", "CP", "159", 1, 2013-08-02, "SUPARNAV", 2, 0);
-			manager_.persist(temp);
-			tx.commit();
+			for (NouveauClient listclient : listnvclient){
+				// reinitialisation des parametre de creation de produit
+				nomClient = "";
+				codeClient = "";
+				textCombo = "";
+				codeGamme = "";
+				
+				nomClient = ((NouveauClient) listclient).getTextFieldNC().getText();
+				codeClient = ((NouveauClient) listclient).getTextFieldCC().getText();
+				System.out.println("Nom du client : " +nomClient);
+				
+				try{
+					c = new Client(nomClient, null);
+					manager_.persist(c);
+					tx.commit();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				
+				
+			}
 			
-			if (panel != null)
-				panel.terminerAjoutClient();*/
+			
+			if (panel_ != null)
+				panel_.terminerAjoutClient();
+			
+			ClasseTraitement_ = new TraitementDonneesTemporaire(main_, panel_);
+			ClasseTraitement_.insertionProduit();
 			
 		}
 

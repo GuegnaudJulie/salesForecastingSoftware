@@ -28,7 +28,7 @@ public class TraitementDonneesTemporaire {
 	 */
 	public void insertionDonnee(){
 
-		//fenetreClient = new VueGlobalNvClient(this);
+		fenetreClient = new VueGlobalNvClient(this);
 		
 		/* DANS VueGlobalNvClient
 		
