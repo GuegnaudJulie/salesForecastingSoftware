@@ -38,6 +38,9 @@ public class PanelEdition extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
+    	rd = new RecuperationDonnees(main_);
+    	nouveauClient = new java.awt.Frame();
+    	nouveauProduit = new java.awt.Frame();
         panelEdition = new javax.swing.JPanel();
         labelTitre = new javax.swing.JLabel();
         messageErreur = new javax.swing.JLabel();
@@ -87,22 +90,8 @@ public class PanelEdition extends javax.swing.JPanel {
         labelDate.setText("Date de livraison");
 
         labelClient.setText("Code client");
-
-        RecuperationDonnees rd = new RecuperationDonnees(main_);
-        client = rd.recuperationCodeClient();
-        String[] code_client = new String[client.size()+1];
-        code_client[0] = "selectionner";
-        int indice = 1;
-        for (Object[] cl : client){
-            code_client[indice] = cl[0].toString();
-            indice++;
-        }
-        valListeClient.setModel(new javax.swing.DefaultComboBoxModel(code_client));
-        valListeClient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                valListeClientActionPerformed(evt);
-            }
-        });
+        
+        listeClient();
 
         boutonAjoutClient.setBackground(new java.awt.Color(0, 153, 102));
         boutonAjoutClient.setText("+");
@@ -115,15 +104,8 @@ public class PanelEdition extends javax.swing.JPanel {
 
         valNomClient.setText(" ");
 
-        produit = rd.recuperationCodeProduit();
-        String[] code_produit = new String[produit.size()+1];
-        code_produit[0] = "";
-        indice = 1;
-        for (Object[] pr : produit){
-            code_produit[indice] = pr[0].toString() + " ," + pr[1];
-            indice++;
-        }
-        valListeProduit.setModel(new javax.swing.DefaultComboBoxModel(code_produit));
+        listeProduit();
+        
         tableauLivraison.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         data = new Object [][] {
             {null, null, null},
@@ -304,7 +286,37 @@ public class PanelEdition extends javax.swing.JPanel {
         );
     }// </editor-fold>                        
 
-    private void boutonParcourirActionPerformed(java.awt.event.ActionEvent evt) {                                                
+    private void listeClient() {
+    	client = rd.recuperationCodeClient();
+        String[] code_client = new String[client.size()+1];
+        code_client[0] = "selectionner";
+        int indice = 1;
+        for (Object[] cl : client){
+            code_client[indice] = cl[0].toString();
+            indice++;
+        }
+        
+        valListeClient.setModel(new javax.swing.DefaultComboBoxModel(code_client));
+        valListeClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                valListeClientActionPerformed(evt);
+            }
+        });
+	}
+    
+    private void listeProduit(){
+    	produit = rd.recuperationCodeProduit();
+        String[] code_produit = new String[produit.size()+1];
+        code_produit[0] = "";
+        int indice = 1;
+        for (Object[] pr : produit){
+            code_produit[indice] = pr[0].toString() + " - " + pr[1];
+            indice++;
+        }
+        valListeProduit.setModel(new javax.swing.DefaultComboBoxModel(code_produit));
+    }
+
+	private void boutonParcourirActionPerformed(java.awt.event.ActionEvent evt) {                                                
         JFileChooser choix = new JFileChooser();
         int retour=choix.showOpenDialog(getParent());
         if(retour==JFileChooser.APPROVE_OPTION){
@@ -328,7 +340,44 @@ public class PanelEdition extends javax.swing.JPanel {
 
     private void boutonAjoutClientActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         // new frame avec formulaire des nouveaux client
-    }                                                 
+    	
+    	/*
+    	nouveauClient.add(new VueGlobalNvClient(main_));
+    	nouveauClient.setLocationRelativeTo(null);
+    	nouveauClient.setVisible(true);
+    	
+    	A rajouter dans VueGlobalNvClient:
+    	
+    	Constructeur:
+    		VueGlobalNvClient(Main main, PanelEdition panel){
+    			main_ = main; //Contient notre EntityManager => plus besoin de faire : new Main(manager_) et de créer le manager
+    			panel_ = panel;
+    		}
+    	
+    	Méthode init_component():
+	    	int nbNewClient = 0;
+	    	if (panel == null){
+		    	List<String> clients = rd.recuperationClientTemp();
+				nbNewClient = produits.size();
+			}
+			else
+				nbNewClient = 1;
+			
+			...
+			
+			for(Object[] cli : clients) => devient => for(int i = 0; i<nbNewClient; i ++)
+			
+		Méthode Enregistrer(){
+			if (panel != null)
+				panel.terminerAjoutClient();
+		}
+    	*/
+    }     
+    
+    private void terminerAjoutClient(){
+    	nouveauClient.setVisible(false);
+    	listeClient();
+    }
 
     private void boutonAjoutLigneActionPerformed(java.awt.event.ActionEvent evt) {                                                 
         // ajouter une ligne au tableau de livraison
@@ -514,15 +563,55 @@ public class PanelEdition extends javax.swing.JPanel {
     }                                             
 
     private void boutonAjoutArticleActionPerformed(java.awt.event.ActionEvent evt) {                                                   
-        // TODO add your handling code here:
-    }                                                  
+    	// new frame avec formulaire des nouveaux produits
+    	
+    	/*
+    	nouveauProduit.add(new VueGlobalNvProduit(main_));
+    	nouveauProduit.setLocationRelativeTo(null);
+    	nouveauProduit.setVisible(true);
+    	
+    	A rajouter dans VueGlobalNvProduit:
+    	
+    	Constructeur:
+    		VueGlobalNvProduit(Main main, PanelEdition panel){
+    			main_ = main; //Contient notre EntityManager => plus besoin de faire : new Main(manager_) et de créer le manager
+    			panel_ = panel;
+    		}
+    	
+    	Méthode init_component():
+	    	int nbNewProd = 0;
+	    	if (panel == null){
+		    	List<String> produits = rd.recuperationProduitTemp();
+				nbNewProd = produits.size();
+			}
+			else
+				nbNewProd = 1;
+			
+			...
+			
+			for(Object[] prod : produits) => devient => for(int i = 0; i<nbNewProd; i ++)
+			
+		Méthode Enregistrer(){
+			if (panel != null)
+				panel.terminerAjoutProduit();
+		}
+    	*/
+    }
+    
+    private void terminerAjoutProduit(){
+    	nouveauProduit.setVisible(false);
+    	listeProduit();
+    }
 
+    private RecuperationDonnees rd;
     private Object[][] data;
     private String[] title = {"Article", "Quantité livrée", "Quantité reprise"};
     private List<Object[]> produit;
     private List<Object[]> client;
     private Main main_;
     private javax.swing.JComboBox valListeProduit;
+    private java.awt.Frame nouveauClient;
+    private java.awt.Frame nouveauProduit;
     // Variables declaration - do not modify                     
     private javax.swing.JButton boutonAjoutArticle;
     private javax.swing.JButton boutonAjoutClient;
