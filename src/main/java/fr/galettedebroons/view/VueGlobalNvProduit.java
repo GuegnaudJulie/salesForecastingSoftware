@@ -236,9 +236,9 @@ public class VueGlobalNvProduit {
 	}
 	
 
-	public static void main(String[] args){
-		VueGlobalNvProduit np = new VueGlobalNvProduit();
-	}
+	/*public static void main(String[] args){
+		//VueGlobalNvProduit np = new VueGlobalNvProduit();
+	}*/
 	
 	public EntityManager getManager(){
 		return manager_;

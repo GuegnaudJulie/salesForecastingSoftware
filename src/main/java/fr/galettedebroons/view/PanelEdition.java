@@ -42,8 +42,8 @@ public class PanelEdition extends javax.swing.JPanel {
     private void initComponents() {
 
     	rd = new RecuperationDonnees(main_);
-    	nouveauClient = new java.awt.Frame();
-    	nouveauProduit = new java.awt.Frame();
+    	nouveauClient = null;
+    	nouveauProduit = new VueGlobalNvProduit();
         panelEdition = new javax.swing.JPanel();
         labelTitre = new javax.swing.JLabel();
         messageErreur = new javax.swing.JLabel();
@@ -345,50 +345,21 @@ public class PanelEdition extends javax.swing.JPanel {
         // new frame avec formulaire des nouveaux client
     	
     	/*
-    	nouveauClient.add(new VueGlobalNvClient(main_));
+    	nouveauClient.add(new VueGlobalNvClient(main_, this));
     	nouveauClient.setLocationRelativeTo(null);
     	nouveauClient.setVisible(true);
-    	
-    	A rajouter dans VueGlobalNvClient:
-    	
-    	Constructeur:
-    		VueGlobalNvClient(Main main, PanelEdition panel){
-    			main_ = main; //Contient notre EntityManager => plus besoin de faire : new Main(manager_) et de créer le manager
-    			panel_ = panel;
-    		}
-    	
-    	Méthode init_component():
-	    	int nbNewClient = 0;
-	    	if (panel == null){
-		    	List<String> clients = rd.recuperationClientTemp();
-				nbNewClient = produits.size();
-			}
-			else
-				nbNewClient = 1;
-			
-			...
-			
-			if (panel == null){
-				for(Object[] cli : clients){
-				...
-				}
-			else{
-				JComboBox jb = new JComboBox(gamme);
-				JComboBox jt = new JComboBox(tournee);
-				panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
-    			NouveauClient np = new NouveauClient(null, null, jt, jb);
-	    		panelGeneral.add(np);
-			}
-			
-		Méthode Enregistrer(){
-			if (panel != null)
-				panel.terminerAjoutClient();
-		}
     	*/
+    	/*
+    	nouveauClient.setLocationRelativeTo(null);
+    	nouveauClient.setSize(500, 500);
+    	nouveauClient.setVisible(true);
+    	*/
+    	
+    	nouveauClient = new VueGlobalNvClient(main_, this);
     }     
     
     private void terminerAjoutClient(){
-    	nouveauClient.setVisible(false);
+    	//nouveauClient.setVisible(false);
     	listeClient();
     }
 
@@ -597,7 +568,7 @@ public class PanelEdition extends javax.swing.JPanel {
     }
     
     private void terminerAjoutProduit(){
-    	nouveauProduit.setVisible(false);
+    	//nouveauProduit.setVisible(false);
     	listeProduit();
     }
 
@@ -608,8 +579,8 @@ public class PanelEdition extends javax.swing.JPanel {
     private List<Object[]> client;
     private Main main_;
     private javax.swing.JComboBox valListeProduit;
-    private java.awt.Frame nouveauClient;
-    private java.awt.Frame nouveauProduit;
+    private VueGlobalNvClient nouveauClient;
+    private VueGlobalNvProduit nouveauProduit;
     // Variables declaration - do not modify                     
     private javax.swing.JButton boutonAjoutArticle;
     private javax.swing.JButton boutonAjoutClient;

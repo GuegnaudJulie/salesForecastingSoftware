@@ -64,6 +64,9 @@ public class ajoutTournee extends javax.swing.JPanel {
         savet = new javax.swing.JButton();
         annult = new javax.swing.JButton();
         
+        nomTournee = "";
+        jourTournee = "";
+        
         factory = Persistence.createEntityManagerFactory("majAnteros");
     	manager = factory.createEntityManager();
     	setManager(manager);
@@ -108,9 +111,10 @@ public class ajoutTournee extends javax.swing.JPanel {
             }
 
 			private void saveActionPerformed(ActionEvent evt) {
+				
 				nomTournee = nmtourn.getText();
 				
-				String jourTournee = "";
+				
 				if(lun.isSelected()){
 					jourTournee = "lundi";
 				}if(mar.isSelected()){
@@ -121,9 +125,15 @@ public class ajoutTournee extends javax.swing.JPanel {
 					jourTournee = jourTournee + " " + "jeudi";
 				}if(ven.isSelected()){
 					jourTournee = jourTournee + " " + "vendredi";
+				}if(sam.isSelected()){
+					jourTournee = jourTournee + " " + "samedi";
+				}if(dim.isSelected()){
+					jourTournee = jourTournee + " " + "dimanche";
 				}
-				Tournee nvGamme = new Tournee(1,nomTournee, jourTournee, null);
-				manager_.persist(nvGamme);
+				System.out.println("le nom de ma tournee : " +nomTournee);
+				System.out.println("le nom de ma tournee : " +jourTournee);
+				Tournee nvGamme = new Tournee(1, jourTournee, nomTournee);
+				manager_.merge(nvGamme);
 				tx.commit();
 				nc.methode();
 			}
@@ -252,5 +262,6 @@ public class ajoutTournee extends javax.swing.JPanel {
     private javax.swing.JButton savet;
     private javax.swing.JCheckBox ven;
     private String nomTournee;
+    private String jourTournee;
     // End of variables declaration//GEN-END:variables
 }

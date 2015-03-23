@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import fr.galettedebroons.domain.Temporaire;
+import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.test.Main;
 
 public class RecuperationDonnees {
@@ -15,6 +16,7 @@ public class RecuperationDonnees {
 	
 	public RecuperationDonnees(Main main){
 		manager_ = main.getManager();
+		System.out.println(manager_.toString());
 	}
 	
 	/**
@@ -59,6 +61,12 @@ public class RecuperationDonnees {
 		}
 		
 		return gamme;
+	}
+	
+	public List<Object[]> recuperationTourneee(){
+		List<Object[]> tournee = manager_.createQuery("select distinct t.id, t.jour_tournee, t.nom" +
+				" from Tournee t", Object[].class).getResultList();
+		return tournee;
 	}
 	
 	public String[] recuperationTournee(){

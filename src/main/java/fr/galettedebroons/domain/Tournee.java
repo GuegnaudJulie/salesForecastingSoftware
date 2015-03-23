@@ -26,6 +26,12 @@ public class Tournee {
 		this.profil_tournee = profil_tournee;
 	}
 	
+	public Tournee(Integer id_tournee, String nom, String jour_tournee) {
+		this.id = id_tournee;
+		this.nom = nom;
+		this.jour_tournee = jour_tournee;
+	}
+
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public int getId() {
 		return id;

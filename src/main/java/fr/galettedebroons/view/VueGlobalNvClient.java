@@ -35,7 +35,7 @@ import fr.galettedebroons.*;
  * @author poher
  *
  */
-public class VueGlobalNvClient extends Frame{
+public class VueGlobalNvClient {
 	
 
 	private static EntityManager manager_;
@@ -55,11 +55,19 @@ public class VueGlobalNvClient extends Frame{
 	JComboBox[] comboGamme;
 	List<NouveauClient> listnvclient;
 	List<Object[]> clients;
+	Main main_;
+	PanelEdition panel_;
 	
 	
 	public VueGlobalNvClient(){
 		initialisationClients();
 		//fenetre.setVisible(true);
+	}
+	
+	public VueGlobalNvClient(Main main, PanelEdition panel){
+		main_ = main; //Contient notre EntityManager => plus besoin de faire : new Main(manager_) et de créer le manager
+		panel_ = panel;
+		initialisationClients();
 	}
 
 	private void initialisationClients() {
@@ -74,9 +82,9 @@ public class VueGlobalNvClient extends Frame{
 		listnvclient = new ArrayList<NouveauClient>();
 		
 		
-		factory = Persistence.createEntityManagerFactory("majAnteros");
+		/*factory = Persistence.createEntityManagerFactory("majAnteros");
     	manager = factory.createEntityManager();
-    	this.setManager(manager);
+    	this.setManager(manager);*/
     	
     	// recupere les clients dans la table temporaire -----
     	/*CriteriaBuilder cb = manager_.getCriteriaBuilder();
@@ -86,9 +94,20 @@ public class VueGlobalNvClient extends Frame{
 		q.where(cb.or(cb.equal(t.get("code_erreur"), "C"),cb.equal(t.get("code_erreur"), "CP")));
 		results = manager_.createQuery(q).getResultList();*/
 		
-		RecuperationDonnees rd = new RecuperationDonnees(new Main(manager));
-		clients = rd.recuperationClientTemp();
-		int nbNewProd = clients.size();
+		RecuperationDonnees rd = new RecuperationDonnees(main_);
+		clients = null;
+		
+		int nbNewClient = 0;
+    	if (panel_ == null){
+	    	clients = rd.recuperationClientTemp();
+			nbNewClient = clients.size();
+		}
+		else
+			nbNewClient = 1;
+		
+				
+		
+		
 		
 		// fin recupere clients -----
 		
@@ -129,31 +148,39 @@ public class VueGlobalNvClient extends Frame{
     	}*/
     	
     	String[] gamme = rd.recuperationGamme();
-    	comboGamme = new JComboBox[nbNewProd];
-    	comboTournee = new JComboBox[nbNewProd];
+    	comboGamme = new JComboBox[nbNewClient];
+    	comboTournee = new JComboBox[nbNewClient];
     	
+    	    	
     	int indice = 0;
     	int indiceTournee = 0;
-    	System.out.println("taille des clients : " +clients.size());
-    	for(Object[] cli : clients) {
-    		JComboBox jb = new JComboBox(gamme);
-    		comboGamme[indice] = jb;
-    		System.out.println("contenu de comboGamme : " +comboGamme[indice]);
-    		
-    		//for(Object[] tournee : tournees){
-	    		JComboBox jt = new JComboBox(tournee);
-	    		comboTournee[indiceTournee] = jt;
-	    		System.out.println("contenu de comboTournee : " +comboTournee[indiceTournee]);
-    		//}
-    		panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
-    		/*String codeclient, String nc, JComboBox tournee, JComboBox gamme*/
-    		NouveauClient np = new NouveauClient(cli[1].toString(),cli[0].toString(), jt, jb);
+    	//System.out.println("taille des clients : " +clients.size());
+    	if (panel_ == null){
+			for(Object[] cli : clients){
+	    		JComboBox jb = new JComboBox(gamme);
+	    		comboGamme[indice] = jb;
+	    		System.out.println("contenu de comboGamme : " +comboGamme[indice]);
+	    		
+	    		//for(Object[] tournee : tournees){
+		    		JComboBox jt = new JComboBox(tournee);
+		    		comboTournee[indiceTournee] = jt;
+		    		System.out.println("contenu de comboTournee : " +comboTournee[indiceTournee]);
+	    		//}
+	    		panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
+	    		/*String codeclient, String nc, JComboBox tournee, JComboBox gamme*/
+	    		NouveauClient np = new NouveauClient(cli[1].toString(),cli[0].toString(), jt, jb);
+	    		panelGeneral.add(np);
+	    		listnvclient.add(np);
+	    		indice ++;
+	    		System.out.println("j'aiiiiiiii qq chose");
+	    	}
+    	}else{
+			JComboBox jb = new JComboBox(gamme);
+			JComboBox jt = new JComboBox(tournee);
+			panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
+			NouveauClient np = new NouveauClient(null, null, jt, jb);
     		panelGeneral.add(np);
-    		listnvclient.add(np);
-    		indice ++;
-    		System.out.println("j'aiiiiiiii qq chose");
-    	}
-    	
+		}
 		// fin de traitement de ma liste de gamme
 		
     	/*int i = 0;
@@ -201,9 +228,9 @@ public class VueGlobalNvClient extends Frame{
 		
 	}
 	
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		VueGlobalNvClient nc = new VueGlobalNvClient();
-	}
+	}*/
 		
 		public EntityManager getManager(){
 			return manager_;
@@ -218,7 +245,11 @@ public class VueGlobalNvClient extends Frame{
 			
 			t = new Temporaire(1, "B004", "CP", "159", 1, 2013-08-02, "SUPARNAV", 2, 0);
 			manager_.persist(temp);
-			tx.commit();*/
+			tx.commit();
+			
+			if (panel != null)
+				panel.terminerAjoutClient();*/
+			
 		}
 
 }
