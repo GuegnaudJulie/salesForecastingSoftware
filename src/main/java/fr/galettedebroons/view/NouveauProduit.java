@@ -24,6 +24,7 @@ public class NouveauProduit extends java.awt.Panel {
     /** Creates new form NouveauClient */
 
     public NouveauProduit(String code_produit, JComboBox comboGamme) {
+    	System.out.println("Nouveau prod !!!");
     	initComponents(code_produit, comboGamme);
     }	
 
@@ -109,7 +110,7 @@ public class NouveauProduit extends java.awt.Panel {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField1))
+                                .addComponent(jTextField1 , javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(18, 18, 18)

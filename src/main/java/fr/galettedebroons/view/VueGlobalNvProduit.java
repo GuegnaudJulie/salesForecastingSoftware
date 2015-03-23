@@ -52,11 +52,20 @@ public class VueGlobalNvProduit {
 	static String presentation_produit;
 	static String gamme_produit;
 	static String textCombo;
+	Main main_;
+	static PanelEdition panel_;
+	static List<String> produits;
 	
 	/**
 	 * constructeur appel methode dynamique creation panel nouveau client
 	 */
 	public VueGlobalNvProduit(){
+		initialisationProduits();
+	}
+	
+	public VueGlobalNvProduit(Main main, PanelEdition panel){
+		main_ = main; //Contient notre EntityManager => plus besoin de faire : new Main(manager_) et de créer le manager
+		panel_ = panel;
 		initialisationProduits();
 	}
 	
@@ -93,8 +102,15 @@ public class VueGlobalNvProduit {
 		for(Object[] result : results) {
 			System.out.println("Test recupère Code produit ?!" +result[0].toString());
 		}*/
-		List<String> produits = rd.recuperationProduitTemp();
-		int nbNewProd = produits.size();
+		
+		
+		produits = null;
+		int nbNewProd = 0;
+		if (panel_ == null){
+			produits = rd.recuperationProduitTemp();
+			nbNewProd = produits.size();
+		}else
+			nbNewProd = 1;
 		// fin recupere produits -----
 		
 		
@@ -118,7 +134,9 @@ public class VueGlobalNvProduit {
     	
     	comboGamme = new JComboBox[nbNewProd];
     	int indice = 0;
-    	for(String prod : produits) {
+    	if (panel_ == null){
+			for(String prod : produits){
+    	
     		JComboBox jb = new JComboBox(gamme);
     		comboGamme[indice] = jb;
     		System.out.println("Ma combo gaaaaamme : " +jb);
@@ -127,7 +145,14 @@ public class VueGlobalNvProduit {
     		panelGeneral.add(np);
     		listnvproduit.add(np);
     		indice ++;
-    	}
+			}
+    	}else{
+    		System.out.println("je suis rataché a un panel T,T");
+				JComboBox jb = new JComboBox(gamme);
+				panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
+				NouveauProduit np = new NouveauProduit(null, jb);
+				panelGeneral.add(np);
+			}
     	
 		
     	panelGlobal.setLayout(new BorderLayout());
@@ -159,6 +184,9 @@ public class VueGlobalNvProduit {
 	 * @param evt
 	 */
 	private static void enregistrercliActionPerformed(ActionEvent evt) {
+		
+		if (panel_ != null)
+			panel_.terminerAjoutProduit();
 
 		JViewport viewport = new JViewport();
 		System.out.println("taille de la liste : " +listnvproduit.size());
@@ -237,7 +265,6 @@ public class VueGlobalNvProduit {
 	
 
 	/*public static void main(String[] args){
-		//VueGlobalNvProduit np = new VueGlobalNvProduit();
 	}*/
 	
 	public EntityManager getManager(){

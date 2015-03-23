@@ -530,14 +530,10 @@ public class PanelEdition extends javax.swing.JPanel {
     	nouveauProduit.add(new VueGlobalNvProduit(main_));
     	nouveauProduit.setLocationRelativeTo(null);
     	nouveauProduit.setVisible(true);
+    	*/
+    	nouveauProduit = new VueGlobalNvProduit(main_, this);
     	
-    	A rajouter dans VueGlobalNvProduit:
-    	
-    	Constructeur:
-    		VueGlobalNvProduit(Main main, PanelEdition panel){
-    			main_ = main; //Contient notre EntityManager => plus besoin de faire : new Main(manager_) et de créer le manager
-    			panel_ = panel;
-    		}
+    	/*A rajouter dans VueGlobalNvProduit:
     	
     	Méthode init_component():
 	    	int nbNewProd = 0;
@@ -558,16 +554,16 @@ public class PanelEdition extends javax.swing.JPanel {
 				JComboBox jb = new JComboBox(gamme);
 				panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
 				NouveauProduit np = new NouveauProduit(null, jb);
-			}
+			}*/
 			
-		Méthode Enregistrer(){
+		/*Méthode Enregistrer(){
 			if (panel != null)
 				panel.terminerAjoutProduit();
 		}
     	*/
     }
     
-    private void terminerAjoutProduit(){
+    void terminerAjoutProduit(){
     	//nouveauProduit.setVisible(false);
     	listeProduit();
     }
