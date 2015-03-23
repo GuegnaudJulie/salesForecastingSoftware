@@ -31,6 +31,18 @@ public class RecuperationDonnees {
 		return profil;
 	}
 	
+	public String[] recuperationClient(){
+		List<String> listClient = manager_.createQuery("select c.enseigne_client " +
+				"from Client c ", String.class).getResultList();
+		String[] client = new String[listClient.size()];
+		int i = 0;
+		for (String g : listClient){
+			client[i] = g;
+			i++;
+		}		
+		return client;
+	}
+	
 	public List<Object[]> recuperationCodeProduit(){
 		List<Object[]> produit = manager_.createQuery("select p.code_produit, p.nom_produit " +
 				"from Produit p ", Object[].class).getResultList();
