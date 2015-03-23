@@ -1,15 +1,20 @@
 package fr.galettedebroons.model;
 
+import javax.swing.JOptionPane;
+
 import fr.galettedebroons.test.Main;
+import fr.galettedebroons.view.PanelEdition;
 
 public class TraitementDonneesTemporaire {
 
 	private Main main_;
+	private PanelEdition panel_;
 	//private JFrame fenetreClient;
 	//private JFrame fenetreProduit;
 	
-	public TraitementDonneesTemporaire(Main main){
+	public TraitementDonneesTemporaire(Main main, PanelEdition panel){
 		main_ = main;
+		panel_ = panel;
 	}
 	
 	/*
@@ -70,6 +75,7 @@ public class TraitementDonneesTemporaire {
 	public void insertionDonneeFin(){
 		new RemplissageLivraison(main_);
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
+		JOptionPane.showMessageDialog(panel_, "Les livraisons ont été ajoutées");
 		rdt.vidage();
 	}
 }

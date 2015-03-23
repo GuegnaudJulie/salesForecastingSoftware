@@ -6,6 +6,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import javax.swing.JFileChooser;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JOptionPane;
 
 import fr.galettedebroons.controller.ControllerFichier;
 import fr.galettedebroons.controller.LectureFichier;
@@ -431,7 +432,7 @@ public class PanelEdition extends javax.swing.JPanel {
         		traitementManuel();
         }
     	if (messageErreur.getText() == ""){
-    		TraitementDonneesTemporaire tdt = new TraitementDonneesTemporaire(main_);
+    		TraitementDonneesTemporaire tdt = new TraitementDonneesTemporaire(main_, this);
     		tdt.insertionDonnee();
     	}
     }
@@ -446,8 +447,6 @@ public class PanelEdition extends javax.swing.JPanel {
 		donnee[3] = valNomClient.getText();
 		
 		for (int ligne = 0; ligne<tableauLivraison.getRowCount(); ligne++){
-			String code = "NP";
-			
 			//Si un article a été rentré
 			if (tableauLivraison.getValueAt(ligne, 0) != null){
 				donnee[4] = tableauLivraison.getValueAt(ligne, 0).toString();
@@ -461,8 +460,7 @@ public class PanelEdition extends javax.swing.JPanel {
 					if (donnee[5].contains("-"))
 						donnee[5].replace("-", "");
 					
-					code = codeErreur(donnee);
-					rdf.ajout(donnee, code);
+					rdf.ajout(donnee, "");
 				}
 				
 				//Quantite Reprise
@@ -472,30 +470,10 @@ public class PanelEdition extends javax.swing.JPanel {
 					if (donnee[5].contains("-"))
 						donnee[5].replace("-", "");
 					
-					if (code == "NP")
-						code = codeErreur(donnee);
-					
-					rdf.ajout(donnee, code);
+					rdf.ajout(donnee, "");
 				}
 			}
 		} //Fin lecture de la JTable
-	}
-
-	private String codeErreur(String[] donnee) {
-		String code = "NP";
-		ControllerFichier cf = new ControllerFichier(main_);
-		int present = cf.verification(donnee);
-		if(present != -1){
-			if (present == 0)
-				code = "";
-			else if (present == 1)
-				code = "C";
-			else if (present == 2)
-				code = "P";
-			else if (present == 3)
-				code = "CP";
-		}
-		return code;
 	}
 
 	private String verifManuelle() {
