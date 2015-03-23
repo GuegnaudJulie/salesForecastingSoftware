@@ -32,9 +32,14 @@ public class ControllerFichier {
 		boolean p_present = true;
 		
 		//Toutes les informations sont présentes
-		for (int i = 0; i < donnees.length; i++){
-			if (donnees[i] == "")
+		for (int i = 0; i < 6; i++){
+			try{
+				if (donnees[i] == "")
+					code_retour = -1;
+			}
+			catch (Exception e){
 				code_retour = -1;
+			}
 		}
 		
 		//Le client et le produit existe
