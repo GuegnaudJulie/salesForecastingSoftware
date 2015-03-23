@@ -19,15 +19,13 @@ public class Tournee {
 	
 	public Tournee(){}
 	
-	public Tournee(int id_tournee, String nom, String jour_tournee, List<Profil> profil_tournee) {
-		this.id = id_tournee;
+	public Tournee(String nom, String jour_tournee, List<Profil> profil_tournee) {
 		this.nom = nom;
 		this.jour_tournee = jour_tournee;
 		this.profil_tournee = profil_tournee;
 	}
 	
-	public Tournee(Integer id_tournee, String nom, String jour_tournee) {
-		this.id = id_tournee;
+	public Tournee(String nom, String jour_tournee) {
 		this.nom = nom;
 		this.jour_tournee = jour_tournee;
 	}

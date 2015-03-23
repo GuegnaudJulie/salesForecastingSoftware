@@ -26,6 +26,7 @@ public class ajoutTournee extends javax.swing.JPanel {
 	static EntityTransaction tx;
 	EntityManagerFactory factory;
 	EntityManager manager;
+	Tournee nvGamme;
 
     /**
      * Creates new form ajoutTournée
@@ -132,8 +133,11 @@ public class ajoutTournee extends javax.swing.JPanel {
 				}
 				System.out.println("le nom de ma tournee : " +nomTournee);
 				System.out.println("le nom de ma tournee : " +jourTournee);
-				Tournee nvGamme = new Tournee(1, jourTournee, nomTournee);
-				manager_.merge(nvGamme);
+				//nvGamme = new Tournee();
+				//nvGamme.setJour_tournee(jourTournee);
+				//nvGamme.setNom(nomTournee);
+				nvGamme = new Tournee(jourTournee, nomTournee);
+				manager_.persist(nvGamme);
 				tx.commit();
 				nc.methode();
 			}

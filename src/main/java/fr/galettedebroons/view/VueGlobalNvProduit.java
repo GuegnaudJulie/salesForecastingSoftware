@@ -254,7 +254,7 @@ public class VueGlobalNvProduit {
 			
 			Produit temp;
 			try{
-				temp = new Produit(code_produit, nom_produit, presentation_produit, gamme, qte_produit);
+				temp = new Produit(code_produit, nature_produit, nom_produit, presentation_produit, gamme, qte_produit);
 				manager_.persist(temp);
 				tx.commit();
 			} catch(Exception e){

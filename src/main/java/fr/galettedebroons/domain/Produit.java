@@ -24,10 +24,11 @@ public class Produit {
 	
 	public Produit(){}
 	
-	public Produit(String code_produit, String nom_produit,
+	public Produit(String code_produit, String nature_produit, String nom_produit,
 			String presentation_produit, Gamme code_gamme, int qte_lot) {
 		super();
 		this.code_produit = code_produit;
+		this.nature_produit = nature_produit;
 		this.nom_produit = nom_produit;
 		this.presentation_produit = presentation_produit;
 		this.produit_gamme = code_gamme;
