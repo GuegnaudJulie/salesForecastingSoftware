@@ -3,6 +3,8 @@ package fr.galettedebroons.test;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import fr.galettedebroons.model.RemplissageLivraison;
 import fr.galettedebroons.view.InterfaceGenerale;
 
 public class Main {
@@ -20,6 +22,9 @@ public class Main {
 	public static void main(String[] args) {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("majAnteros"); // majAnteros, createAnteros, dropAnteros, createAndDrop ...
 		EntityManager manager = factory.createEntityManager();
+		
+		RemplissageLivraison rl = new RemplissageLivraison(new Main(manager));
+		rl.remplissage();
 		
 		/*EntityManagerFactory factory = Persistence.createEntityManagerFactory("createAnteros"); // majAnteros, createAnteros, ...
 		EntityManager manager = factory.createEntityManager();
@@ -60,9 +65,11 @@ public class Main {
 		tx.commit();
 		*/
 		
+		/*
 		InterfaceGenerale IHM = new InterfaceGenerale(new Main(manager));
 		IHM.setLocationRelativeTo(null);
 		IHM.setVisible(true);
+		*/ 
 		
 		System.out.println(".. done");
 	}

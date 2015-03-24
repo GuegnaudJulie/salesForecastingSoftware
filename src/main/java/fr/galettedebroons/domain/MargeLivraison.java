@@ -20,6 +20,12 @@ public class MargeLivraison {
 		this.taux_reprise = taux_reprise;
 	}
 	
+	public MargeLivraison(double taux_reprise, Profil marge_profil, Produit marge_produit) {
+		this.taux_reprise = taux_reprise;
+		this.marge_profil = marge_profil;
+		this.marge_produit = marge_produit;
+	}
+	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public int getId() {
 		return id;

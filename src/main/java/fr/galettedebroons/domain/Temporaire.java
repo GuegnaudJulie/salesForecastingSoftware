@@ -37,55 +37,73 @@ public class Temporaire {
 	public int getId() {
 		return id;
 	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	public String getBon_livraison() {
 		return bon_livraison;
 	}
+	
 	public void setBon_livraison(String bon_livraison) {
 		this.bon_livraison = bon_livraison;
 	}
+	
 	public Date getDate() {
 		return date;
 	}
+	
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
 	public String getCode_profil() {
 		return code_profil;
 	}
+	
 	public void setCode_profil(String code_profil) {
 		this.code_profil = code_profil;
 	}
+	
 	public String getNom_client() {
 		return nom_client;
 	}
+	
 	public void setNom_client(String nom_client) {
 		this.nom_client = nom_client;
 	}
+	
 	public String getCode_produit() {
 		return code_produit;
 	}
+	
 	public void setCode_produit(String code_produit) {
 		this.code_produit = code_produit;
 	}
+	
 	public String getCode_erreur() {
 		return code_erreur;
 	}
+	
 	public void setCode_erreur(String code_erreur) {
 		this.code_erreur = code_erreur;
 	}
+	
     public int getQuantite_livree() {
         return quantite_livree;
     }
+    
     public void setQuantite_livree(int quantite_livree) {
         this.quantite_livree = quantite_livree;
     }
+    
     public int getQuantite_reprise() {
         return quantite_reprise;
     }
+    
     public void setQuantite_reprise(int quantite_reprise) {
         this.quantite_reprise = quantite_reprise;
     }
+    
 }

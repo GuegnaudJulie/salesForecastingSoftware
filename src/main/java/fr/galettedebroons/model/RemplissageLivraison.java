@@ -65,7 +65,8 @@ public class RemplissageLivraison {
 				System.out.println(code_produit + " contient P");
 				d1= ajoutjours(t.getDate(), 2);System.out.println("Date "+d1);
 				int j=0;
-				while(j<temp.size()){                        
+				while(j<temp.size()){  
+					System.out.println("je suis dans "+ t);
 					if(d1.compareTo(temp.get(j).getDate())==0){
 						String code_cli=temp.get(j).getCode_profil(); 
 						String code_prod=temp.get(j).getCode_produit();
@@ -94,9 +95,9 @@ public class RemplissageLivraison {
 								//Pour la colonne quantité livrée
 								l.setQte_livraison(ql);
                                   
-								//Pour la colonne quantité effectivement vendue.
-								int qte=ql-temp.get(j).getQuantite_reprise();
-								l.setQte_eff_vendue(qte);
+								//Pour la colonne quantité effectivement vendue
+								/*int qte=ql-temp.get(j).getQuantite_reprise();
+								l.setQte_eff_vendue(qte);*/
 								manager_.persist(l);
 								
 							}

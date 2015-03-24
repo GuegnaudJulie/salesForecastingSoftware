@@ -18,6 +18,10 @@ public class Client {
 
 	public Client(){}
 	
+	public Client(String enseigne_client) {
+		this.enseigne_client = enseigne_client;
+	}
+	
 	public Client(String enseigne_client, List<Profil> client_profil) {
 		this.enseigne_client = enseigne_client;
 		this.setClient_profil(client_profil);
