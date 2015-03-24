@@ -10,6 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.swing.JComboBox;
 
+import fr.galettedebroons.model.ModificationDonnees;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.test.Main;
 
@@ -46,13 +47,14 @@ public class MargeModification extends javax.swing.JPanel {
 	        jButton2 = new javax.swing.JButton();
 	        jLabel4 = new javax.swing.JLabel();
 	        
-	        factory = Persistence.createEntityManagerFactory("majAnteros");
+	        /*factory = Persistence.createEntityManagerFactory("majAnteros");
 	    	manager = factory.createEntityManager();
 	    	setManager(manager);
 	    	tx = manager_.getTransaction();
-			tx.begin();
-			System.out.println("mon main : " +main_);
+			tx.begin();*/
+			//System.out.println("mon main : " +main_);
 			rd = new RecuperationDonnees(main_);
+			md = new ModificationDonnees(main_);
 
 			// recherche des clients en base et ajout dans combobox1
 			listClient = rd.recuperationProfil();
@@ -167,7 +169,18 @@ public class MargeModification extends javax.swing.JPanel {
 	     * @param evt
 	     */
 	    private void jButton2ActionPerformed(ActionEvent evt) {
+	    	double pourcentage = 0.0;
+	    	String nomprofil = "";
+	    	String nomproduit = "";
+	    	
+			pourcentage = Integer.parseInt(jTextField1.getText());
+			nomprofil = (String) jComboBox1.getSelectedItem();
+			nomproduit = (String) jComboBox2.getSelectedItem();
+			System.out.println("mon pourcentaaaaa : " +pourcentage);
+			System.out.println("mon pourcentaaaaa : " +nomprofil);
+			System.out.println("mon pourcentaaaaa : " +nomprofil);
 			
+			md.updateTauxReprise(pourcentage, nomprofil, nomproduit);
 		}
 	    
 	    public EntityManager getManager(){
@@ -195,7 +208,8 @@ public class MargeModification extends javax.swing.JPanel {
 		static EntityTransaction tx;
 		
 		Main main_;
-		RecuperationDonnees rd;		
+		RecuperationDonnees rd;
+		ModificationDonnees md;
 		
 		String[] listClient;
 		String[] listProduit;

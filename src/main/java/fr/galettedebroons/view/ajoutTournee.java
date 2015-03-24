@@ -66,7 +66,7 @@ public class ajoutTournee extends javax.swing.JPanel {
         annult = new javax.swing.JButton();
         
         nomTournee = "";
-        jourTournee = "";
+        jourTournee = null;
         
         factory = Persistence.createEntityManagerFactory("majAnteros");
     	manager = factory.createEntityManager();
@@ -115,28 +115,35 @@ public class ajoutTournee extends javax.swing.JPanel {
 				
 				nomTournee = nmtourn.getText();
 				
-				
+				int i = 0;
 				if(lun.isSelected()){
-					jourTournee = "lundi";
+					jourTournee[i] = "lundi";
+					i++;
 				}if(mar.isSelected()){
-					jourTournee = jourTournee + " " + "mardi";
+					jourTournee[i] = "mardi";
+					i++;
 				}if(mer.isSelected()){
-					jourTournee = jourTournee + " " + "mercredi";
+					jourTournee[i] = "mercredi";
+					i++;
 				}if(jeu.isSelected()){
-					jourTournee = jourTournee + " " + "jeudi";
+					jourTournee[i] = "jeudi";
+					i++;
 				}if(ven.isSelected()){
-					jourTournee = jourTournee + " " + "vendredi";
+					jourTournee[i] = "vendredi";
+					i++;
 				}if(sam.isSelected()){
-					jourTournee = jourTournee + " " + "samedi";
+					jourTournee[i] = "samedi";
+					i++;
 				}if(dim.isSelected()){
-					jourTournee = jourTournee + " " + "dimanche";
+					jourTournee[i] = "dimanche";
+					i++;
 				}
 				System.out.println("le nom de ma tournee : " +nomTournee);
 				System.out.println("le nom de ma tournee : " +jourTournee);
 				//nvGamme = new Tournee();
 				//nvGamme.setJour_tournee(jourTournee);
 				//nvGamme.setNom(nomTournee);
-				nvGamme = new Tournee(jourTournee, nomTournee);
+				nvGamme = new Tournee(nomTournee, jourTournee);
 				manager_.persist(nvGamme);
 				tx.commit();
 				nc.methode();
@@ -266,6 +273,6 @@ public class ajoutTournee extends javax.swing.JPanel {
     private javax.swing.JButton savet;
     private javax.swing.JCheckBox ven;
     private String nomTournee;
-    private String jourTournee;
+    private String[] jourTournee;
     // End of variables declaration//GEN-END:variables
 }
