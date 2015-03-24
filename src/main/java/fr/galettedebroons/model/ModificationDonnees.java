@@ -3,6 +3,7 @@ package fr.galettedebroons.model;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.test.Main;
@@ -40,4 +41,18 @@ public class ModificationDonnees {
 		tx.commit();
 	}
 
+	public void updateLivraison(Livraison l, int qtePlus, int qteMoins){
+		tx.begin();
+		
+		manager_.createQuery("UPDATE Livraison l SET qte_livraison LIKE :qteLi AND" +
+				"qte_repris LIKE :qteRe"
+				+ "WHERE l LIKE :livraison")
+				.setParameter("livraison", l)
+				.setParameter("qteLi", qtePlus)
+				.setParameter("qteRe", qteMoins)
+				.executeUpdate();
+		
+		tx.commit();
+	}
+	
 }

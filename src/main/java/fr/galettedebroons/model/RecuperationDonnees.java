@@ -46,6 +46,11 @@ public class RecuperationDonnees {
 		return client;
 	}
 	
+	public Profil recupProfil(String codeClient){
+		Profil profil = manager_.createQuery("select p from Profil p where code_client LIKE :codeClient", Profil.class).setParameter("codeClient", codeClient).getSingleResult();
+		return profil;
+	}
+	
 	public String[] recuperationProduit(){
 		List<String> listProduit = manager_.createQuery("select p.code_produit " +
 				"from Produit p ", String.class).getResultList();
@@ -56,6 +61,15 @@ public class RecuperationDonnees {
 			i++;
 		}		
 		return produit;
+	}
+	
+	public Produit recupProduit(String code_produit) {
+		Produit prod =  manager_.createQuery("select p from Produit p WHERE " +
+				"code_produit LIKE :produit", Produit.class)
+				.setParameter("produit", code_produit)
+				.getSingleResult();
+		
+		return prod;
 	}
 	
 	public String[] recuperationClient(){
@@ -138,34 +152,59 @@ public class RecuperationDonnees {
 	
 	public boolean recuperationLivraison(String bl, Date date, String code_prod){
 		boolean present = false;
-		List<Livraison> ListLivraison = null;
-		Produit produit = null;
-		
-		List<Produit> listeProduits =  manager_.createQuery("select p from Produit p WHERE p.code_produit LIKE :codeProd", Produit.class)
+		Livraison livraison = null;
+		Produit produit =  manager_.createQuery("select p from Produit p WHERE p.code_produit LIKE :codeProd", Produit.class)
 				.setParameter("codeProd", code_prod)
-				.setMaxResults(1)
-				.getResultList();
-		for (Produit prod : listeProduits)
-			produit = prod;
-
-		ListLivraison = manager_.createQuery("select l from Livraison l WHERE " +
+				.getSingleResult();
+		
+		livraison = manager_.createQuery("select l from Livraison l WHERE " +
 				"l.bon_livraison LIKE :bl AND " +
 				"l.date_livraison LIKE :date", Livraison.class)
 				.setParameter("bl", bl)
 				.setParameter("date", date)
-				.setMaxResults(1)
-				.getResultList();
+				.getSingleResult();
 		
-		for (Livraison l : ListLivraison)
-		{
-			for (Produit p : l.getLivraison_produit())
-				System.out.println("Le code du produit est : " + p.getCode_produit());
-			
-			if (l.getLivraison_produit().contains(produit))
-				present = true;
-		}
+		if (livraison.getLivraison_produit().contains(produit))
+			present = true;
 		
 		return present;
+	}
+	
+	public Livraison recupLivraison(String bl, Date date, String code_prod){
+		Produit produit =  manager_.createQuery("select p from Produit p WHERE p.code_produit LIKE :codeProd", Produit.class)
+				.setParameter("codeProd", code_prod)
+				.getSingleResult();
+
+		Livraison livraison = manager_.createQuery("select l from Livraison l WHERE " +
+				"l.bon_livraison LIKE :bl AND " +
+				"l.date_livraison LIKE :date", Livraison.class)
+				.setParameter("bl", bl)
+				.setParameter("date", date)
+				.getSingleResult();
+		
+		if (!livraison.getLivraison_produit().contains(produit))
+			livraison = null;
+		
+		return livraison;
+	}
+	
+	public Livraison recupLivraisonPrec(Produit prod, Profil profil, Date date){
+		Livraison livraison =  manager_.createQuery("select l from Livraison l WHERE " +
+				"livraison_profil LIKE :profil AND " +
+				"livraison_produit LIKE :produit AND " +
+				"date_livraison < :date " +
+				"ORDER BY date_livraison ASC LIMIT 1", Livraison.class)
+				.setParameter("profil", profil)
+				.setParameter("produit", prod)
+				.setParameter("date", date)
+				.getSingleResult();
+		
+		return livraison;
+	}
+	
+	public String[] recupJoursLivraison(Profil profil){
+		String[] joursLivraison = manager_.createQuery("select t.jour_tournee from Tournee t where profil_tournee LIKE :profil", String[].class).setParameter("profil", profil).getSingleResult();
+		return joursLivraison;
 	}
 	
 	public Gamme recuperationGammeProduit(String code_produit){
@@ -192,4 +231,5 @@ public class RecuperationDonnees {
 		
 		return res;
 	}
+
 }

@@ -17,109 +17,167 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
 
 /**
  *
- * @author Oumoul
+ * @author	Oumoul
+ * @author	Julie Guegnaud
  */
 
 public class RemplissageLivraison {
 	
 	private EntityManager manager_;
+	private Main main_;
+	private RecuperationDonnees rd_;
+	private ModificationDonnees md_;
 	
 	public RemplissageLivraison(Main main){
 		manager_ = main.getManager();
+		main_ = main;
 	}     
 	
-	//Creation d'une vue si ta table temporaire contient quelque chose et calcul des quatités effectivement vendues.
-
+	//Creation d'une vue si ta table temporaire contient quelque chose et calcul des quatites effectivement vendues.
 	public void remplissage(){
-		EntityTransaction tx = manager_.getTransaction(); 
-		// Tri sur les données de la table temporaire.
-		String req="select t from Temporaire t order by t.date";
-		Query q=manager_.createQuery(req);
-		List<Temporaire> temp = (ArrayList<Temporaire>)q.getResultList();   
-		for(Temporaire t:temp){
-			//Récupération de certaines valeurs de la table: le BL,le code_profil, le code_Produit et la quantité livrée.
-			
-			//Test pour voir si on récupere bien les bonnes valeurs.
-			System.out.print(t.getBon_livraison()+" "); 
-			System.out.print(t.getDate()+" ");
-			System.out.print(t.getCode_profil()+" "); 
-			System.out.print(t.getNom_client()+" ");
-			System.out.print(t.getCode_produit()+" ");
-			System.out.print(t.getQuantite_livree()+" ");
-			System.out.print(t.getQuantite_reprise());
-			System.out.println();
-			
-			//Récuperation des informations pour le calcul de la quantité effective.
-			String bl=t.getBon_livraison();
-			String code_profil=t.getCode_profil();
-			String code_produit=t.getCode_produit();
-			int ql=t.getQuantite_livree();
-			Date d1;
-
-			//Teste sur le type du produit pour pouvoir ajouter la durée de vie et récupérer la date de reprise et la quantité reprise.
-			if(code_produit.indexOf('P')!=-1){
-				System.out.println(code_produit + " contient P");
-				d1= ajoutjours(t.getDate(), 2);System.out.println("Date "+d1);
-				int j=0;
-				while(j<temp.size()){  
-					System.out.println("je suis dans "+ t);
-					if(d1.compareTo(temp.get(j).getDate())==0){
-						String code_cli=temp.get(j).getCode_profil(); 
-						String code_prod=temp.get(j).getCode_produit();
-						System.out.println("ceci est "+code_cli+" "+code_prod);
-						if(code_profil == null ? code_cli == null : code_profil.equals(code_cli)){                                
-							if(code_produit == null ? code_prod == null : code_produit.equals(code_prod)){
-								Livraison l=new Livraison(); 
-								//Pour la colonne bon de livraison
-								String b=bl+","+temp.get(j).getBon_livraison();
-								l.setBon_livraison(b);
-								//Pour la colonne profil
-								Query re=manager_.createQuery("select p from Profil p where p.code_client = :cdp");
-								re.setParameter("cdp", code_profil);
-								Profil pro=(Profil)re.getSingleResult();
-								l.setLivraison_profil(pro);
-								
-								//Pour la colonne produit
-								Query re1=manager_.createQuery("select prod from Produit prod where prod.code_produit = :prc");
-								re1.setParameter("prc", code_produit);
-								Produit prod=(Produit)re1.getSingleResult();
-								l.getLivraison_produit().add(prod);
-								
-								//Pour la colonne date
-								l.setDate_livraison(d1);
-								
-								//Pour la colonne quantité livrée
-								l.setQte_livraison(ql);
-                                  
-								//Pour la colonne quantité effectivement vendue
-								/*int qte=ql-temp.get(j).getQuantite_reprise();
-								l.setQte_eff_vendue(qte);*/
-								manager_.persist(l);
-								
-							}
-						}
-					}
-					j++;
-				}
-			}                 
-			/* else{
-				System.out.println(code_produit + " est un produit de type LS");  
-				d1= ajoutjours(t.getDate(), 5);System.out.println("Date "+d1);  
-			} */ 
-		}       
-	}
-        
-	public Date ajoutjours(Date d, int nbrjours){
-		GregorianCalendar gc = new GregorianCalendar();
-		gc.setTime(d);
-		gc.add(GregorianCalendar.DAY_OF_MONTH, nbrjours);
-		Date sqlDate = new Date(gc.getTimeInMillis());
+		rd_ = new RecuperationDonnees(main_);
+		md_ = new ModificationDonnees(main_);
 		
-		return sqlDate;
+		// Tri sur les donnees de la table temporaire
+		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC", Temporaire.class).getResultList();   
+		
+		for(Temporaire t : temp){
+			
+			//Recuperation des informations pour le calcul de la quantite effective.
+			String bl = t.getBon_livraison();
+			//String code_profil = t.getCode_profil();
+			String code_produit = t.getCode_produit();
+			int ql = t.getQuantite_livree();
+			int qr = t.getQuantite_reprise();
+			Date date = t.getDate();
+			
+			//recuperation du profil du client
+			Profil profil = rd_.recupProfil(t.getCode_profil());
+			
+			//recuperation du produit de la livraison
+			Produit produit = rd_.recupProduit(code_produit);
+			
+			//recuperation des jours de livraison normaux
+			String[] joursLivraison = rd_.recupJoursLivraison(profil);
+			
+			//Jours de la semaine de la livraison actuelle
+			String jours = joursSemaine(date);
+			
+			//On verifie que le jours de livraison été prévu
+			boolean prevu = false;
+			for(int i = 0; i<joursLivraison.length; i++)
+				if (joursLivraison[i] == jours)
+					prevu = true;
+			
+			//On effectue les traitements
+			if (prevu){
+				if (verifQte(ql, qr)){
+					//On verifie que la donnee n est pas deja presente dans la base
+					Livraison livr = rd_.recupLivraison(bl, date, code_produit);
+					
+					if (livr == null)
+						ajoutLivraison(bl, profil, produit, date, ql, qr);
+					else
+						majLivraison(livr, ql, qr);
+				}
+			}
+			else{
+				Livraison lprec = precedenteLivraison(date, produit, profil);
+				int qteLivr = lprec.getQte_livraison() + ql;
+				int qteRepris = lprec.getQte_reprise() + qr;
+				
+				if (verifQte(qteLivr, qteRepris))
+					md_.updateLivraison(lprec, qteLivr, qteRepris);
+			}
+		}
 	}
 	
- }
+
+	/**
+	 * Fonction de decalage de la date
+	 * 
+	 * @param d : une date
+	 * @param nbrjours : le nombre de jours à rajouter à une date
+	 * @return la date precedente decaler au nombre de jours voulu
+	 */
+	public Date ajoutjours(Date d, int nbrjours){
+		return new Date(d.getTime() + (nbrjours * (24*3600*1000)));
+	}
+	
+	
+	/**
+	 * Fonction qui verifie que la quantite livree et la quantite reprise sont coherentes
+	 * 
+	 * @return true si c'est coherent
+	 */
+	public boolean verifQte(int qtePlus, int qteMoins){
+		return (qtePlus > qteMoins);
+	}
+	
+	
+	/**
+	 * renvoie le jours de la semaine correspondant à une certaine date
+	 * 
+	 * @param date
+	 * @return le jours de la semaine (String)
+	 */
+	public String joursSemaine(Date date){
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		int joursSemaine = calendar.get(calendar.DAY_OF_WEEK);
+		/* 1=dimanche / 2=lundi / 3=mardi / 4=mercredi / 5=jeudi / 6=vendredi / 7=samedi */
+		
+		String jours = "";
+		switch (joursSemaine){
+			case 1:
+				jours = "dimanche";
+			case 2:
+				jours = "lundi";
+			case 3:
+				jours = "mardi";
+			case 4:
+				jours = "mercredi";
+			case 5:
+				jours = "jeudi";
+			case 6:
+				jours = "vendredi";
+			case 7:
+				jours = "samedi";
+		}
+		
+		return jours;
+	}
+	
+	
+	public Livraison precedenteLivraison(Date date, Produit prod, Profil profil){
+		Livraison precLivraison = rd_.recupLivraisonPrec(prod, profil, date);
+		return precLivraison;
+	}
+	
+	
+	
+	public void ajoutLivraison(String bl, Profil profil, Produit produit, Date date, int ql, int qr){
+		EntityTransaction tx = manager_.getTransaction();
+		tx.begin();
+		
+		List<Produit> list = new ArrayList<Produit>();
+		list.add(produit);
+		
+		Livraison livr = new Livraison(bl, list, date, ql, qr);
+		
+		manager_.persist(livr);
+		tx.commit();
+		
+	}
+	
+	private void majLivraison(Livraison livr, int ql, int qr) {
+		int qteLivr = livr.getQte_livraison() + ql;
+		int qteRepris = livr.getQte_reprise() + qr;
+		if (verifQte(qteLivr, qteRepris))
+			md_.updateLivraison(livr, qteLivr, qteRepris);
+	}
+
+}
