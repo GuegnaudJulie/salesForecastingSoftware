@@ -52,16 +52,18 @@ public class MargeModification extends javax.swing.JPanel {
 	    	tx = manager_.getTransaction();
 			tx.begin();
 			System.out.println("mon main : " +main_);
-			RecuperationDonnees rd = new RecuperationDonnees(main_);
+			rd = new RecuperationDonnees(main_);
 
 			// recherche des clients en base et ajout dans combobox1
-			listClient = rd.recuperationClient();
+			listClient = rd.recuperationProfil();
 			jComboBox1 = new JComboBox(listClient);
 	        
 	        //jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
 	        // recherche des produits associes au client selectionne
-	        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+			listProduit = rd.recuperationProduit();
+			jComboBox2 = new JComboBox(listProduit);
+	        //jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
 	        jButton1.setText("Rechercher");
 	        jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -103,7 +105,7 @@ public class MargeModification extends javax.swing.JPanel {
 	                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
 	                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 	                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-	                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+	                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
 	                        .addGap(29, 29, 29)
 	                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 	                            .addGroup(layout.createSequentialGroup()
@@ -145,6 +147,17 @@ public class MargeModification extends javax.swing.JPanel {
 	     * @param evt
 	     */
 	    private void jButton1ActionPerformed(ActionEvent evt) {
+	    	jLabel1.setText("Taux de reprise actuel : ");
+	    	double tauxreprise = 0.0;
+	    	this.enseigne_client = "";
+	    	this.codeProduit = "";
+	    	
+	    	enseigne_client = (String) jComboBox1.getSelectedItem();
+			codeProduit = (String) jComboBox2.getSelectedItem();
+			
+			tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);
+			jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
+			this.repaint();
 			
 		}
 	    
@@ -182,9 +195,14 @@ public class MargeModification extends javax.swing.JPanel {
 		static EntityTransaction tx;
 		
 		Main main_;
-		
+		RecuperationDonnees rd;		
 		
 		String[] listClient;
+		String[] listProduit;
+		
+		String enseigne_client;
+		String codeProduit;
+		
 	    // End of variables declaration
 
 	}
