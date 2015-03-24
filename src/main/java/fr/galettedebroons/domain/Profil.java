@@ -28,21 +28,6 @@ public class Profil {
 		this.actif = actif;
 	}
 	
-	public Profil(String code_client, Client client_profil, Gamme code_gamme, Boolean actif) {
-		this.code_client = code_client;
-		this.client_profil = client_profil;
-		this.gamme_profil = code_gamme;
-		this.actif = actif;
-	}
-	
-	public Profil(String code_client, Client client_profil, Gamme code_gamme, Boolean actif, Tournee profil_tournee) {
-		this.code_client = code_client;
-		this.client_profil = client_profil;
-		this.gamme_profil = code_gamme;
-		this.actif = actif;
-		this.profil_tournee = profil_tournee;
-	}
-	
 	@Id
 	public String getCode_client() {
 		return code_client;
@@ -77,10 +62,6 @@ public class Profil {
 	public void setLivraison_profil(List<Livraison> livraison_profil) {
 		this.livraison_profil = livraison_profil;
 	}
-	
-	public void addLivraison(Livraison livraison){
-		livraison_profil.add(livraison);
-	}
 
 	@ManyToOne
 	public Client getClient_profil() {
@@ -108,10 +89,6 @@ public class Profil {
 	public void setMarge_profil(List<MargeLivraison> marge_profil) {
 		this.marge_profil = marge_profil;
 	}
-	
-	public void addMarge(MargeLivraison marge){
-		marge_profil.add(marge);
-	}
 
 	@OneToMany(mappedBy="prevision_profil", cascade=CascadeType.PERSIST)
 	public List<Prevision> getPrevision_profil() {
@@ -120,9 +97,5 @@ public class Profil {
 
 	public void setPrevision_profil(List<Prevision> prevision_profil) {
 		this.prevision_profil = prevision_profil;
-	}
-	
-	public void addPrevision(Prevision prevision){
-		prevision_profil.add(prevision);
 	}
 }

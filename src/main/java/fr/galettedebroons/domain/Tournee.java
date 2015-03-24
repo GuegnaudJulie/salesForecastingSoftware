@@ -14,20 +14,20 @@ public class Tournee {
 	
 	private int id;
 	private String nom;
-	private String jour_tournee;
+	private String[] jour_tournee;
 	private List<Profil> profil_tournee;
 	
 	public Tournee(){}
 	
-	public Tournee(String nom, String jour_tournee) {
-		this.nom = nom;
-		this.jour_tournee = jour_tournee;
-	}
-	
-	public Tournee(String nom, String jour_tournee, List<Profil> profil_tournee) {
+	public Tournee(String nom, String[] jour_tournee, List<Profil> profil_tournee) {
 		this.nom = nom;
 		this.jour_tournee = jour_tournee;
 		this.profil_tournee = profil_tournee;
+	}
+	
+	public Tournee(String nom, String[] jour_tournee) {
+		this.nom = nom;
+		this.jour_tournee = jour_tournee;
 	}
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,11 +47,11 @@ public class Tournee {
 		this.nom = nom;
 	}
 
-	public String getJour_tournee() {
+	public String[] getJour_tournee() {
 		return jour_tournee;
 	}
 
-	public void setJour_tournee(String jour_tournee) {
+	public void setJour_tournee(String[] jour_tournee) {
 		this.jour_tournee = jour_tournee;
 	}
 
@@ -64,8 +64,5 @@ public class Tournee {
 		this.profil_tournee = profil_tournee;
 	}
 	
-	public void addProfil(Profil profil){
-		profil_tournee.add(profil);
-	}
 
 }
