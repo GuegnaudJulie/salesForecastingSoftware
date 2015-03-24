@@ -1,13 +1,13 @@
 package fr.galettedebroons.model;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
-import fr.galettedebroons.domain.Temporaire;
-import fr.galettedebroons.domain.Tournee;
+import fr.galettedebroons.domain.Gamme;
+import fr.galettedebroons.domain.Livraison;
+import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.test.Main;
 
 public class RecuperationDonnees {
@@ -93,5 +93,42 @@ public class RecuperationDonnees {
 		}
 		
 		return tournee;
+	}
+	
+	public boolean recuperationLivraison(String bl, Date date, String code_prod){
+		boolean present = false;
+		List<Livraison> ListLivraison = null;
+		Produit produit = null;
+		
+		List<Produit> listeProduits =  manager_.createQuery("select p from Produit p WHERE p.code_produit LIKE :codeProd", Produit.class)
+				.setParameter("codeProd", code_prod)
+				.setMaxResults(1)
+				.getResultList();
+		for (Produit prod : listeProduits)
+			produit = prod;
+
+		ListLivraison = manager_.createQuery("select l from Livraison l WHERE " +
+				"l.bon_livraison LIKE :bl AND " +
+				"l.date_livraison LIKE :date", Livraison.class)
+				.setParameter("bl", bl)
+				.setParameter("date", date)
+				.setMaxResults(1)
+				.getResultList();
+		
+		for (Livraison l : ListLivraison)
+		{
+			for (Produit p : l.getLivraison_produit())
+				System.out.println("Le code du produit est : " + p.getCode_produit());
+			
+			if (l.getLivraison_produit().contains(produit))
+				present = true;
+		}
+		
+		return present;
+	}
+	
+	public Gamme recuperationGammeProduit(String code_produit){
+		Gamme gamme = manager_.createQuery("select p.produit_gamme from Produit p where code_produit LIKE :cp", Gamme.class).setParameter("cp", code_produit).getSingleResult();	
+		return gamme;
 	}
 }

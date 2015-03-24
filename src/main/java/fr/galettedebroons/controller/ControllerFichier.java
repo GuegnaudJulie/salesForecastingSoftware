@@ -20,18 +20,14 @@ public class ControllerFichier {
 	 * verification de la presence du client et du produit dans la base
 	 * 
 	 * @param donnees
-	 * @return 0 la donnee est presente dans la base
-	 * @return 1 le client n'exite pas
-	 * @return 2 le produit n'existe pas
-	 * @return 3 le client et le produit n'existe pas
-	 * @return -1 Il manque des informations
+	 * @return 0 (OK) / 1 (client inconnu) / 2 (produit inconnu) / 3 (client et produit inconnus) / -1 (informations manquantes)
 	 */
 	public int verification(String[] donnees){
 		int code_retour = 0;
 		boolean c_present = true;
 		boolean p_present = true;
 		
-		//Toutes les informations sont présentes
+		//Toutes les informations sont prÃ©sentes
 		for (int i = 0; i < 6; i++){
 			try{
 				if (donnees[i] == "")
