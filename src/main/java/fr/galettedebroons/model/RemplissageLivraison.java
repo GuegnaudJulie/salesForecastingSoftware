@@ -46,16 +46,16 @@ public class RemplissageLivraison {
 		
 		for(Temporaire t : temp){
 			
-			//Recuperation des informations pour le calcul de la quantite effective.
+			//récuperation des informations
 			String bl = t.getBon_livraison();
-			//String code_profil = t.getCode_profil();
+			String code_profil = t.getCode_profil();
 			String code_produit = t.getCode_produit();
 			int ql = t.getQuantite_livree();
 			int qr = t.getQuantite_reprise();
 			Date date = t.getDate();
 			
 			//recuperation du profil du client
-			Profil profil = rd_.recupProfil(t.getCode_profil());
+			Profil profil = rd_.recupProfil(code_profil);
 			
 			//recuperation du produit de la livraison
 			Produit produit = rd_.recupProduit(code_produit);
@@ -66,15 +66,19 @@ public class RemplissageLivraison {
 			//Jours de la semaine de la livraison actuelle
 			String jours = joursSemaine(date);
 			
-			//On verifie que le jours de livraison été prévu
+			//On verifie que le jours de la livraison été prévu
 			boolean prevu = false;
 			for(int i = 0; i<joursLivraison.length; i++)
 				if (joursLivraison[i] == jours)
 					prevu = true;
 			
+			//Recuperation de la livraison précédente pour vérifier le nombre de reprise
+			Livraison lprec = precedenteLivraison(date, produit, profil);
+			int precLivr = lprec.getQte_livraison();
+			
 			//On effectue les traitements
 			if (prevu){
-				if (verifQte(ql, qr)){
+				if (verifQte(precLivr, qr)){
 					//On verifie que la donnee n est pas deja presente dans la base
 					Livraison livr = rd_.recupLivraison(bl, date, code_produit);
 					
@@ -85,9 +89,9 @@ public class RemplissageLivraison {
 				}
 			}
 			else{
-				Livraison lprec = precedenteLivraison(date, produit, profil);
-				int qteLivr = lprec.getQte_livraison() + ql;
-				int qteRepris = lprec.getQte_reprise() + qr;
+				Livraison lprec2 = precedenteLivraison(lprec.getDate_livraison(), produit, profil);
+				int qteLivr = lprec2.getQte_livraison() + ql;
+				int qteRepris = lprec.getQte_repris() + qr;
 				
 				if (verifQte(qteLivr, qteRepris))
 					md_.updateLivraison(lprec, qteLivr, qteRepris);
@@ -175,7 +179,7 @@ public class RemplissageLivraison {
 	
 	private void majLivraison(Livraison livr, int ql, int qr) {
 		int qteLivr = livr.getQte_livraison() + ql;
-		int qteRepris = livr.getQte_reprise() + qr;
+		int qteRepris = livr.getQte_repris() + qr;
 		if (verifQte(qteLivr, qteRepris))
 			md_.updateLivraison(livr, qteLivr, qteRepris);
 	}
