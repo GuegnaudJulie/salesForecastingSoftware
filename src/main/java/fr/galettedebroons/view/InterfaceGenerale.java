@@ -36,7 +36,7 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         panelAccueil = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         panelEdition = new fr.galettedebroons.view.PanelEdition(main_);
-        panelPrevision = new javax.swing.JPanel();
+        panelPrevision = new fr.galettedebroons.view.VuePrevision(main_);
         jLabel2 = new javax.swing.JLabel();
         panelProduction = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -88,26 +88,7 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         
         panelOnglet.addTab("Edition", panelEdition);
 
-        jLabel2.setText("Bienvenue dans notre onglet \"prévision\". Vous y trouverez la prévision des ventes de la semaine par client et par produit");
-
-        javax.swing.GroupLayout panelPrevisionLayout = new javax.swing.GroupLayout(panelPrevision);
-        panelPrevision.setLayout(panelPrevisionLayout);
-        panelPrevisionLayout.setHorizontalGroup(
-            panelPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelPrevisionLayout.createSequentialGroup()
-                .addGap(91, 91, 91)
-                .addComponent(jLabel2)
-                .addContainerGap(369, Short.MAX_VALUE))
-        );
-        panelPrevisionLayout.setVerticalGroup(
-            panelPrevisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelPrevisionLayout.createSequentialGroup()
-                .addGap(89, 89, 89)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(468, Short.MAX_VALUE))
-        );
-
-        panelOnglet.addTab("Prévision semaine", panelPrevision);
+       panelOnglet.addTab("Prévision semaine", panelPrevision);
 
         jLabel3.setText("Bienvenue dans l'onglet production. Vous y trouver le nombre de galette à produire et la quantité de chaque ingrédient à prévoir soit pour la journée soit pour la semaine soit pour la semaine prochaine");
 
