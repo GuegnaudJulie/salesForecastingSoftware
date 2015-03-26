@@ -91,7 +91,7 @@ public class RemplissageLivraison {
 			else{
 				Livraison lprec2 = precedenteLivraison(lprec.getDate_livraison(), produit, profil);
 				int qteLivr = lprec2.getQte_livraison() + ql;
-				int qteRepris = lprec.getQte_repris() + qr;
+				int qteRepris = lprec.getQte_reprise() + qr;
 				
 				if (verifQte(qteLivr, qteRepris))
 					md_.updateLivraison(lprec, qteLivr, qteRepris);
@@ -179,7 +179,7 @@ public class RemplissageLivraison {
 	
 	private void majLivraison(Livraison livr, int ql, int qr) {
 		int qteLivr = livr.getQte_livraison() + ql;
-		int qteRepris = livr.getQte_repris() + qr;
+		int qteRepris = livr.getQte_reprise() + qr;
 		if (verifQte(qteLivr, qteRepris))
 			md_.updateLivraison(livr, qteLivr, qteRepris);
 	}
