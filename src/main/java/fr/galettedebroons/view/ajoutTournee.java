@@ -136,6 +136,8 @@ public class ajoutTournee extends javax.swing.JPanel {
 				//nvGamme = new Tournee();
 				//nvGamme.setJour_tournee(jourTournee);
 				//nvGamme.setNom(nomTournee);
+				
+				main_.getTransaction().begin();
 				nvGamme = new Tournee(nomTournee, jourTournee);
 				main_.getManager().persist(nvGamme);
 				main_.getTransaction().commit();

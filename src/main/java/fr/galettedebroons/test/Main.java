@@ -31,7 +31,7 @@ public class Main {
 	public void setTransaction(EntityTransaction tx){
 		tx_ = tx;
 	}
-
+	
 	public static void main(String[] args) {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("majAnteros"); // majAnteros, createAnteros, dropAnteros, createAndDrop ...
 		EntityManager manager = factory.createEntityManager();
@@ -39,7 +39,6 @@ public class Main {
 		
 		Main main = new Main(manager);
 		main.setTransaction(tx);
-		main.getTransaction().begin();
 
 		// TODO create entity
 		/*List<Profil> lToto = new ArrayList();

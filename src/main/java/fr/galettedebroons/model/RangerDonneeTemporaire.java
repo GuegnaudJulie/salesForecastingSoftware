@@ -31,8 +31,10 @@ import javax.persistence.Query;
  */
 public class RangerDonneeTemporaire {
 	private EntityManager manager_;
+	private Main main_;
 	
 	public RangerDonneeTemporaire(Main main){
+		main_ = main;
 		manager_ = main.getManager();
 	}
 	
@@ -43,9 +45,6 @@ public class RangerDonneeTemporaire {
 	 * @param code code d'erreur donnee par la fonction present()
 	 */
 	public void ajout(String[] donnee, String code) {
-		EntityTransaction tx = manager_.getTransaction();
-		tx.begin();
-		
 		Date date = null;
 		int indice;
 		String dateStr;
@@ -97,6 +96,8 @@ public class RangerDonneeTemporaire {
 		int qtite = Integer.parseInt(donnee[5]);
 		
 		/* Insertion dans la table temporaire */
+		main_.getTransaction().begin();
+		
 		Temporaire temp;
 		if (qtite>0)
 			temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], qtite, 0, code);
@@ -104,8 +105,7 @@ public class RangerDonneeTemporaire {
 			temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], 0, qtite, code);
 		
 		manager_.persist(temp);
-               
-		tx.commit();
+		main_.getTransaction().commit();
 	}
 	
 	/**

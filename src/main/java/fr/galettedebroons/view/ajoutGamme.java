@@ -84,6 +84,8 @@ public class ajoutGamme extends javax.swing.JPanel {
 			private void saveActionPerformed(ActionEvent evt) {
 				codeGamme = codgam.getText();
 				dureeConserv = Integer.parseInt(dconsgam.getText());
+				
+				main_.getTransaction().begin();
 				Gamme nvGamme = new Gamme(codeGamme, dureeConserv, null, null);
 				main_.getManager().persist(nvGamme);
 				main_.getTransaction().commit();

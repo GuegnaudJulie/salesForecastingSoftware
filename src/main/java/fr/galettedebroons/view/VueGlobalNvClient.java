@@ -200,6 +200,7 @@ public class VueGlobalNvClient {
 			codeClient = ((NouveauClient) listclient).getTextFieldCC().getText();
 				
 			try{
+				main_.getTransaction().begin();
 				c = new Client(nomClient, null);
 				main_.getManager().persist(c);
 				main_.getTransaction().commit();
