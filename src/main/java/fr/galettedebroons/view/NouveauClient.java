@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.domain.Tournee;
+import fr.galettedebroons.test.Main;
 
 /**
  * Formulaire de creation de nouveau client
@@ -26,7 +27,8 @@ import fr.galettedebroons.domain.Tournee;
 public class NouveauClient extends java.awt.Panel {
 
 	    /** Creates new form NouveauClient */
-	    public NouveauClient(String cc, String nc, JComboBox tournee, JComboBox gamme) {
+	    public NouveauClient(Main main, String cc, String nc, JComboBox tournee, JComboBox gamme) {
+	    	main_ = main;
 	        initComponents(cc, nc, tournee, gamme);
 	    }
 	    
@@ -145,20 +147,21 @@ public class NouveauClient extends java.awt.Panel {
 	    
 	    public void methode(){
 	    	fenetreNvGamme.setVisible(false);
-	    	
 		}
 	    
 	    private void jButton1ActionPerformed(ActionEvent evt) {
-			ajoutTournee nvGamme = new ajoutTournee(this);
+			ajoutTournee nvGamme = new ajoutTournee(main_, this);
 	    	fenetreNvGamme.setSize(500, 500);
 	    	fenetreNvGamme.add(nvGamme);
+	    	fenetreNvGamme.setLocationRelativeTo(null);
 	    	fenetreNvGamme.setVisible(true);
 		}
 	    
 	    private void jButton2ActionPerformed(ActionEvent evt) {
-			ajoutGamme nvGamme = new ajoutGamme(this);
+			ajoutGamme nvGamme = new ajoutGamme(main_, this);
 	    	fenetreNvGamme.setSize(500, 200);
 	    	fenetreNvGamme.add(nvGamme);
+	    	fenetreNvGamme.setLocationRelativeTo(null);
 	    	fenetreNvGamme.setVisible(true);
 		}
 	    
@@ -170,8 +173,7 @@ public class NouveauClient extends java.awt.Panel {
 	    	return jTextField2;
 	    }
 	    
-
-	    // Variables declaration - do not modify
+	    // Variables declaration
 	    private javax.swing.JButton jButton1;
 	    private javax.swing.JButton jButton2;
 	    private javax.swing.JComboBox jComboBox1;
@@ -183,5 +185,6 @@ public class NouveauClient extends java.awt.Panel {
 	    private javax.swing.JTextField jTextField1;
 	    private javax.swing.JTextField jTextField2;
 	    private JFrame fenetreNvGamme;
+	    private Main main_;
 	    // End of variables declaration
 }

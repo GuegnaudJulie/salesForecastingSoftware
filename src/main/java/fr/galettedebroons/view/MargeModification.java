@@ -14,13 +14,13 @@ import fr.galettedebroons.model.ModificationDonnees;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.test.Main;
 
+/**
+ *
+ * @author poher
+ */
+
 public class MargeModification extends javax.swing.JPanel {
 	
-
-	/**
-	 *
-	 * @author poher
-	 */
 	    /** Creates new form MargeModification */
 	   
 		public MargeModification(Main main) {
@@ -47,13 +47,7 @@ public class MargeModification extends javax.swing.JPanel {
 	        jButton2 = new javax.swing.JButton();
 	        jLabel4 = new javax.swing.JLabel();
 	        
-	        /*factory = Persistence.createEntityManagerFactory("majAnteros");
-	    	manager = factory.createEntityManager();
-	    	setManager(manager);
-	    	tx = manager_.getTransaction();
-			tx.begin();*/
-			//System.out.println("mon main : " +main_);
-			rd = new RecuperationDonnees(main_);
+	        rd = new RecuperationDonnees(main_);
 			md = new ModificationDonnees(main_);
 
 			// recherche des clients en base et ajout dans combobox1
@@ -182,13 +176,6 @@ public class MargeModification extends javax.swing.JPanel {
 			
 			md.updateTauxReprise(pourcentage, nomprofil, nomproduit);
 		}
-	    
-	    public EntityManager getManager(){
-			return manager_;
-		}
-		public static void setManager(EntityManager manager){
-			manager_ = manager;
-		}
 
 	    // Variables declaration - do not modify
 	    private javax.swing.JButton jButton1;
@@ -202,12 +189,7 @@ public class MargeModification extends javax.swing.JPanel {
 	    private javax.swing.JSeparator jSeparator1;
 	    private javax.swing.JTextField jTextField1;
 	    
-	    private static EntityManager manager_;
-		static EntityManagerFactory factory;
-		static EntityManager manager;
-		static EntityTransaction tx;
-		
-		Main main_;
+	    Main main_;
 		RecuperationDonnees rd;
 		ModificationDonnees md;
 		

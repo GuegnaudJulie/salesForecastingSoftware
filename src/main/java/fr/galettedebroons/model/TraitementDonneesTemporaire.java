@@ -19,46 +19,18 @@ public class TraitementDonneesTemporaire {
 		panel_ = panel;
 	}
 	
-	/*
-	 * Frame VueGlobaleNvClient
-	 * Attente de fin de traitement
-	 * Frame VueGlobaleNvClient
-	 * Attente de fin de traitement
-	 * Insertion dans livraisons
-	 */
 	public void insertionDonnee(){
-
-		fenetreClient = new VueGlobalNvClient(this);
-		
-		/* DANS VueGlobalNvClient
-		
-		private TraitementDonneesTemporaire ClasseTraitement_;
-		
-		private static void enregistrercliActionPerformed(ActionEvent evt) {
-			//Ajout Ã  la fin
-			ClasseTraitement_.insertionProduit();
-		}
-		*/
+		fenetreClient = new VueGlobalNvClient(main_, null, this);
 	}
 	
 	public void insertionProduit(){
-		//fenetreProduit = new VueGlobalNvProduit(this);
-		
-		/* DANS VueGlobalNvProduit
-		
-		private TraitementDonneesTemporaire ClasseTraitement_;
-		
-		private static void enregistrercliActionPerformed(ActionEvent evt) {
-			//Ajout Ã  la fin
-			ClasseTraitement_.insertionDonneeFin();
-		}
-		*/
+		fenetreProduit = new VueGlobalNvProduit(main_, null, this);
 	}
 	
 	public void insertionDonneeFin(){
 		new RemplissageLivraison(main_);
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
-		JOptionPane.showMessageDialog(panel_, "Les livraisons ont Ã©tÃ© ajoutÃ©es");
+		JOptionPane.showMessageDialog(panel_, "Les livraisons ont été ajoutées");
 		rdt.vidage();
 	}
 }

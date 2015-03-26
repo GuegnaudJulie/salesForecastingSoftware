@@ -14,16 +14,14 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 import fr.galettedebroons.domain.Gamme;
+import fr.galettedebroons.test.Main;
 
 /**
  *
  * @author Oumoul
  */
 public class ajoutGamme extends javax.swing.JPanel {
-	private static EntityManager manager_;
-	static EntityTransaction tx;
-	EntityManagerFactory factory;
-	EntityManager manager;
+	private Main main_;
 	NouveauProduit np;
 	NouveauClient nc;
 	
@@ -33,13 +31,15 @@ public class ajoutGamme extends javax.swing.JPanel {
     /**
      * Creates new form ajoutGamme
      */
-    public ajoutGamme(NouveauProduit np) {
+    public ajoutGamme(Main main, NouveauProduit np) {
     	this.np = np;
+    	main_ = main;
         initComponents();
     }
     
-    public ajoutGamme(NouveauClient nc) {
+    public ajoutGamme(Main main, NouveauClient nc) {
     	this.nc = nc;
+    	main_ = main;
         initComponents();
     }
 
@@ -51,7 +51,6 @@ public class ajoutGamme extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
-    	
     	
     	codeGamme = "";
     	dureeConserv = -1;
@@ -65,12 +64,6 @@ public class ajoutGamme extends javax.swing.JPanel {
         codgam = new javax.swing.JTextField();
         dconsgam = new javax.swing.JTextField();
         
-        factory = Persistence.createEntityManagerFactory("majAnteros");
-    	manager = factory.createEntityManager();
-    	setManager(manager);
-    	final EntityTransaction tx = manager_.getTransaction();
-		tx.begin();
-
         jTextField2.setText("jTextField2");
 
         jLabel1.setText("AJOUT GAMME");
@@ -92,8 +85,8 @@ public class ajoutGamme extends javax.swing.JPanel {
 				codeGamme = codgam.getText();
 				dureeConserv = Integer.parseInt(dconsgam.getText());
 				Gamme nvGamme = new Gamme(codeGamme, dureeConserv, null, null);
-				manager_.persist(nvGamme);
-				tx.commit();
+				main_.getManager().persist(nvGamme);
+				main_.getTransaction().commit();
 				np.methode();
 			}
         });
@@ -147,19 +140,10 @@ public class ajoutGamme extends javax.swing.JPanel {
         );
     }// </editor-fold>
 
-    private void codgamActionPerformed(java.awt.event.ActionEvent evt) {                                       
+    private void codgamActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    }          
+    }
     
-    public EntityManager getManager(){
-		return manager_;
-	}
-	public void setManager(EntityManager manager){
-		manager_ = manager;
-	}
-	
-
-
     // Variables declaration - do not modify
     private javax.swing.JButton annulg;
     private javax.swing.JTextField codgam;

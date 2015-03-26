@@ -342,24 +342,10 @@ public class PanelEdition extends javax.swing.JPanel {
     }                                              
 
     private void boutonAjoutClientActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-        // new frame avec formulaire des nouveaux client
-    	
-    	/*
-    	nouveauClient.add(new VueGlobalNvClient(main_, this));
-    	nouveauClient.setLocationRelativeTo(null);
-    	nouveauClient.setVisible(true);
-    	*/
-    	/*
-    	nouveauClient.setLocationRelativeTo(null);
-    	nouveauClient.setSize(500, 500);
-    	nouveauClient.setVisible(true);
-    	*/
-    	
-    	nouveauClient = new VueGlobalNvClient(main_, this);
+        nouveauClient = new VueGlobalNvClient(main_, this, null);
     }     
     
     void terminerAjoutClient(){
-    	//nouveauClient.setVisible(false);
     	listeClient();
     }
 
@@ -524,14 +510,7 @@ public class PanelEdition extends javax.swing.JPanel {
     }                                             
 
     private void boutonAjoutArticleActionPerformed(java.awt.event.ActionEvent evt) {                                                   
-    	// new frame avec formulaire des nouveaux produits
-    	
-    	/*
-    	nouveauProduit.add(new VueGlobalNvProduit(main_));
-    	nouveauProduit.setLocationRelativeTo(null);
-    	nouveauProduit.setVisible(true);
-    	*/
-    	nouveauProduit = new VueGlobalNvProduit(main_, this);
+    	nouveauProduit = new VueGlobalNvProduit(main_, this, null);
     	
     	/*A rajouter dans VueGlobalNvProduit:
     	
@@ -555,16 +534,9 @@ public class PanelEdition extends javax.swing.JPanel {
 				panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
 				NouveauProduit np = new NouveauProduit(null, jb);
 			}*/
-			
-		/*Méthode Enregistrer(){
-			if (panel != null)
-				panel.terminerAjoutProduit();
-		}
-    	*/
     }
     
     void terminerAjoutProduit(){
-    	//nouveauProduit.setVisible(false);
     	listeProduit();
     }
 
@@ -577,6 +549,7 @@ public class PanelEdition extends javax.swing.JPanel {
     private javax.swing.JComboBox valListeProduit;
     private VueGlobalNvClient nouveauClient;
     private VueGlobalNvProduit nouveauProduit;
+    
     // Variables declaration - do not modify                     
     private javax.swing.JButton boutonAjoutArticle;
     private javax.swing.JButton boutonAjoutClient;

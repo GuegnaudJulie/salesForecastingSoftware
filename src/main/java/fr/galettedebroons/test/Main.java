@@ -5,13 +5,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-import fr.galettedebroons.model.RemplissageLivraison;
 import fr.galettedebroons.view.InterfaceGenerale;
 
 public class Main {
 	
 	private EntityManager manager_;
-	private EntityTransaction tx;
+	private EntityTransaction tx_;
 	
 	public Main(EntityManager manager) {
 		manager_ = manager;
@@ -20,23 +19,27 @@ public class Main {
 	public EntityManager getManager(){
 		return manager_;
 	}
+	
 	public EntityTransaction getTransaction(){
-		return this.tx;
+		return this.tx_;
+	}
+	
+	public void setManager(EntityManager manager){
+		manager_ = manager;
+	}
+	
+	public void setTransaction(EntityTransaction tx){
+		tx_ = tx;
 	}
 
 	public static void main(String[] args) {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("majAnteros"); // majAnteros, createAnteros, dropAnteros, createAndDrop ...
 		EntityManager manager = factory.createEntityManager();
-		
-		//RemplissageLivraison rl = new RemplissageLivraison(new Main(manager));
-		//rl.remplissage();
-		
-		//EntityManagerFactory factory = Persistence.createEntityManagerFactory("createAnteros"); // majAnteros, createAnteros, ...
-		//EntityManager manager = factory.createEntityManager();
-		//salesForecastingSoftwareTest test = new salesForecastingSoftwareTest(manager);
-		
 		EntityTransaction tx = manager.getTransaction();
-		tx.begin();
+		
+		Main main = new Main(manager);
+		main.setTransaction(tx);
+		main.getTransaction().begin();
 
 		// TODO create entity
 		/*List<Profil> lToto = new ArrayList();
@@ -70,11 +73,9 @@ public class Main {
 		tx.commit();
 		*/
 		
-		
-		InterfaceGenerale IHM = new InterfaceGenerale(new Main(manager));
+		InterfaceGenerale IHM = new InterfaceGenerale(main);
 		IHM.setLocationRelativeTo(null);
 		IHM.setVisible(true);
-		
 		
 		System.out.println(".. done");
 	}

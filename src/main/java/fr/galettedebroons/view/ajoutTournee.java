@@ -14,6 +14,7 @@ import javax.persistence.Persistence;
 
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Tournee;
+import fr.galettedebroons.test.Main;
 
 /**
  *
@@ -22,10 +23,7 @@ import fr.galettedebroons.domain.Tournee;
 public class ajoutTournee extends javax.swing.JPanel {
 	
 	private NouveauClient nc;
-	private static EntityManager manager_;
-	static EntityTransaction tx;
-	EntityManagerFactory factory;
-	EntityManager manager;
+	private Main main_;
 	Tournee nvGamme;
 
     /**
@@ -35,8 +33,9 @@ public class ajoutTournee extends javax.swing.JPanel {
         initComponents();
     }
     
-    public ajoutTournee(NouveauClient nc) {
+    public ajoutTournee(Main main, NouveauClient nc) {
     	this.nc = nc;
+    	main_ = main;
         initComponents();
     }
 
@@ -67,12 +66,6 @@ public class ajoutTournee extends javax.swing.JPanel {
         
         nomTournee = "";
         jourTournee = null;
-        
-        factory = Persistence.createEntityManagerFactory("majAnteros");
-    	manager = factory.createEntityManager();
-    	setManager(manager);
-    	final EntityTransaction tx = manager_.getTransaction();
-		tx.begin();
 
         jLabel1.setText("AJOUT TOURNEE");
 
@@ -144,8 +137,8 @@ public class ajoutTournee extends javax.swing.JPanel {
 				//nvGamme.setJour_tournee(jourTournee);
 				//nvGamme.setNom(nomTournee);
 				nvGamme = new Tournee(nomTournee, jourTournee);
-				manager_.persist(nvGamme);
-				tx.commit();
+				main_.getManager().persist(nvGamme);
+				main_.getTransaction().commit();
 				nc.methode();
 			}
         });
@@ -248,13 +241,6 @@ public class ajoutTournee extends javax.swing.JPanel {
     private void nmtournActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nmtournActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nmtournActionPerformed
-
-    public EntityManager getManager(){
-		return manager_;
-	}
-	public void setManager(EntityManager manager){
-		manager_ = manager;
-	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton annult;

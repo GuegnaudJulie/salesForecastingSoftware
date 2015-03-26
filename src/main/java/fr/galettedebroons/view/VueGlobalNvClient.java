@@ -44,12 +44,12 @@ import fr.galettedebroons.*;
  */
 public class VueGlobalNvClient {
 	
-
-	private static EntityManager manager_;
+	Main main_;
+	PanelEdition panel_;
+	TraitementDonneesTemporaire ClasseTraitement_;
+	RecuperationDonnees rd_;
 	List<Object[]> results;
-	static EntityTransaction tx;
-	EntityManagerFactory factory;
-	EntityManager manager;
+	
 	String nomClientLabel;
 	String nomClientJTF;
 	String codeClientLabel;
@@ -62,153 +62,80 @@ public class VueGlobalNvClient {
 	JComboBox[] comboGamme;
 	List<NouveauClient> listnvclient;
 	List<Object[]> clients;
-	Main main_;
-	PanelEdition panel_;
-	TraitementDonneesTemporaire ClasseTraitement_;
 	String nomClient;
 	String codeClient;
 	String textCombo;
 	String codeGamme;
-	
-	
-	public VueGlobalNvClient(){
-		initialisationClients();
-		//fenetre.setVisible(true);
-	}
-	
+		
 	/**
 	 * Constructeur initialise composants graphiques
 	 * @param main acces au Entity Manager pour gerer la BDD
 	 * @param panel
 	 */
-	public VueGlobalNvClient(Main main, PanelEdition panel){
+	public VueGlobalNvClient(Main main, PanelEdition panel, TraitementDonneesTemporaire traitementDonneesTemporaire){
 		main_ = main; 
 		panel_ = panel;
+		ClasseTraitement_ = traitementDonneesTemporaire;
+		rd_ = new RecuperationDonnees(main_);
 		initialisationClients();
-	}
-
-	public VueGlobalNvClient(TraitementDonneesTemporaire traitementDonneesTemporaire) {
-		this.ClasseTraitement_ = traitementDonneesTemporaire;
 	}
 
 	/**
 	 * initialisation des composants
 	 */
 	private void initialisationClients() {
-
-		//this.comboTournee = new JComboBox();
-		//this.comboGamme = new JComboBox();
 		panelGeneral = new JPanel();
 		panelBouton = new JPanel();
 		panelGlobal = new JPanel();
 		fenetre = new JFrame();
 		fenetre.setSize(700,500);
 		listnvclient = new ArrayList<NouveauClient>();
-		
-		
-		factory = Persistence.createEntityManagerFactory("majAnteros");
-    	manager = factory.createEntityManager();
-    	this.setManager(manager);
-    	tx = manager_.getTransaction();
-		tx.begin();
     	
-    	// recupere les clients dans la table temporaire -----
-    	/*CriteriaBuilder cb = manager_.getCriteriaBuilder();
-		CriteriaQuery<Object[]> q = cb.createQuery(Object[].class);
-    	Root<Temporaire> t = q.from(Temporaire.class);
-		q.select(cb.array(t.get("code_profil"), t.get("nom_client"))).distinct(true);
-		q.where(cb.or(cb.equal(t.get("code_erreur"), "C"),cb.equal(t.get("code_erreur"), "CP")));
-		results = manager_.createQuery(q).getResultList();*/
-		
-		RecuperationDonnees rd = new RecuperationDonnees(main_);
+		// récupération de la liste de client
 		clients = null;
-		
 		int nbNewClient = 0;
     	if (panel_ == null){
-	    	clients = rd.recuperationClientTemp();
+	    	clients = rd_.recuperationClientTemp();
 			nbNewClient = clients.size();
 		}
 		else
 			nbNewClient = 1;
 		
-				
+		// récupération de la liste de tournee
+		String[] tournee = rd_.recuperationTournee(); 
 		
-		
-		
-		// fin recupere clients -----
-		
-		// debut de traitement de ma liste de tournee -----
-		/*List<Tournee> tournees = new ArrayList<Tournee>();
-		tournees = manager_.createQuery("select t from Tournee t", Tournee.class).getResultList();
-		System.out.println("MA LISTE DEROULANTE !!!! " +tournees.size());
-    	//System.out.println("MA LISTE DEROULANTE !!!! " +tournees.get(0).getId());
-    	int k=0;
-    	List<String> latournee = new ArrayList<String>();
-    	for(Tournee tournee : tournees){
-    		String matournee = tournees.get(k).getId() + " " +tournees.get(k).getJour_tournee() + " " 
-    				+ tournees.get(k).getNom();
-    		System.out.println("Ma tournee : " +matournee);
-    		latournee.add(matournee);
-    		comboTournee.addItem(matournee);
-    		k++;
-    		
-    	}*/
-    	
-    	String[] tournee = rd.recuperationTournee(); 
-    	
-    	// fin de traitement de ma liste de tournee -----
-
-    	
-    	// debut de traitement de ma liste de gamme
-    	/*List<Gamme> gammes = new ArrayList<Gamme>();
-		gammes = manager_.createQuery("select g from Gamme g", Gamme.class).getResultList();
-		int g = 0;
-		List<String> lagamme = new ArrayList<String>();
-    	for(Gamme gamme : gammes){
-    		String magamme = gammes.get(g).getCode_gamme() + " " +gammes.get(g).getDuree_conservation();
-    		System.out.println("Ma gamme : " +magamme);
-    		lagamme.add(magamme);
-    		comboGamme.addItem(magamme);
-    		k++;
-    		
-    	}*/
-    	
-    	String[] gamme = rd.recuperationGamme();
+		// récupération de la liste de gamme
+    	String[] gamme = rd_.recuperationGamme();
     	comboGamme = new JComboBox[nbNewClient];
     	comboTournee = new JComboBox[nbNewClient];
     	
-    	    	
     	int indice = 0;
     	int indiceTournee = 0;
-    	//System.out.println("taille des clients : " +clients.size());
     	if (panel_ == null){
 			for(Object[] cli : clients){
 	    		JComboBox jb = new JComboBox(gamme);
 	    		comboGamme[indice] = jb;
-	    		System.out.println("contenu de comboGamme : " +comboGamme[indice]);
 	    		
 	    		//for(Object[] tournee : tournees){
 		    		JComboBox jt = new JComboBox(tournee);
 		    		comboTournee[indiceTournee] = jt;
-		    		System.out.println("contenu de comboTournee : " +comboTournee[indiceTournee]);
 	    		//}
 	    		panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
 	    		/*String codeclient, String nc, JComboBox tournee, JComboBox gamme*/
-	    		NouveauClient np = new NouveauClient(cli[1].toString(),cli[0].toString(), jt, jb);
+	    		NouveauClient np = new NouveauClient(main_, cli[1].toString(),cli[0].toString(), jt, jb);
 	    		panelGeneral.add(np);
 	    		listnvclient.add(np);
 	    		indice ++;
-	    		System.out.println("j'aiiiiiiii qq chose");
 	    	}
-    	}else{
+    	}
+    	else{
 			JComboBox jb = new JComboBox(gamme);
 			JComboBox jt = new JComboBox(tournee);
 			panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
-			NouveauClient np = new NouveauClient(null, null, jt, jb);
+			NouveauClient np = new NouveauClient(main_, null, null, jt, jb);
     		panelGeneral.add(np);
     		listnvclient.add(np);
 		}
-		// fin de traitement de ma liste de gamme
 		
     	/*int i = 0;
 		for(Object[] result : results) {
@@ -235,6 +162,7 @@ public class VueGlobalNvClient {
 			
 			
 		}*/
+    	
 		panelGlobal.setLayout(new BorderLayout());
 		panelGlobal.add(panelGeneral, BorderLayout.CENTER);
 		//fenetre.add(panelGeneral);
@@ -247,59 +175,46 @@ public class VueGlobalNvClient {
 	               enregistrercliActionPerformed(evt);
 	           }
 	    });
+		
 		//this.getContentPane().add(new JButton("CENTER"), BorderLayout.CENTER);
 		panelGlobal.add(panelBouton, BorderLayout.SOUTH);
 		fenetre.add(panelGlobal);
+		fenetre.setLocationRelativeTo(null);
 		//fenetre.add(panelBouton);
 		fenetre.setVisible(true);
+	}
+	
+	private void enregistrercliActionPerformed(ActionEvent evt) {
+		Client c = new Client();
+		Profil p;
+		//listnvclient
+		
+		for (NouveauClient listclient : listnvclient){
+			// reinitialisation des parametre de creation de produit
+			nomClient = "";
+			codeClient = "";
+			textCombo = "";
+			codeGamme = "";
+			
+			nomClient = ((NouveauClient) listclient).getTextFieldNC().getText();
+			codeClient = ((NouveauClient) listclient).getTextFieldCC().getText();
+				
+			try{
+				c = new Client(nomClient, null);
+				main_.getManager().persist(c);
+				main_.getTransaction().commit();
+				
+				if (panel_ != null)
+					panel_.terminerAjoutClient();
+				
+				if (ClasseTraitement_ != null)
+					ClasseTraitement_.insertionProduit();
+				
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	
-	/*public static void main(String[] args){
-		VueGlobalNvClient nc = new VueGlobalNvClient();
-	}*/
-		
-		public EntityManager getManager(){
-			return manager_;
-		}
-		public void setManager(EntityManager manager){
-			manager_ = manager;
-		}
-		
-		private void enregistrercliActionPerformed(ActionEvent evt) {
-			Client c = new Client();
-			Profil p;
-			//listnvclient
-			
-			for (NouveauClient listclient : listnvclient){
-				// reinitialisation des parametre de creation de produit
-				nomClient = "";
-				codeClient = "";
-				textCombo = "";
-				codeGamme = "";
-				
-				nomClient = ((NouveauClient) listclient).getTextFieldNC().getText();
-				codeClient = ((NouveauClient) listclient).getTextFieldCC().getText();
-				System.out.println("Nom du client : " +nomClient);
-				
-				try{
-					c = new Client(nomClient, null);
-					manager_.persist(c);
-					tx.commit();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-				
-				
-			}
-			
-			
-			if (panel_ != null)
-				panel_.terminerAjoutClient();
-			
-			ClasseTraitement_ = new TraitementDonneesTemporaire(main_, panel_);
-			ClasseTraitement_.insertionProduit();
-			
-		}
-
 }

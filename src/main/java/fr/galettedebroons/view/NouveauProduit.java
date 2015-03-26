@@ -3,6 +3,8 @@ package fr.galettedebroons.view;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
+import fr.galettedebroons.test.Main;
+
 
 /*
  * To change this template, choose Tools | Templates
@@ -23,8 +25,8 @@ public class NouveauProduit extends java.awt.Panel {
 
     /** Creates new form NouveauClient */
 
-    public NouveauProduit(String code_produit, JComboBox comboGamme) {
-    	System.out.println("Nouveau prod !!!");
+    public NouveauProduit(Main main, String code_produit, JComboBox comboGamme) {
+    	main_ = main;
     	initComponents(code_produit, comboGamme);
     }	
 
@@ -160,16 +162,16 @@ public class NouveauProduit extends java.awt.Panel {
                 .addGap(32, 32, 32)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        System.out.println("je passe par la ! ");
 
         jLabel3.getAccessibleContext().setAccessibleName("labelTournee");
     }// </editor-fold>
                                         
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-    	ajoutGamme nvGamme = new ajoutGamme(this);
+    	ajoutGamme nvGamme = new ajoutGamme(main_, this);
     	fenetreNvGamme.setSize(500, 200);
     	fenetreNvGamme.add(nvGamme);
+    	fenetreNvGamme.setLocationRelativeTo(null);
     	fenetreNvGamme.setVisible(true);
     }
     
@@ -183,7 +185,6 @@ public class NouveauProduit extends java.awt.Panel {
     
     public void methode(){
     	fenetreNvGamme.setVisible(false);
-    	
 	}
     
     // Variables declaration - do not modify
@@ -204,6 +205,7 @@ public class NouveauProduit extends java.awt.Panel {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JSeparator jSeparator1;
     private JFrame fenetreNvGamme;
+    private Main main_;
     // End of variables declaration
 
 }
