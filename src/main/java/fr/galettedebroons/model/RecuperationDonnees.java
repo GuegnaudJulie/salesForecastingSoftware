@@ -231,5 +231,20 @@ public class RecuperationDonnees {
 		
 		return res;
 	}
+	
+	public String[] recuperationProfilTournee(String tournee){
+		System.out.println("ma touuuurnee : ");
+		List<Profil> listProfil = manager_.createQuery("select t.profilTournee "
+				+ "FROM Tournee t WHERE t.nom LIKE :tournee")
+				.setParameter("tournee", tournee)
+				.getResultList();
+		String[] profil = new String[listProfil.size()];
+		int i = 0;
+		for (Profil g : listProfil){
+			profil[i] = g.getCode_client();
+			i++;
+		}		
+		return profil;
+	}
 
 }

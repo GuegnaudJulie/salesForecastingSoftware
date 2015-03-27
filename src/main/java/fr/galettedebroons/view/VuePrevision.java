@@ -1,7 +1,11 @@
 package fr.galettedebroons.view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JComboBox;
 
+import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.test.Main;
 
 
@@ -38,7 +42,7 @@ public class VuePrevision extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
-    	jComboBox1 = new javax.swing.JComboBox();
+    	//jComboBox1 = new javax.swing.JComboBox();
         jComboBox2 = new javax.swing.JComboBox();
         jComboBox3 = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -46,10 +50,24 @@ public class VuePrevision extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         
+        rd = new RecuperationDonnees(main_);
+        
+        //recuperation tournee
+        listeTournee = rd.recuperationTournee();
+        jComboBox1 = new JComboBox(listeTournee);
+        jComboBox1.addActionListener(new java.awt.event.ActionListener(){
+        	public void actionPerformed(java.awt.event.ActionEvent evt) {
+        		jComboBox1ActionPerformed(evt);
+			}
+        });
+
+        
         /*listClient = rd.recuperationProfil();
 		jComboBox1 = new JComboBox(listClient);*/
+        
+        
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        //jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -109,6 +127,17 @@ public class VuePrevision extends javax.swing.JPanel {
         );
     }// </editor-fold>
 
+    
+    private void jComboBox1ActionPerformed(ActionEvent evt) {
+		// TODO Auto-generated method stub
+    	String profil = "";
+    	profil = (String) jComboBox1.getSelectedItem();
+    	System.out.println("jComboBox1.getSelectedIndex()" +jComboBox1.getSelectedItem());
+    	listClient = rd.recuperationProfilTournee(profil);
+    	jComboBox2 = new JComboBox(listClient);
+    	jComboBox2.repaint();
+    	
+	}
 
     // Variables declaration - do not modify
     private javax.swing.JComboBox jComboBox1;
@@ -119,4 +148,7 @@ public class VuePrevision extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
 
+    RecuperationDonnees rd;
+    String[] listClient;
+    String[] listeTournee;
 }

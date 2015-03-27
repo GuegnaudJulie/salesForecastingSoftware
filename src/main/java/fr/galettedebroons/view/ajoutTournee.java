@@ -65,7 +65,6 @@ public class ajoutTournee extends javax.swing.JPanel {
         annult = new javax.swing.JButton();
         
         nomTournee = "";
-        jourTournee = null;
 
         jLabel1.setText("AJOUT TOURNEE");
 
@@ -105,40 +104,39 @@ public class ajoutTournee extends javax.swing.JPanel {
             }
 
 			private void saveActionPerformed(ActionEvent evt) {
+				lundi = false;
+				mardi = false;
+				mercredi = false;
+				jeudi = false;
+				vendredi = false;
+				samedi = false;
+				dimanche = false;
 				
 				nomTournee = nmtourn.getText();
 				
-				int i = 0;
 				if(lun.isSelected()){
-					jourTournee[i] = "lundi";
-					i++;
+					lundi = true;
 				}if(mar.isSelected()){
-					jourTournee[i] = "mardi";
-					i++;
+					mardi = true;
 				}if(mer.isSelected()){
-					jourTournee[i] = "mercredi";
-					i++;
+					mercredi = true;
 				}if(jeu.isSelected()){
-					jourTournee[i] = "jeudi";
-					i++;
+					jeudi = true;
 				}if(ven.isSelected()){
-					jourTournee[i] = "vendredi";
-					i++;
+					vendredi = true;
 				}if(sam.isSelected()){
-					jourTournee[i] = "samedi";
-					i++;
+					samedi = true;
 				}if(dim.isSelected()){
-					jourTournee[i] = "dimanche";
-					i++;
+					dimanche = true;
 				}
 				System.out.println("le nom de ma tournee : " +nomTournee);
-				System.out.println("le nom de ma tournee : " +jourTournee);
 				//nvGamme = new Tournee();
 				//nvGamme.setJour_tournee(jourTournee);
 				//nvGamme.setNom(nomTournee);
 				
 				main_.getTransaction().begin();
-				nvGamme = new Tournee(nomTournee, jourTournee);
+				nvGamme = new Tournee(nomTournee, lundi, mardi, mercredi, jeudi, 
+						vendredi, samedi, dimanche);
 				main_.getManager().persist(nvGamme);
 				main_.getTransaction().commit();
 				nc.methode();
@@ -261,6 +259,13 @@ public class ajoutTournee extends javax.swing.JPanel {
     private javax.swing.JButton savet;
     private javax.swing.JCheckBox ven;
     private String nomTournee;
-    private String[] jourTournee;
+    
+    private boolean lundi;
+    private boolean mardi;
+    private boolean mercredi;
+    private boolean jeudi;
+    private boolean vendredi;
+    private boolean samedi;
+    private boolean dimanche;
     // End of variables declaration//GEN-END:variables
 }
