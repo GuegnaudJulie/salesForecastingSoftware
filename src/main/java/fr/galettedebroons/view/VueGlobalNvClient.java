@@ -2,7 +2,10 @@ package fr.galettedebroons.view;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -33,6 +36,7 @@ import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
+import fr.galettedebroons.model.selectBase.RecupTemporaire;
 import fr.galettedebroons.test.Main;
 import fr.galettedebroons.*;
 /**
@@ -48,6 +52,7 @@ public class VueGlobalNvClient {
 	PanelEdition panel_;
 	TraitementDonneesTemporaire ClasseTraitement_;
 	RecuperationDonnees rd_;
+	RecupTemporaire rt_;
 	List<Object[]> results;
 	
 	String nomClientLabel;
@@ -58,6 +63,7 @@ public class VueGlobalNvClient {
 	JPanel panelGeneral;
 	JPanel panelBouton;
 	JPanel panelGlobal;
+	JScrollPane scrollPane;
 	JComboBox[] comboTournee;
 	JComboBox[] comboGamme;
 	List<NouveauClient> listnvclient;
@@ -77,6 +83,7 @@ public class VueGlobalNvClient {
 		panel_ = panel;
 		ClasseTraitement_ = traitementDonneesTemporaire;
 		rd_ = new RecuperationDonnees(main_);
+		rt_ = new RecupTemporaire(main_);
 		initialisationClients();
 	}
 
@@ -95,7 +102,7 @@ public class VueGlobalNvClient {
 		clients = null;
 		int nbNewClient = 0;
     	if (panel_ == null){
-	    	clients = rd_.recuperationClientTemp();
+	    	clients = rt_.recuperationClientTemp();
 			nbNewClient = clients.size();
 		}
 		else
@@ -112,18 +119,29 @@ public class VueGlobalNvClient {
     	int indice = 0;
     	int indiceTournee = 0;
     	if (panel_ == null){
+
+    		GridBagLayout gbl = new GridBagLayout();
+    		panelGeneral.setLayout(gbl);
+    		GridBagConstraints gbc = new GridBagConstraints();
+    		
 			for(Object[] cli : clients){
 	    		JComboBox jb = new JComboBox(gamme);
 	    		comboGamme[indice] = jb;
 	    		
-	    		//for(Object[] tournee : tournees){
-		    		JComboBox jt = new JComboBox(tournee);
-		    		comboTournee[indiceTournee] = jt;
-	    		//}
-	    		panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
-	    		/*String codeclient, String nc, JComboBox tournee, JComboBox gamme*/
+		    	JComboBox jt = new JComboBox(tournee);
+		    	comboTournee[indiceTournee] = jt;
+	    		
 	    		NouveauClient np = new NouveauClient(main_, cli[1].toString(),cli[0].toString(), jt, jb);
-	    		panelGeneral.add(np);
+	    		
+	    		gbc.gridx = 0;
+	    		gbc.gridy = indice;
+	    		gbc.fill = gbc.BOTH;
+	    		gbc.weightx = 10;
+	    		gbc.weighty = 1;
+	    		gbc.insets = new Insets(0, 0, 1, 0);
+	    		gbc.ipady = gbc.anchor = GridBagConstraints.CENTER;
+	    		
+	    		panelGeneral.add(np, gbc);
 	    		listnvclient.add(np);
 	    		indice ++;
 	    	}
@@ -163,6 +181,7 @@ public class VueGlobalNvClient {
 			
 		}*/
     	
+    	scrollPane = new JScrollPane(panelGeneral);
 		panelGlobal.setLayout(new BorderLayout());
 		panelGlobal.add(panelGeneral, BorderLayout.CENTER);
 		//fenetre.add(panelGeneral);
@@ -210,6 +229,8 @@ public class VueGlobalNvClient {
 				
 				if (ClasseTraitement_ != null)
 					ClasseTraitement_.insertionProduit();
+				
+				fenetre.setVisible(false);
 				
 			}catch(Exception e){
 				e.printStackTrace();

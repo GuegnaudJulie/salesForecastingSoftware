@@ -2,6 +2,7 @@ package fr.galettedebroons.model;
 
 import javax.swing.JOptionPane;
 
+import fr.galettedebroons.model.selectBase.RecupTemporaire;
 import fr.galettedebroons.test.Main;
 import fr.galettedebroons.view.PanelEdition;
 import fr.galettedebroons.view.VueGlobalNvClient;
@@ -13,24 +14,35 @@ public class TraitementDonneesTemporaire {
 	private PanelEdition panel_;
 	private VueGlobalNvClient fenetreClient;
 	private VueGlobalNvProduit fenetreProduit;
+	private RecupTemporaire rt_;
 	
 	public TraitementDonneesTemporaire(Main main, PanelEdition panel){
 		main_ = main;
 		panel_ = panel;
+		rt_ = new RecupTemporaire(main_);
 	}
 	
 	public void insertionDonnee(){
-		fenetreClient = new VueGlobalNvClient(main_, null, this);
+		if (rt_.recuperationClientInexistant()){
+			fenetreClient = new VueGlobalNvClient(main_, null, this);
+		}
+		else
+			insertionProduit();
 	}
 	
 	public void insertionProduit(){
-		fenetreProduit = new VueGlobalNvProduit(main_, null, this);
+		if (rt_.recuperationProdInexistant()){
+			fenetreProduit = new VueGlobalNvProduit(main_, null, this);
+		}
+		else
+			insertionDonneeFin();
 	}
 	
 	public void insertionDonneeFin(){
 		new RemplissageLivraison(main_);
-		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
 		JOptionPane.showMessageDialog(panel_, "Les livraisons ont été ajoutées");
+		
+		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
 		rdt.vidage();
 	}
 }

@@ -99,18 +99,6 @@ public class RecuperationDonnees {
 		return produit;
 	}
 	
-	public List<String> recuperationProduitTemp(){
-		List<String> produit = manager_.createQuery("select distinct t.code_produit " +
-				"from Temporaire t where code_erreur = 'CP' or  code_erreur = 'P'", String.class).getResultList();
-		return produit;
-	}
-	
-	public List<Object[]> recuperationClientTemp(){
-		List<Object[]> produit = manager_.createQuery("select distinct t.nom_client, t.code_profil " +
-				"from Temporaire t where code_erreur = 'CP' or  code_erreur = 'P'", Object[].class).getResultList();
-		return produit;
-	}
-	
 	public String[] recuperationGamme(){
 		List<String> ListGamme = manager_.createQuery("select g.code_gamme " +
 				"from Gamme g ", String.class).getResultList();
@@ -150,33 +138,6 @@ public class RecuperationDonnees {
 				.setParameter("cc", code_client)
 				.getSingleResult();
 		return profil;
-	}
-	
-	public Livraison recuperationLivraison(String bl, Date date, String code_prod){
-		Livraison livr = manager_.createQuery("select l from Livraison l, Produit p where " +
-				"l.bon_livraison LIKE :bl AND " +
-				"l.date_livraison LIKE :date" +
-				"l.livraison_produit.code_produit LIKE :code", Livraison.class)
-				.setParameter("bl", code_prod)
-				.setParameter("date", date)
-				.setParameter("code", code_prod)
-				.getSingleResult();
-		
-		return livr;
-	}
-	
-	public Livraison recupLivraisonPrec(Produit prod, Profil profil, Date date){
-		Livraison livraison =  manager_.createQuery("select l from Livraison l WHERE " +
-				"livraison_profil LIKE :profil AND " +
-				"livraison_produit LIKE :produit AND " +
-				"date_livraison < :date " +
-				"ORDER BY date_livraison ASC LIMIT 1", Livraison.class)
-				.setParameter("profil", profil)
-				.setParameter("produit", prod)
-				.setParameter("date", date)
-				.getSingleResult();
-		
-		return livraison;
 	}
 	
 	public String[] recupJoursLivraison(Profil profil){
@@ -240,12 +201,5 @@ public class RecuperationDonnees {
 		}		*/
 		return tableauProfil;
 	}
-
-	public List<Object[]> recuperationListLivraison(){
-		List<Object[]> livr = manager_.createQuery("select l.bon_livraison, l.livraison_profil.code_client, l.livraison_produit.code_produit, l.date_livraison, l.qte_livraison, l.qte_reprise from " +
-				"Livraison l", Object[].class)
-				.getResultList();
-		
-		return livr;
-	}
+	
 }

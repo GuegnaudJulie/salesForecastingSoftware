@@ -1,16 +1,12 @@
 package fr.galettedebroons.view;
 
 import java.util.List;
-import java.awt.GridLayout;
 import java.io.IOException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JOptionPane;
 
-import fr.galettedebroons.controller.ControllerFichier;
 import fr.galettedebroons.controller.LectureFichier;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
@@ -23,10 +19,7 @@ import fr.galettedebroons.test.Main;
  * @since   18/03/2015
  */
 public class PanelEdition extends javax.swing.JPanel {
-
-    /**
-     * Creates new form panelEdition
-     */
+	
     public PanelEdition(Main main) {
         main_ = main;
         initComponents();
@@ -347,6 +340,7 @@ public class PanelEdition extends javax.swing.JPanel {
     
     void terminerAjoutClient(){
     	listeClient();
+    	this.repaint();
     }
 
     private void boutonAjoutLigneActionPerformed(java.awt.event.ActionEvent evt) {                                                 
@@ -507,37 +501,17 @@ public class PanelEdition extends javax.swing.JPanel {
         	};
     	tableauLivraison.removeRowSelectionInterval(9, tableauLivraison.getRowCount()-1);
     	tableauLivraison.getColumn("Article").setCellEditor(new DefaultCellEditor(valListeProduit));
+    	
+    	this.repaint();
     }                                             
 
     private void boutonAjoutArticleActionPerformed(java.awt.event.ActionEvent evt) {                                                   
     	nouveauProduit = new VueGlobalNvProduit(main_, this, null);
-    	
-    	/*A rajouter dans VueGlobalNvProduit:
-    	
-    	Méthode init_component():
-	    	int nbNewProd = 0;
-	    	if (panel == null){
-		    	List<String> produits = rd.recuperationProduitTemp();
-				nbNewProd = produits.size();
-			}
-			else
-				nbNewProd = 1;
-			
-			...
-			
-			if (panel == null){
-				for(Object[] prod : produits){
-				...
-				}
-			else{
-				JComboBox jb = new JComboBox(gamme);
-				panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
-				NouveauProduit np = new NouveauProduit(null, jb);
-			}*/
     }
     
     void terminerAjoutProduit(){
     	listeProduit();
+    	this.repaint();
     }
 
     private RecuperationDonnees rd;

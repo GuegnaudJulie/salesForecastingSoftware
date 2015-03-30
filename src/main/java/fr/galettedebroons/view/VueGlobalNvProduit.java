@@ -30,6 +30,7 @@ import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
+import fr.galettedebroons.model.selectBase.RecupTemporaire;
 import fr.galettedebroons.test.Main;
 
 public class VueGlobalNvProduit {
@@ -38,6 +39,7 @@ public class VueGlobalNvProduit {
 	static JPanel panelGeneral;
 	static JPanel panelGlobal;
 	static JPanel panelBouton;
+	static JScrollPane scrollPane;
 	static JFrame fenetre;
 	static JComboBox[] comboGamme;
 	static List<NouveauProduit> listnvproduit;
@@ -78,12 +80,13 @@ public class VueGlobalNvProduit {
 		fenetre.setSize(700,500);
 		
 		RecuperationDonnees rd = new RecuperationDonnees(main_);
+		RecupTemporaire rt = new RecupTemporaire(main_);
 		
     	// recupere les produits dans la table temporaire
 		produits = null;
 		int nbNewProd = 0;
 		if (panel_ == null){
-			produits = rd.recuperationProduitTemp();
+			produits = rt.recuperationProduitTemp();
 			nbNewProd = produits.size();
 		}else
 			nbNewProd = 1;
@@ -111,6 +114,8 @@ public class VueGlobalNvProduit {
 			panelGeneral.add(np);
 			listnvproduit.add(np);
 		}
+    	
+    	scrollPane = new JScrollPane(panelGeneral);
     	
     	panelGlobal.setLayout(new BorderLayout());
 		panelGlobal.add(panelGeneral, BorderLayout.CENTER);
@@ -203,6 +208,8 @@ public class VueGlobalNvProduit {
 				
 				if (ClasseTraitement_ != null)
 					ClasseTraitement_.insertionDonneeFin();
+				
+				fenetre.setVisible(false);
 				
 			} catch(Exception e){
 				e.printStackTrace();

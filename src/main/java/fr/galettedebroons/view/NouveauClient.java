@@ -134,7 +134,7 @@ public class NouveauClient extends java.awt.Panel {
 		                    .addComponent(jLabel4)
 		                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 		                    .addComponent(jButton2))
-		                .addContainerGap(228, Short.MAX_VALUE))
+		                .addContainerGap(38, Short.MAX_VALUE))
 		        );
 	
 		        jLabel3.getAccessibleContext().setAccessibleName("labelTournee");

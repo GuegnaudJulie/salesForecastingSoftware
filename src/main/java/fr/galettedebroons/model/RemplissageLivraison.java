@@ -9,10 +9,11 @@ import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
+import fr.galettedebroons.model.selectBase.RecupLivraison;
 import fr.galettedebroons.test.Main;
 
 import java.sql.Date;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,6 +30,7 @@ public class RemplissageLivraison {
 	private EntityManager manager_;
 	private Main main_;
 	private RecuperationDonnees rd_;
+	private RecupLivraison rl_;
 	private ModificationDonnees md_;
 	
 	public RemplissageLivraison(Main main){
@@ -40,6 +42,7 @@ public class RemplissageLivraison {
 	public void remplissage(){
 		rd_ = new RecuperationDonnees(main_);
 		md_ = new ModificationDonnees(main_);
+		rl_ = new RecupLivraison(main_);
 		
 		// Tri sur les donnees de la table temporaire
 		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC", Temporaire.class).getResultList();   
@@ -80,7 +83,7 @@ public class RemplissageLivraison {
 			if (prevu){
 				if (verifQte(precLivr, qr)){
 					//On verifie que la donnee n est pas deja presente dans la base
-					Livraison livr = rd_.recuperationLivraison(bl, date, code_produit);
+					Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
 					
 					if (livr == null)
 						ajoutLivraison(bl, profil, produit, date, ql, qr);
@@ -131,7 +134,7 @@ public class RemplissageLivraison {
 	public String joursSemaine(Date date){
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
-		int joursSemaine = calendar.get(calendar.DAY_OF_WEEK);
+		int joursSemaine = calendar.get(Calendar.DAY_OF_WEEK);
 		/* 1=dimanche / 2=lundi / 3=mardi / 4=mercredi / 5=jeudi / 6=vendredi / 7=samedi */
 		
 		String jours = "";
@@ -155,13 +158,10 @@ public class RemplissageLivraison {
 		return jours;
 	}
 	
-	
 	public Livraison precedenteLivraison(Date date, Produit prod, Profil profil){
-		Livraison precLivraison = rd_.recupLivraisonPrec(prod, profil, date);
+		Livraison precLivraison = rl_.recupLivraisonPrec(prod, profil, date);
 		return precLivraison;
 	}
-	
-	
 	
 	public void ajoutLivraison(String bl, Profil profil, Produit produit, Date date, int ql, int qr){
 		EntityTransaction tx = manager_.getTransaction();
