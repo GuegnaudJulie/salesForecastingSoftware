@@ -150,42 +150,17 @@ public class RecuperationDonnees {
 		return profil;
 	}
 	
-	public boolean recuperationLivraison(String bl, Date date, String code_prod){
-		boolean present = false;
-		Livraison livraison = null;
-		Produit produit =  manager_.createQuery("select p from Produit p WHERE p.code_produit LIKE :codeProd", Produit.class)
-				.setParameter("codeProd", code_prod)
-				.getSingleResult();
-		
-		livraison = manager_.createQuery("select l from Livraison l WHERE " +
+	public Livraison recuperationLivraison(String bl, Date date, String code_prod){
+		Livraison livr = manager_.createQuery("select l from Livraison l, Produit p where " +
 				"l.bon_livraison LIKE :bl AND " +
-				"l.date_livraison LIKE :date", Livraison.class)
-				.setParameter("bl", bl)
+				"l.date_livraison LIKE :date" +
+				"l.livraison_produit.code_produit LIKE :code", Livraison.class)
+				.setParameter("bl", code_prod)
 				.setParameter("date", date)
+				.setParameter("code", code_prod)
 				.getSingleResult();
 		
-		if (livraison.getLivraison_produit().contains(produit))
-			present = true;
-		
-		return present;
-	}
-	
-	public Livraison recupLivraison(String bl, Date date, String code_prod){
-		Produit produit =  manager_.createQuery("select p from Produit p WHERE p.code_produit LIKE :codeProd", Produit.class)
-				.setParameter("codeProd", code_prod)
-				.getSingleResult();
-
-		Livraison livraison = manager_.createQuery("select l from Livraison l WHERE " +
-				"l.bon_livraison LIKE :bl AND " +
-				"l.date_livraison LIKE :date", Livraison.class)
-				.setParameter("bl", bl)
-				.setParameter("date", date)
-				.getSingleResult();
-		
-		if (!livraison.getLivraison_produit().contains(produit))
-			livraison = null;
-		
-		return livraison;
+		return livr;
 	}
 	
 	public Livraison recupLivraisonPrec(Produit prod, Profil profil, Date date){
@@ -203,7 +178,10 @@ public class RecuperationDonnees {
 	}
 	
 	public String[] recupJoursLivraison(Profil profil){
-		String[] joursLivraison = manager_.createQuery("select t.jour_tournee from Tournee t where profil_tournee LIKE :profil", String[].class).setParameter("profil", profil).getSingleResult();
+		String[] joursLivraison = manager_.createQuery("select t.jour_tournee from Tournee t where profil_tournee LIKE :profil", String[].class)
+				.setParameter("profil", profil)
+				.getSingleResult();
+		
 		return joursLivraison;
 	}
 	
@@ -234,16 +212,18 @@ public class RecuperationDonnees {
 	
 	public String[] recuperationProfilTournee(String tournee){
 		System.out.println("ma touuuurnee : ");
-		List<Profil> listProfil = manager_.createQuery("select t.profilTournee "
+		List<Profil> listProfil = manager_.createQuery("select t.profil_tournee "
 				+ "FROM Tournee t WHERE t.nom LIKE :tournee")
 				.setParameter("tournee", tournee)
 				.getResultList();
+		
 		String[] profil = new String[listProfil.size()];
 		int i = 0;
 		for (Profil g : listProfil){
 			profil[i] = g.getCode_client();
 			i++;
-		}		
+		}
+		
 		return profil;
 	}
 

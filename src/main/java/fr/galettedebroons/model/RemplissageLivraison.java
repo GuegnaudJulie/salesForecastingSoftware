@@ -80,7 +80,7 @@ public class RemplissageLivraison {
 			if (prevu){
 				if (verifQte(precLivr, qr)){
 					//On verifie que la donnee n est pas deja presente dans la base
-					Livraison livr = rd_.recupLivraison(bl, date, code_produit);
+					Livraison livr = rd_.recuperationLivraison(bl, date, code_produit);
 					
 					if (livr == null)
 						ajoutLivraison(bl, profil, produit, date, ql, qr);
@@ -167,10 +167,7 @@ public class RemplissageLivraison {
 		EntityTransaction tx = manager_.getTransaction();
 		tx.begin();
 		
-		List<Produit> list = new ArrayList<Produit>();
-		list.add(produit);
-		
-		Livraison livr = new Livraison(bl, list, date, ql, qr);
+		Livraison livr = new Livraison(bl, produit, date, ql, qr);
 		
 		manager_.persist(livr);
 		tx.commit();
