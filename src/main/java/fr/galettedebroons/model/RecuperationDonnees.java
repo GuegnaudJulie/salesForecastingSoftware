@@ -2,6 +2,8 @@ package fr.galettedebroons.model;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -211,20 +213,32 @@ public class RecuperationDonnees {
 	}
 	
 	public String[] recuperationProfilTournee(String tournee){
-		System.out.println("ma touuuurnee : ");
-		List<Profil> listProfil = manager_.createQuery("select t.profil_tournee "
-				+ "FROM Tournee t WHERE t.nom LIKE :tournee")
+		// tableau de String profil
+		String[] tableauProfil = null;
+		List<Collection> listProfil = manager_.createQuery("select t.profil_tournee "
+				+ "FROM Tournee t WHERE t.nom LIKE :tournee", Collection.class)
 				.setParameter("tournee", tournee)
 				.getResultList();
-		
-		String[] profil = new String[listProfil.size()];
-		int i = 0;
-		for (Profil g : listProfil){
+		tableauProfil = new String[listProfil.size()];
+		// chercher comment gérer une liste de collectiooooooooooon !!!!!
+		Iterator it = listProfil.iterator();
+		int i=0;
+		while(it.hasNext()){
+			//System.out.println("coucouuuu " +it.next());
+			
+			Profil p = (Profil) it.next();
+			System.out.println("mon profil : " +p.getCode_client() + " " +p.getGamme_profil());
+			tableauProfil[i] = p.getCode_client();
+			i++;
+			
+		}
+		//String[] profil = new String[listProfil.size()];
+		//int i = 0;
+		/*for (Profil g : listProfil){
 			profil[i] = g.getCode_client();
 			i++;
-		}
-		
-		return profil;
+		}		*/
+		return tableauProfil;
 	}
 
 	public List<Object[]> recuperationListLivraison(){

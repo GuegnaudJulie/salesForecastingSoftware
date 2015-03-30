@@ -1,1 +1,7 @@
 /target/
+/.gitignore
+/.project
+/.settings/
+/README.md
+/pom.xml
+/src/
