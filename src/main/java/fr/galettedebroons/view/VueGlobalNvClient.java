@@ -7,6 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.domain.Tournee;
+import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
 import fr.galettedebroons.model.selectBase.RecupTemporaire;
@@ -97,6 +100,16 @@ public class VueGlobalNvClient {
 		fenetre = new JFrame();
 		fenetre.setSize(700,500);
 		listnvclient = new ArrayList<NouveauClient>();
+		
+		fenetre.addWindowListener( new WindowAdapter()
+        {
+        	public void windowClosing (WindowEvent e)
+        	{
+        		RangerDonneeTemporaire tdt = new RangerDonneeTemporaire(main_);
+        		tdt.vidage();
+        	}
+        });
+		fenetre.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
     	
 		// récupération de la liste de client
 		clients = null;

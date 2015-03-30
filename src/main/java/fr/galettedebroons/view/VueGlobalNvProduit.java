@@ -3,6 +3,8 @@ package fr.galettedebroons.view;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Temporaire;
+import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
 import fr.galettedebroons.model.selectBase.RecupTemporaire;
@@ -74,6 +77,16 @@ public class VueGlobalNvProduit {
 		panelGlobal = new JPanel();
 		panelBouton = new JPanel();
 		fenetre = new JFrame();
+		
+		fenetre.addWindowListener( new WindowAdapter()
+        {
+        	public void windowClosing (WindowEvent e)
+        	{
+        		RangerDonneeTemporaire tdt = new RangerDonneeTemporaire(main_);
+        		tdt.vidage();
+        	}
+        });
+		fenetre.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 		
 		listnvproduit = new ArrayList<NouveauProduit>();
 		fenetre = new JFrame();

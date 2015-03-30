@@ -5,6 +5,11 @@
  */
 package fr.galettedebroons.view;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import fr.galettedebroons.model.RangerDonneeTemporaire;
+import fr.galettedebroons.model.TraitementDonneesTemporaire;
 import fr.galettedebroons.test.Main;
 
 /**
@@ -43,7 +48,7 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         panelParametrage = new fr.galettedebroons.view.MargeModification(main_);
         panelManuel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         boutonSocieteBroons.setText("Broons");

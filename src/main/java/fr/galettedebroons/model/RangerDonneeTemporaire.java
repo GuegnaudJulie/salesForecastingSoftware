@@ -112,8 +112,6 @@ public class RangerDonneeTemporaire {
 	 * Fonction de vidage de la table Temporaire
 	 */
 	public void vidage(){
-		System.out.println("je suis dans la fonction de vidage !");
-		
 		EntityTransaction tx = manager_.getTransaction();
 		tx.begin();
 		
