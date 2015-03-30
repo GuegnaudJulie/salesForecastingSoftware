@@ -232,8 +232,6 @@ public class VueGlobalNvProduit {
 			
 		}
 		
-		JOptionPane.showMessageDialog(panelGeneral, "Les nouveaux produits ont été ajouté");
-		
 		if (panel_ != null)
 			panel_.terminerAjoutProduit();
 		
