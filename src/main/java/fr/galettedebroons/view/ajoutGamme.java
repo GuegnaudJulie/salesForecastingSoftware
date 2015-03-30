@@ -6,12 +6,6 @@
 package fr.galettedebroons.view;
 
 import java.awt.event.ActionEvent;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.test.Main;
@@ -31,13 +25,8 @@ public class ajoutGamme extends javax.swing.JPanel {
     /**
      * Creates new form ajoutGamme
      */
-    public ajoutGamme(Main main, NouveauProduit np) {
+    public ajoutGamme(Main main, NouveauProduit np, NouveauClient nc) {
     	this.np = np;
-    	main_ = main;
-        initComponents();
-    }
-    
-    public ajoutGamme(Main main, NouveauClient nc) {
     	this.nc = nc;
     	main_ = main;
         initComponents();
@@ -89,7 +78,11 @@ public class ajoutGamme extends javax.swing.JPanel {
 				Gamme nvGamme = new Gamme(codeGamme, dureeConserv, null, null);
 				main_.getManager().persist(nvGamme);
 				main_.getTransaction().commit();
-				np.methode();
+				
+				if (np != null)
+					np.methode();
+				else if (nc != null)
+					nc.fermetureGamme();
 			}
         });
 

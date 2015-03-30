@@ -1,8 +1,10 @@
 package fr.galettedebroons.view;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
+import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.test.Main;
 
 
@@ -27,6 +29,7 @@ public class NouveauProduit extends java.awt.Panel {
 
     public NouveauProduit(Main main, String code_produit, JComboBox comboGamme) {
     	main_ = main;
+    	rd_ = new RecuperationDonnees(main);
     	initComponents(code_produit, comboGamme);
     }	
 
@@ -38,8 +41,7 @@ public class NouveauProduit extends java.awt.Panel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     @SuppressWarnings("rawtypes")
 	private void initComponents(String code_produit, JComboBox comboGamme) {
-
-    	System.out.println("ma combobox : " +comboGamme);
+    	
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -69,7 +71,6 @@ public class NouveauProduit extends java.awt.Panel {
         jLabel3.setText("Nom Produit");
 
         jComboBox1 = comboGamme;
-        //jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel4.setText("Présentation Produit");
 
@@ -168,7 +169,7 @@ public class NouveauProduit extends java.awt.Panel {
                                         
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-    	ajoutGamme nvGamme = new ajoutGamme(main_, this);
+    	ajoutGamme nvGamme = new ajoutGamme(main_, this, null);
     	fenetreNvGamme.setSize(500, 200);
     	fenetreNvGamme.add(nvGamme);
     	fenetreNvGamme.setLocationRelativeTo(null);
@@ -183,8 +184,20 @@ public class NouveauProduit extends java.awt.Panel {
     	return fenetreNvGamme;
     }
     
+    public void listGamme(){
+		// récupération de la liste de gamme
+    	String[] gamme = rd_.recuperationGamme();
+    	
+    	jComboBox1.removeAllItems();
+    	//jComboBox2 = new JComboBox(gamme);
+    	DefaultComboBoxModel model = new DefaultComboBoxModel(gamme);
+    	jComboBox1.setModel(model);
+    }
+    
     public void methode(){
     	fenetreNvGamme.setVisible(false);
+    	
+    	listGamme();
 	}
     
     // Variables declaration - do not modify
@@ -206,6 +219,7 @@ public class NouveauProduit extends java.awt.Panel {
     private javax.swing.JSeparator jSeparator1;
     private JFrame fenetreNvGamme;
     private Main main_;
+    private RecuperationDonnees rd_;
     // End of variables declaration
 
 }

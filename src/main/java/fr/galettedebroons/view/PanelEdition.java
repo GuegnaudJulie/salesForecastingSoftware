@@ -4,6 +4,7 @@ import java.util.List;
 import java.io.IOException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.DefaultCellEditor;
 
@@ -291,7 +292,8 @@ public class PanelEdition extends javax.swing.JPanel {
             code_client[indice] = cl[0].toString();
             indice++;
         }
-        
+    	
+    	valListeClient.removeAllItems();
         valListeClient.setModel(new javax.swing.DefaultComboBoxModel(code_client));
         valListeClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -309,6 +311,8 @@ public class PanelEdition extends javax.swing.JPanel {
             code_produit[indice] = pr[0].toString() + " - " + pr[1];
             indice++;
         }
+        
+        valListeProduit.removeAllItems();
         valListeProduit.setModel(new javax.swing.DefaultComboBoxModel(code_produit));
     }
 

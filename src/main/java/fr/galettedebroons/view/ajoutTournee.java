@@ -7,12 +7,6 @@ package fr.galettedebroons.view;
 
 import java.awt.event.ActionEvent;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-
-import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.test.Main;
 
@@ -25,13 +19,6 @@ public class ajoutTournee extends javax.swing.JPanel {
 	private NouveauClient nc;
 	private Main main_;
 	Tournee nvGamme;
-
-    /**
-     * Creates new form ajoutTournée
-     */
-    public ajoutTournee() {
-        initComponents();
-    }
     
     public ajoutTournee(Main main, NouveauClient nc) {
     	this.nc = nc;
@@ -58,8 +45,6 @@ public class ajoutTournee extends javax.swing.JPanel {
         sam = new javax.swing.JCheckBox();
         dim = new javax.swing.JCheckBox();
         jeu = new javax.swing.JCheckBox();
-        jComboBox1 = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
         nmtourn = new javax.swing.JTextField();
         savet = new javax.swing.JButton();
         annult = new javax.swing.JButton();
@@ -86,10 +71,6 @@ public class ajoutTournee extends javax.swing.JPanel {
 
         jeu.setText("Jeudi");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel4.setText("Profil Tournée");
-
         nmtourn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nmtournActionPerformed(evt);
@@ -102,45 +83,6 @@ public class ajoutTournee extends javax.swing.JPanel {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveActionPerformed(evt);
             }
-
-			private void saveActionPerformed(ActionEvent evt) {
-				lundi = false;
-				mardi = false;
-				mercredi = false;
-				jeudi = false;
-				vendredi = false;
-				samedi = false;
-				dimanche = false;
-				
-				nomTournee = nmtourn.getText();
-				
-				if(lun.isSelected()){
-					lundi = true;
-				}if(mar.isSelected()){
-					mardi = true;
-				}if(mer.isSelected()){
-					mercredi = true;
-				}if(jeu.isSelected()){
-					jeudi = true;
-				}if(ven.isSelected()){
-					vendredi = true;
-				}if(sam.isSelected()){
-					samedi = true;
-				}if(dim.isSelected()){
-					dimanche = true;
-				}
-				System.out.println("le nom de ma tournee : " +nomTournee);
-				//nvGamme = new Tournee();
-				//nvGamme.setJour_tournee(jourTournee);
-				//nvGamme.setNom(nomTournee);
-				
-				main_.getTransaction().begin();
-				nvGamme = new Tournee(nomTournee, lundi, mardi, mercredi, jeudi, 
-						vendredi, samedi, dimanche);
-				main_.getManager().persist(nvGamme);
-				main_.getTransaction().commit();
-				nc.methode();
-			}
         });
 
         annult.setText("Annuler");
@@ -182,12 +124,7 @@ public class ajoutTournee extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(nmtourn, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(156, 156, 156))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(65, 65, 65)
-                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(138, 138, 138))))
+                                .addGap(156, 156, 156))))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -227,10 +164,7 @@ public class ajoutTournee extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(mer)
                             .addComponent(dim))
-                        .addGap(58, 58, 58))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4)))
+                        .addGap(58, 58, 58)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(savet)
@@ -242,14 +176,50 @@ public class ajoutTournee extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_nmtournActionPerformed
 
+	private void saveActionPerformed(ActionEvent evt) {
+		lundi = false;
+		mardi = false;
+		mercredi = false;
+		jeudi = false;
+		vendredi = false;
+		samedi = false;
+		dimanche = false;
+		
+		nomTournee = nmtourn.getText();
+		
+		if(lun.isSelected()){
+			lundi = true;
+		}if(mar.isSelected()){
+			mardi = true;
+		}if(mer.isSelected()){
+			mercredi = true;
+		}if(jeu.isSelected()){
+			jeudi = true;
+		}if(ven.isSelected()){
+			vendredi = true;
+		}if(sam.isSelected()){
+			samedi = true;
+		}if(dim.isSelected()){
+			dimanche = true;
+		}
+		
+		main_.getTransaction().begin();
+		
+		nvGamme = new Tournee(nomTournee, lundi, mardi, mercredi, jeudi, 
+				vendredi, samedi, dimanche);
+		
+		main_.getManager().persist(nvGamme);
+		main_.getTransaction().commit();
+		
+		nc.fermetureTournee();
+	}
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton annult;
     private javax.swing.JCheckBox dim;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JCheckBox jeu;
     private javax.swing.JCheckBox lun;
     private javax.swing.JCheckBox mar;

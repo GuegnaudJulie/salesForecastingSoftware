@@ -2,9 +2,11 @@ package fr.galettedebroons.view;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
+import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.test.Main;
 
 /**
@@ -17,6 +19,7 @@ public class NouveauClient extends java.awt.Panel {
 	    /** Creates new form NouveauClient */
 	    public NouveauClient(Main main, String cc, String nc, JComboBox tournee, JComboBox gamme) {
 	    	main_ = main;
+	    	rd_ = new RecuperationDonnees(main);
 	        initComponents(cc, nc, tournee, gamme);
 	    }
 	    
@@ -39,7 +42,7 @@ public class NouveauClient extends java.awt.Panel {
 		        jComboBox2 = new javax.swing.JComboBox();
 		        jButton2 = new javax.swing.JButton();
 		        
-		        fenetreNvGamme = new JFrame();
+		        fenetre = new JFrame();
 	
 		        jLabel1.setText("Nom Client");
 	
@@ -52,7 +55,6 @@ public class NouveauClient extends java.awt.Panel {
 		        jLabel3.setText("Tournée");
 	
 		        jComboBox1 = tournee;
-		        //jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 	
 		        // bouton tournee
 		        jButton1.setText("+");
@@ -65,7 +67,6 @@ public class NouveauClient extends java.awt.Panel {
 		        jLabel4.setText("Gamme");
 	
 		        jComboBox2 = gamme;
-		        //jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 	
 		        // bouton gamme
 		        jButton2.setText("+");
@@ -122,7 +123,7 @@ public class NouveauClient extends java.awt.Panel {
 		                    .addComponent(jLabel4)
 		                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 		                    .addComponent(jButton2))
-		                .addContainerGap(38, Short.MAX_VALUE))
+		                .addContainerGap(50, Short.MAX_VALUE))
 		        );
 	
 		        jLabel3.getAccessibleContext().setAccessibleName("labelTournee");
@@ -130,27 +131,52 @@ public class NouveauClient extends java.awt.Panel {
 	    
 
 	    public JFrame getJFrame(){
-	    	return fenetreNvGamme;
+	    	return fenetre;
 	    }
 	    
-	    public void methode(){
-	    	fenetreNvGamme.setVisible(false);
+	    public void listTournee(){
+			// récupération de la liste de tournee
+			String[] tournee = rd_.recuperationTournee();
+			jComboBox1.removeAllItems();
+	    	//jComboBox2 = new JComboBox(tournee);
+	    	DefaultComboBoxModel model = new DefaultComboBoxModel(tournee);
+	    	jComboBox1.setModel(model);
+	    }
+	    
+	    public void listGamme(){
+			// récupération de la liste de gamme
+	    	String[] gamme = rd_.recuperationGamme();
+	    	
+	    	jComboBox2.removeAllItems();
+	    	//jComboBox2 = new JComboBox(gamme);
+	    	DefaultComboBoxModel model = new DefaultComboBoxModel(gamme);
+	    	jComboBox2.setModel(model);
+	    }
+	    
+	    public void fermetureGamme(){
+	    	fenetre.setVisible(false);
+	    	listGamme();
 		}
 	    
+	    public void fermetureTournee(){
+	    	fenetre.setVisible(false);
+	    	listTournee();
+	    }
+	    
 	    private void jButton1ActionPerformed(ActionEvent evt) {
-			ajoutTournee nvGamme = new ajoutTournee(main_, this);
-	    	fenetreNvGamme.setSize(500, 500);
-	    	fenetreNvGamme.add(nvGamme);
-	    	fenetreNvGamme.setLocationRelativeTo(null);
-	    	fenetreNvGamme.setVisible(true);
+			ajoutTournee nvTournee = new ajoutTournee(main_, this);
+			fenetre.setSize(500, 500);
+	    	fenetre.add(nvTournee);
+	    	fenetre.setLocationRelativeTo(null);
+	    	fenetre.setVisible(true);
 		}
 	    
 	    private void jButton2ActionPerformed(ActionEvent evt) {
-			ajoutGamme nvGamme = new ajoutGamme(main_, this);
-	    	fenetreNvGamme.setSize(500, 200);
-	    	fenetreNvGamme.add(nvGamme);
-	    	fenetreNvGamme.setLocationRelativeTo(null);
-	    	fenetreNvGamme.setVisible(true);
+			ajoutGamme nvGamme = new ajoutGamme(main_, null, this);
+			fenetre.setSize(500, 200);
+	    	fenetre.add(nvGamme);
+	    	fenetre.setLocationRelativeTo(null);
+	    	fenetre.setVisible(true);
 		}
 	    
 	    public javax.swing.JTextField getTextFieldNC(){
@@ -172,7 +198,8 @@ public class NouveauClient extends java.awt.Panel {
 	    private javax.swing.JLabel jLabel4;
 	    private javax.swing.JTextField jTextField1;
 	    private javax.swing.JTextField jTextField2;
-	    private JFrame fenetreNvGamme;
+	    private JFrame fenetre;
 	    private Main main_;
+	    private RecuperationDonnees rd_;
 	    // End of variables declaration
 }
