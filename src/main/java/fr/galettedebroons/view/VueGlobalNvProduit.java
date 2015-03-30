@@ -1,20 +1,16 @@
 package fr.galettedebroons.view;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -27,9 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.JViewport;
 
 import fr.galettedebroons.domain.Gamme;
-import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
-import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
@@ -110,12 +104,27 @@ public class VueGlobalNvProduit {
     	comboGamme = new JComboBox[nbNewProd];
     	int indice = 0;
     	if (panel_ == null){
+    		
+    		GridBagLayout gbl = new GridBagLayout();
+    		panelGeneral.setLayout(gbl);
+    		GridBagConstraints gbc = new GridBagConstraints();
+    		
 			for(String prod : produits){
 	    		JComboBox jb = new JComboBox(gamme);
 	    		comboGamme[indice] = jb;
-	    		panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
+	    		//panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
+	    		
 	    		NouveauProduit np = new NouveauProduit(main_, prod.toString(), jb);
-	    		panelGeneral.add(np);
+	    		
+	    		gbc.gridx = 0;
+	    		gbc.gridy = indice;
+	    		gbc.fill = gbc.BOTH;
+	    		gbc.weightx = 10;
+	    		gbc.weighty = 1;
+	    		gbc.insets = new Insets(0, 0, 1, 0);
+	    		gbc.ipady = gbc.anchor = GridBagConstraints.CENTER;
+	    		
+	    		panelGeneral.add(np, gbc);
 	    		listnvproduit.add(np);
 	    		indice ++;
 			}
@@ -146,8 +155,7 @@ public class VueGlobalNvProduit {
 		panelGlobal.add(panelBouton, BorderLayout.SOUTH);
 		//fenetre.add(panelGlobal);
 		
-		JScrollPane pane = new JScrollPane(panelGlobal);
-		fenetre.setContentPane(pane);
+		fenetre.setContentPane(panelGlobal);
 		fenetre.setLocationRelativeTo(null);
 		
 		//fenetre.add(panelBouton);
@@ -216,12 +224,6 @@ public class VueGlobalNvProduit {
 				main_.getManager().persist(temp);
 				main_.getTransaction().commit();
 				
-				if (panel_ != null)
-					panel_.terminerAjoutProduit();
-				
-				if (ClasseTraitement_ != null)
-					ClasseTraitement_.insertionDonneeFin();
-				
 				fenetre.setVisible(false);
 				
 			} catch(Exception e){
@@ -229,7 +231,15 @@ public class VueGlobalNvProduit {
 			}
 			
 		}
+		
 		JOptionPane.showMessageDialog(panelGeneral, "Les nouveaux produits ont été ajouté");
+		
+		if (panel_ != null)
+			panel_.terminerAjoutProduit();
+		
+		if (ClasseTraitement_ != null)
+			ClasseTraitement_.insertionDonneeFin();
+		
 	}
 
 }

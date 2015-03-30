@@ -237,12 +237,6 @@ public class VueGlobalNvClient {
 				main_.getManager().persist(c);
 				main_.getTransaction().commit();
 				
-				if (panel_ != null)
-					panel_.terminerAjoutClient();
-				
-				if (ClasseTraitement_ != null)
-					ClasseTraitement_.insertionProduit();
-				
 				fenetre.setVisible(false);
 				
 			}catch(Exception e){
@@ -250,6 +244,11 @@ public class VueGlobalNvClient {
 			}
 		}
 		
+		if (panel_ != null)
+			panel_.terminerAjoutClient();
+		
+		if (ClasseTraitement_ != null)
+			ClasseTraitement_.insertionProduit();
 	}
 	
 }
