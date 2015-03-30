@@ -2,12 +2,15 @@ package fr.galettedebroons.domain;
 
 import java.sql.Date;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
 public class Livraison {
 	
+	private int id;
 	private String bon_livraison;
 	private Profil livraison_profil;
 	private Produit livraison_produit;
@@ -32,7 +35,6 @@ public class Livraison {
 		this.qte_reprise = qte_reprise;
 	}
 	
-	@Id
 	public String getBon_livraison() {
 		return bon_livraison;
 	}
@@ -81,5 +83,14 @@ public class Livraison {
 	
 	public void setQte_reprise(int qte_reprise) {
 		this.qte_reprise = qte_reprise;
+	}
+
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
