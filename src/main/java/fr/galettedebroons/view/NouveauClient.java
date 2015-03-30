@@ -1,22 +1,10 @@
 package fr.galettedebroons.view;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
-import fr.galettedebroons.domain.Gamme;
-import fr.galettedebroons.domain.Temporaire;
-import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.test.Main;
 
 /**
@@ -106,13 +94,13 @@ public class NouveauClient extends java.awt.Panel {
 		                    .addGroup(layout.createSequentialGroup()
 		                        .addComponent(jLabel3)
 		                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-		                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+		                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
 		                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                        .addComponent(jButton1)
 		                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 		                        .addComponent(jLabel4)
 		                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-		                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+		                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
 		                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 		                        .addComponent(jButton2)))
 		                .addContainerGap(62, Short.MAX_VALUE))

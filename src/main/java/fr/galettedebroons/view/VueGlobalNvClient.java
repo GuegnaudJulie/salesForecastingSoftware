@@ -196,7 +196,7 @@ public class VueGlobalNvClient {
     	
     	scrollPane = new JScrollPane(panelGeneral);
 		panelGlobal.setLayout(new BorderLayout());
-		panelGlobal.add(panelGeneral, BorderLayout.CENTER);
+		panelGlobal.add(scrollPane, BorderLayout.CENTER);
 		//fenetre.add(panelGeneral);
 		
 		JButton boutonEnregistrer = new JButton();
