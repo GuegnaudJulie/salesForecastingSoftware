@@ -41,6 +41,7 @@ import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
+import fr.galettedebroons.model.selectBase.RecupClientProfil;
 import fr.galettedebroons.model.selectBase.RecupGamme;
 import fr.galettedebroons.model.selectBase.RecupTemporaire;
 import fr.galettedebroons.model.selectBase.RecupTournee;
@@ -59,6 +60,7 @@ public class VueGlobalNvClient {
 	TraitementDonneesTemporaire ClasseTraitement_;
 	RecuperationDonnees rd_;
 	RecupTemporaire rt_;
+	RecupClientProfil rcp_;
 	List<Object[]> results;
 	
 	String nomClientLabel;
@@ -90,6 +92,7 @@ public class VueGlobalNvClient {
 		ClasseTraitement_ = traitementDonneesTemporaire;
 		rd_ = new RecuperationDonnees(main_);
 		rt_ = new RecupTemporaire(main_);
+		rcp_ = new RecupClientProfil(main_);
 		initialisationClients();
 	}
 
@@ -140,25 +143,27 @@ public class VueGlobalNvClient {
     		GridBagConstraints gbc = new GridBagConstraints();
     		
 			for(Object[] cli : clients){
-	    		JComboBox jb = new JComboBox(gamme);
-	    		comboGamme[indice] = jb;
-	    		
-		    	JComboBox jt = new JComboBox(tournee);
-		    	comboTournee[indice] = jt;
-	    		
-	    		NouveauClient np = new NouveauClient(main_, this, cli[1].toString(),cli[0].toString(), jt, jb);
-	    		
-	    		gbc.gridx = 0;
-	    		gbc.gridy = indice;
-	    		gbc.fill = gbc.BOTH;
-	    		gbc.weightx = 10;
-	    		gbc.weighty = 1;
-	    		gbc.insets = new Insets(0, 0, 1, 0);
-	    		gbc.ipady = gbc.anchor = GridBagConstraints.CENTER;
-	    		
-	    		panelGeneral.add(np, gbc);
-	    		listnvclient.add(np);
-	    		indice ++;
+				if (!rcp_.recuperationProfil(cli[1].toString())){
+					JComboBox jb = new JComboBox(gamme);
+		    		comboGamme[indice] = jb;
+		    		
+			    	JComboBox jt = new JComboBox(tournee);
+			    	comboTournee[indice] = jt;
+		    		
+		    		NouveauClient np = new NouveauClient(main_, this, cli[1].toString(),cli[0].toString(), jt, jb);
+		    		
+		    		gbc.gridx = 0;
+		    		gbc.gridy = indice;
+		    		gbc.fill = gbc.BOTH;
+		    		gbc.weightx = 10;
+		    		gbc.weighty = 1;
+		    		gbc.insets = new Insets(0, 0, 1, 0);
+		    		gbc.ipady = gbc.anchor = GridBagConstraints.CENTER;
+		    		
+		    		panelGeneral.add(np, gbc);
+		    		listnvclient.add(np);
+		    		indice ++;
+				}
 	    	}
     	}
     	else{
