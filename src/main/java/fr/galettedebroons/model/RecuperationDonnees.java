@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.MargeLivraison;
+import fr.galettedebroons.domain.Prevision;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.main.Main;
@@ -193,13 +194,73 @@ public class RecuperationDonnees {
 			i++;
 			
 		}
-		//String[] profil = new String[listProfil.size()];
-		//int i = 0;
-		/*for (Profil g : listProfil){
-			profil[i] = g.getCode_client();
-			i++;
-		}		*/
+		
 		return tableauProfil;
+	}
+	public List<Object[]> recuperationListLivraison(){
+		List<Object[]> livr = manager_.createQuery("select l.bon_livraison, l.livraison_profil.code_client, l.livraison_produit.code_produit, l.date_livraison, l.qte_livraison, l.qte_reprise from " +
+				"Livraison l", Object[].class)
+				.getResultList();
+		
+		return livr;
+	}
+	
+	public List<Prevision> recuperationPrevision(java.util.Date data, String tournee){
+		String[] listProfilTournee = null;
+		System.out.println("ma tournée : " +tournee);
+		// recupere liste des profils qui appartiennent à la tournee passé en parametre
+		// table tournee
+		listProfilTournee = recuperationProfilTournee(tournee);
+		List<Object[]> prev = null;
+		List<Prevision> listPrev = new ArrayList();
+		
+		for(int i=0; i<listProfilTournee.length; i++){
+			System.out.println("prevision : " +listProfilTournee[i]);
+			prev = manager_.createQuery("select p.quantite, p.prevision_profil, "
+					+ "p.prevision_produit from Prevision p where p.date LIKE :date ", Object[].class)
+					.setParameter("date", data)
+					.getResultList();
+			
+			int k=0;
+			Iterator it = prev.iterator();
+			while (it.hasNext()){
+				System.out.println("ttata : " +it.next());
+			}
+			for(Object[] p : prev){
+				System.out.println("monnnnnnnnnnnnn profil : " +((Profil) p[1]).getPrevision_profil());
+				System.out.println("malistetournee : " +listProfilTournee[i]);
+				/*if(listProfilTournee[i] == prev.get(k).getPrevision_profil().toString()){
+					listPrev.add(p);
+				}*/
+				k++;
+			}
+		}
+			
+		return listPrev;
+	}
+	
+	public List<Object[]> recupPrevTournee(String nomTournee, java.util.Date data){
+		String[] listeTournee = null;
+		List<Object[]> listeprev = new ArrayList<Object[]>();
+		// recuperer liste des profil des tournees
+		listeTournee = recuperationProfilTournee(nomTournee);
+		
+		// parcours de chaque profil et recupère prévision
+		for(int i=0; i<listeTournee.length; i++){
+			List<String> monTab = (List<String>) manager_.createQuery("select p.prevision_profil.code_client from Prevision p"
+					, String.class)
+					.getResultList();
+			
+			listeprev.addAll(manager_.createQuery("select p.quantite, p.prevision_profil.code_client, "
+					+ "p.prevision_produit.code_produit from Prevision p where p.date LIKE :date "
+					+ "and p.prevision_profil.code_client LIKE :profil"
+					, Object[].class)
+					.setParameter("date", data)
+					.setParameter("profil", listeTournee[i])
+					.getResultList());
+			System.out.println("MA LISTE RECUPDONNEE : " +listeprev.size());
+		}
+		return listeprev;
 	}
 	
 }
