@@ -2,13 +2,17 @@ package fr.galettedebroons.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
 
-import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RecuperationDonnees;
+import fr.galettedebroons.main.Main;
 
 
 /*
@@ -76,18 +80,33 @@ public class VuePrevision extends javax.swing.JPanel {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selectionner une tournée"}));
 
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        reinitialiserJTable();
+        
+       /* jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null}
+                },
+                new String [] {
+                    null, null, null, null, null, null
+                }
+            ));*/
+        jTable1.setAutoCreateColumnsFromModel(false);
+        
+        
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setText("Prévision");
@@ -99,6 +118,11 @@ public class VuePrevision extends javax.swing.JPanel {
         jLabel4.setText("Date");
 
         jButton1.setText("Prévision");
+        jButton1.addActionListener(new java.awt.event.ActionListener(){
+        	public void actionPerformed(java.awt.event.ActionEvent evt) {
+        		jButton1ActionPerformed(evt);
+			}
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -121,7 +145,7 @@ public class VuePrevision extends javax.swing.JPanel {
                                 .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(159, 159, 159)
                             .addComponent(jButton1))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(622, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -145,12 +169,15 @@ public class VuePrevision extends javax.swing.JPanel {
                         .addComponent(jLabel1))
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(275, 275, 275))
         );
     }// </editor-fold>
 
-    
+    /**
+     * Action clic bouton sur la combobox des tournee
+     * @param evt
+     */
     @SuppressWarnings("unchecked")
 	private void jComboBox1ActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
@@ -161,8 +188,137 @@ public class VuePrevision extends javax.swing.JPanel {
     	jComboBox2.removeAllItems();
     	DefaultComboBoxModel model = new DefaultComboBoxModel(listClient);
     	jComboBox2.setModel(model);
+    	jComboBox2.addItem("Tous");
     	
 	}
+    
+    /**
+     * action sur le bouton prevision pour voir afficher nos previsions dans la table
+     * @param evt
+     */
+    private void jButton1ActionPerformed(ActionEvent evt) {
+    	reinitialiserJTable();
+    	
+    	jTable1.repaint();
+    	String nomTournee = "";
+    	String nomProfil = "";
+    	String date = "";
+    	java.util.Date data = null;
+    	
+    	nomTournee = (String) jComboBox1.getSelectedItem();
+    	System.out.println("nomTournee : " +nomTournee);
+    	nomProfil = (String) jComboBox2.getSelectedItem();
+    	System.out.println("nomProfil : " +nomProfil);
+    	System.out.println(String.valueOf(jDateChooser1.getDate()));
+    	
+    	data = jDateChooser1.getDate();
+    	System.out.println("data :  " +data);
+    	date = String.valueOf(jDateChooser1.getDate());
+    	System.out.println("ma date : " +date);
+    	
+    	// appel de recuperation des previsions
+    	//rd.recuperationPrevision(data, nomTournee);
+    	// si seulement tournee selectionnee
+    	System.out.println("MA TOURNEEEEE : " +nomTournee);
+    	
+    	if(nomTournee != "" && nomProfil.toString().contains("Tous") && data != null){
+    		List<Object[]> maliste = rd.recupPrevTournee(nomTournee, data);
+    		String monProfilPrecedent = "";
+    		String monProfil = "";
+    		String monProduit = "";
+    		int maQuantité = 0;
+    		String[] mesTitre = new String[100];
+    		int tabTitre = 0;
+    		int ligne = 0;
+    		int colonne = 0;
+    		int ligneprofil = 0;
+    		int colonneprofil = 0;
+    		
+    		jTable1.getTableHeader().getColumnModel().getColumn(0).setHeaderValue("Profil");
+    		jTable1.repaint();
+    		
+    		jTable1.getTableHeader().repaint();
+    		int k = 1;
+    		for (Object[] p : maliste){
+    			System.out.println("Mon profil " +p[1]);
+    			monProfil = (String) p[1];
+    			System.out.println("Mon produit " +p[2]);
+    			monProduit = (String) p[2];
+    			System.out.println("Ma quantité " +p[0]);
+    			maQuantité = (int) p[0];
+    			
+    			// si meme profil alors ajout du produit après ancient produit ajouté
+    			System.out.println("la valeur de mon profil : " +monProfilPrecedent);
+    			System.out.println("la valeur de mon profil précédent : " +colonne);
+    			if(monProfil.equals(monProfilPrecedent) || (jTable1.getModel().getValueAt(0, 0) == null)){
+    				System.out.println("je rentre bien dans ma condition");
+    				jTable1.getModel().setValueAt(monProfil, ligneprofil, colonneprofil);
+    				jTable1.getTableHeader().getColumnModel().getColumn(k).setHeaderValue(monProduit);
+    				mesTitre[tabTitre] = monProduit;
+    				tabTitre++;
+    				colonne++;
+    				System.out.println("ma quantité : " +maQuantité);
+    				jTable1.getModel().setValueAt(maQuantité, ligne, colonne);
+    				monProfilPrecedent = monProfil;
+    				
+    				System.out.println("la valeur de ma colonne : " +colonne);
+    				System.out.println("la valeur de ma ligne : " +ligne);
+    				k++;
+    			}
+    			if(!monProfil.equals(monProfilPrecedent)){
+    				System.out.println("mon profil différent : " +monProfil);
+    				ligneprofil++;
+    				jTable1.getModel().setValueAt(monProfil, ligneprofil, colonneprofil);
+    				// si mon produit est différent d'un produit déjà existant alors on avance
+    				k = 0;
+    				System.out.println("c'est quoiii ? " +mesTitre[0]);
+    				while(mesTitre[k] != null){
+    					System.out.println("mamaaaaa");
+    					if(monProduit.equals(mesTitre[k])){
+    						System.out.println("monproduit : " +mesTitre[k] + "mon indice : " +k);
+    						System.out.println("ligne profil : " +ligneprofil);
+    						System.out.println("colonne profil : " +colonneprofil);
+    						jTable1.getModel().setValueAt(maQuantité, ligneprofil, k+1);
+    						ligne++;
+    					}
+    					k++;
+    				}
+    				
+    				jTable1.getTableHeader().getColumnModel().getColumn(k+1).setHeaderValue(monProduit);
+    				monProfilPrecedent = monProfil;
+    				k++;
+    			}
+    		}
+    	}
+	}
+    
+    /**
+     * reinitialisation de l'affichage de la table
+     */
+    public void reinitialiserJTable(){
+    	jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null}
+                },
+                new String [] {
+                    null, null, null, null, null, null
+                }
+            ));
+    }
 
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
@@ -175,8 +331,6 @@ public class VuePrevision extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    
-   
 
     RecuperationDonnees rd;
     String[] listClient;
