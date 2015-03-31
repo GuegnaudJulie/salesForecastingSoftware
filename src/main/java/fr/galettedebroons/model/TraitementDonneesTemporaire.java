@@ -23,23 +23,23 @@ public class TraitementDonneesTemporaire {
 	}
 	
 	public void insertionDonnee(){
-		if (rt_.recuperationClientInexistant()){
+		if (rt_.recuperationClientInexistant())
 			fenetreClient = new VueGlobalNvClient(main_, null, this);
-		}
 		else
 			insertionProduit();
 	}
 	
 	public void insertionProduit(){
-		if (rt_.recuperationProdInexistant()){
+		if (rt_.recuperationProdInexistant())
 			fenetreProduit = new VueGlobalNvProduit(main_, null, this);
-		}
 		else
 			insertionDonneeFin();
 	}
 	
 	public void insertionDonneeFin(){
-		new RemplissageLivraison(main_);
+		System.out.println("On passe au remplissage de la table livraison !");
+		RemplissageLivraison rl = new RemplissageLivraison(main_);
+		rl.remplissage();
 		JOptionPane.showMessageDialog(panel_, "Les livraisons ont été ajoutées");
 		
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);

@@ -12,6 +12,7 @@ import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.selectBase.RecupGamme;
 import fr.galettedebroons.model.selectBase.RecupLivraison;
+import fr.galettedebroons.model.selectBase.RecupTournee;
 
 import java.sql.Date;
 import java.util.Calendar;
@@ -31,6 +32,7 @@ public class RemplissageLivraison {
 	private Main main_;
 	private RecuperationDonnees rd_;
 	private RecupLivraison rl_;
+	private RecupTournee rt_;
 	private ModificationDonnees md_;
 	
 	public RemplissageLivraison(Main main){
@@ -45,6 +47,7 @@ public class RemplissageLivraison {
 		rd_ = new RecuperationDonnees(main_);
 		md_ = new ModificationDonnees(main_);
 		rl_ = new RecupLivraison(main_);
+		rt_ = new RecupTournee(main_);
 		
 		// Tri sur les donnees de la table temporaire
 		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC", Temporaire.class).getResultList();   
@@ -66,15 +69,16 @@ public class RemplissageLivraison {
 			Produit produit = rd_.recupProduit(code_produit);
 			
 			//recuperation des jours de livraison normaux
-			String[] joursLivraison = rd_.recupJoursLivraison(profil);
+			Boolean[] booleanJours = rt_.recuperationJoursTournee(profil);
+			String[] tabJours = stringJours(booleanJours);
 			
 			//Jours de la semaine de la livraison actuelle
 			String jours = joursSemaine(date);
 			
 			//On verifie que le jours de la livraison été prévu
 			boolean prevu = false;
-			for(int i = 0; i<joursLivraison.length; i++)
-				if (joursLivraison[i] == jours)
+			for(int i = 0; i<tabJours.length; i++)
+				if (tabJours[i] == jours)
 					prevu = true;
 			
 			//Recuperation duree entre un dépot et une reprise
@@ -104,6 +108,45 @@ public class RemplissageLivraison {
 		}
 	}
 	
+	/**
+	 * Fonction pour avoir uniquement les jours de livraison en string
+	 * 
+	 * @param booleanJours : un tableau de boolean
+	 * @return un tableau de string
+	 */
+	private String[] stringJours(Boolean[] booleanJours) {
+		// Connaitre la taille de tableau à faire
+		int nbTaille = 0;
+		for (int i = 0; i<booleanJours.length; i++){
+			if (booleanJours[i])
+				nbTaille ++;
+		}
+		
+		String[] stringJours = new String[nbTaille];
+		int indice = 0;
+		for (int i = 0; i<booleanJours.length; i++){
+			if (booleanJours[i]){
+				if (i == 0)
+					stringJours[indice] = "lundi";
+				else if (i == 0)
+					stringJours[indice] = "mardi";
+				else if (i == 1)
+					stringJours[indice] = "mercredi";
+				else if (i == 2)
+					stringJours[indice] = "jeudi";
+				else if (i == 3)
+					stringJours[indice] = "vendredi";
+				else if (i == 4)
+					stringJours[indice] = "samedi";
+				else if (i == 5)
+					stringJours[indice] = "dimanche";
+				
+				indice ++;
+			}
+		}
+		
+		return null;
+	}
 
 	/**
 	 * Fonction de decalage de la date

@@ -272,6 +272,7 @@ public class VueGlobalNvClient {
 			
 			nomClient = ((NouveauClient) listclient).getTextFieldNC().getText();
 			codeClient = ((NouveauClient) listclient).getTextFieldCC().getText();
+			
 			codeGamme = comboGamme[indice].getSelectedItem().toString();
 			tourneeCombo = comboTournee[indice].getSelectedItem().toString();
 				
