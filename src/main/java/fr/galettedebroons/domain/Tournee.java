@@ -132,5 +132,8 @@ public class Tournee {
 		this.profil_tournee = profil_tournee;
 	}
 	
-
+	public void addProfil(Profil profil){
+		this.profil_tournee.add(profil);
+	}
+	
 }

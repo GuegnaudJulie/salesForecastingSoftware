@@ -22,7 +22,7 @@ public class RecupGamme {
 	}
 	
 	public int recuperationValiditeGamme(Gamme g){
-		int duree = manager_.createQuery("select g.duree_conservation from Gamme g where g LIKE :gamme", int.class)
+		Integer duree = manager_.createQuery("select g.duree_conservation from Gamme g where g LIKE :gamme", Integer.class)
 				.setParameter("gamme", g)
 				.getSingleResult(); 
 		

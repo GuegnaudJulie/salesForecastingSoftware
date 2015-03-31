@@ -71,11 +71,19 @@ public class ajoutGamme extends javax.swing.JPanel {
             }
 
 			private void saveActionPerformed(ActionEvent evt) {
-				codeGamme = codgam.getText();
-				dureeConserv = Integer.parseInt(dconsgam.getText());
-				
 				main_.getTransaction().begin();
-				Gamme nvGamme = new Gamme(codeGamme, dureeConserv, null, null);
+				
+				codeGamme = codgam.getText();
+				Gamme nvGamme = new Gamme(codeGamme);
+				
+				try{
+					dureeConserv = Integer.parseInt(dconsgam.getText());
+					nvGamme.setDuree_conservation(dureeConserv);
+				}
+				catch (Exception e){
+					System.out.println("pas de duree enregistree");;
+				}
+				
 				main_.getManager().persist(nvGamme);
 				main_.getTransaction().commit();
 				

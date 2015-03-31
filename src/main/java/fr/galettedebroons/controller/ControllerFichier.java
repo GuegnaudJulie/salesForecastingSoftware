@@ -41,17 +41,16 @@ public class ControllerFichier {
 		//Le client et le produit existe
 		if (code_retour != -1)
 		{
-			@SuppressWarnings("unchecked")
-			List<Profil> profil = manager_.createQuery("select c from Profil c where c.code_client LIKE :codeClient ")
+			List<Profil> profil = manager_.createQuery("select c from Profil c where c.code_client LIKE :codeClient ", Profil.class)
 					.setParameter("codeClient", donnees[2])
 					.setMaxResults(1).getResultList();
 			if (profil.isEmpty())
 				c_present = false;
 			
-			@SuppressWarnings("unchecked")
-			List<Produit> produit = manager_.createQuery("select p from Produit p where p.code_produit LIKE :codeProduit ")
+			List<Produit> produit = manager_.createQuery("select p from Produit p where p.code_produit LIKE :codeProduit ", Produit.class)
 					.setParameter("codeProduit", donnees[4])
 					.setMaxResults(1).getResultList();
+			
 			if (produit.isEmpty())
 				p_present = false;
 			

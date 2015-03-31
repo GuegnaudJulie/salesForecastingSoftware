@@ -27,12 +27,21 @@ public class Livraison {
 		this.qte_reprise = qte_reprise;
 	}
 	
-	public Livraison(String bon_livraison, Produit code_produit, Date date_livraison, int qte_livraison, int qte_reprise) {
+	public Livraison(String bon_livraison, Produit code_produit, Profil profil, Date date_livraison, int qte_livraison, int qte_reprise) {
 		this.bon_livraison = bon_livraison;
 		this.livraison_produit = code_produit;
 		this.date_livraison = date_livraison;
 		this.qte_livraison = qte_livraison;
 		this.qte_reprise = qte_reprise;
+	}
+
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getBon_livraison() {
@@ -85,12 +94,4 @@ public class Livraison {
 		this.qte_reprise = qte_reprise;
 	}
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 }

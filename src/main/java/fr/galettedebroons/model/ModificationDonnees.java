@@ -12,11 +12,12 @@ public class ModificationDonnees {
 	
 	Main main_;
 	private EntityManager manager_;
-	private EntityTransaction tx;
+	private EntityTransaction tx_;
 	
 	public ModificationDonnees(Main main){
 		this.main_ = main;
 		manager_ = main.getManager();
+		tx_ = main.getTransaction();
 		System.out.println("mon manager : " +manager_);
 	}
 	
@@ -36,23 +37,14 @@ public class ModificationDonnees {
 				.executeUpdate();
 		
 		System.out.println("je passeeee");
-		this.tx = main_.getTransaction();
+		this.tx_ = main_.getTransaction();
 		System.out.println("je re passe");
-		tx.commit();
+		tx_.commit();
 	}
 
 	public void updateLivraison(Livraison l, int qtePlus, int qteMoins){
-		tx.begin();
-		
-		manager_.createQuery("UPDATE Livraison l SET qte_livraison LIKE :qteLi AND" +
-				"qte_repris LIKE :qteRe"
-				+ "WHERE l LIKE :livraison")
-				.setParameter("livraison", l)
-				.setParameter("qteLi", qtePlus)
-				.setParameter("qteRe", qteMoins)
-				.executeUpdate();
-		
-		tx.commit();
+		l.setQte_livraison(qtePlus);
+		l.setQte_reprise(qteMoins);
 	}
 	
 }

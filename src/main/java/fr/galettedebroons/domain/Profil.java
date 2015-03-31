@@ -70,6 +70,10 @@ public class Profil {
 		this.livraison_profil = livraison_profil;
 	}
 
+	public void addLivraison(Livraison l){
+		livraison_profil.add(l);
+	}
+	
 	@ManyToOne
 	public Client getClient_profil() {
 		return client_profil;
@@ -97,6 +101,10 @@ public class Profil {
 		this.marge_profil = marge_profil;
 	}
 
+	public void addMarge(MargeLivraison m){
+		marge_profil.add(m);
+	}
+	
 	@OneToMany(mappedBy="prevision_profil", cascade=CascadeType.PERSIST)
 	public List<Prevision> getPrevision_profil() {
 		return prevision_profil;
@@ -105,4 +113,9 @@ public class Profil {
 	public void setPrevision_profil(List<Prevision> prevision_profil) {
 		this.prevision_profil = prevision_profil;
 	}
+	
+	public void addPrevision(Prevision p){
+		prevision_profil.add(p);
+	}
+	
 }

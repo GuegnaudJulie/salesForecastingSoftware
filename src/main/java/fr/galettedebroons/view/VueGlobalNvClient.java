@@ -246,14 +246,23 @@ public class VueGlobalNvClient {
 				
 				main_.getTransaction().begin();
 				
+				//Création d'un profil
 				List<Livraison> livr = new ArrayList<Livraison>();
 				p = new Profil(codeClient, gamme, livr, true);
 				p.setProfil_tournee(tournee);
 				
+				//Création d'un client
 				List<Profil> profil = new ArrayList<Profil>();
 				profil.add(p);
 				c = new Client(nomClient, profil);
 				p.setClient_profil(c);
+				
+				//Liaison du profil et de la tournee
+				List<Profil> listP = tournee.getProfil_tournee();
+				if (listP.isEmpty())
+					tournee.setProfil_tournee(profil);
+				else
+					tournee.addProfil(p);
 				
 				main_.getManager().persist(c);
 				

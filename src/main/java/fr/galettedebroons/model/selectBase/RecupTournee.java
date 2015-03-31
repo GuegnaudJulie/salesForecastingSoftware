@@ -1,5 +1,7 @@
 package fr.galettedebroons.model.selectBase;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import fr.galettedebroons.domain.Profil;
@@ -22,18 +24,47 @@ public class RecupTournee {
 		return tournee;
 	}
 	
-	public Boolean[] recuperationJoursTournee(Profil profil){
-		Object[] joursLivraison = manager_.createQuery("select t.lundi, t.mardi, t.mercredi, t.jeudi, t.vendredi, t.samedi, t.dimanche from Tournee t where profil_tournee LIKE :profil", Object[].class)
-				.setParameter("profil", profil)
-				.getSingleResult();
+	public String[] recuperationJoursTournee(Profil profil){
+		String[] joursTournee = new String[7];
 		
-		System.out.println(joursLivraison[0]);
+		//recuperation des tournee
+		List<Tournee> listTournee = manager_.createQuery("select t from Tournee t", Tournee.class)
+				.getResultList();
 		
-		int i = 0;
-		if (i == 1){
-			System.out.println("bwaaaa !!!!");
+		int indice = 0;
+		for (Tournee t : listTournee){
+			if (t.getProfil_tournee().contains(profil)){
+				if (t.isLundi()){
+					joursTournee[indice] = "lundi";
+					indice ++;
+				}
+				if (t.isMardi()){
+					joursTournee[indice] = "mardi";
+					indice ++;
+				}
+				if (t.isMercredi()){
+					joursTournee[indice] = "mercredi";
+					indice ++;
+				}
+				if (t.isJeudi()){
+					joursTournee[indice] = "jeudi";
+					indice ++;
+				}
+				if (t.isVendredi()){
+					joursTournee[indice] = "vendredi";
+					indice ++;
+				}
+				if (t.isSamedi()){
+					joursTournee[indice] = "samedi";
+					indice ++;
+				}
+				if (t.isDimanche()){
+					joursTournee[indice] = "dimanche";
+					indice ++;
+				}
+			}
 		}
 		
-		return null;
+		return joursTournee;
 	}
 }

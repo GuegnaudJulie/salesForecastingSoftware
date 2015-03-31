@@ -17,6 +17,10 @@ public class Gamme {
 	
 	public Gamme(){}
 	
+	public Gamme(String code_gamme) {
+		this.code_gamme = code_gamme;
+	}
+	
 	public Gamme(String code_gamme, int duree_conservation) {
 		this.code_gamme = code_gamme;
 		this.duree_conservation = duree_conservation;

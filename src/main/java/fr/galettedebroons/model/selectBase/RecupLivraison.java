@@ -19,28 +19,39 @@ public class RecupLivraison {
 	}
 	
 	public Livraison recuperationLivraison(String bl, Date date, String code_prod){
-		Livraison livr = manager_.createQuery("select l from Livraison l where " +
-				"l.bon_livraison LIKE :bl AND " +
-				"l.date_livraison LIKE :date" +
-				"l.livraison_produit.code_produit LIKE :code", Livraison.class)
-				.setParameter("bl", bl)
-				.setParameter("date", date)
-				.setParameter("code", code_prod)
-				.getSingleResult();
+		Livraison livr;
+		
+		try{
+			livr = manager_.createQuery("select l from Livraison l where " +
+					"l.bon_livraison LIKE :bl AND " +
+					"l.date_livraison LIKE :date AND " +
+					"l.livraison_produit.code_produit LIKE :code", Livraison.class)
+					.setParameter("bl", bl)
+					.setParameter("date", date)
+					.setParameter("code", code_prod)
+					.getSingleResult();
+		} catch (Exception e){
+			livr = null;
+		}
 		
 		return livr;
 	}
 
 	public Livraison recupLivraisonPrec(Produit prod, Profil profil, Date date){
-		Livraison livraison =  manager_.createQuery("select l from Livraison l WHERE " +
-				"livraison_profil LIKE :profil AND " +
-				"livraison_produit LIKE :produit AND " +
-				"date_livraison < :date " +
-				"ORDER BY date_livraison ASC LIMIT 1", Livraison.class)
-				.setParameter("profil", profil)
-				.setParameter("produit", prod)
-				.setParameter("date", date)
-				.getSingleResult();
+		Livraison livraison;
+		try{
+			livraison =  manager_.createQuery("select l from Livraison l WHERE " +
+						"livraison_profil LIKE :profil AND " +
+						"livraison_produit LIKE :produit AND " +
+						"date_livraison < :date " +
+						"ORDER BY date_livraison ASC LIMIT 1", Livraison.class)
+						.setParameter("profil", profil)
+						.setParameter("produit", prod)
+						.setParameter("date", date)
+						.getSingleResult();
+		} catch (Exception e){
+			livraison = null;
+		}
 		
 		return livraison;
 	}
@@ -55,10 +66,10 @@ public class RecupLivraison {
 	
 	public List<Livraison> recupLivraisonPrec(Produit prod, Profil profil, Date date1, Date date2){
 		List<Livraison> livr = manager_.createQuery("select l from Livraison l where " +
-				"l.date_livraison > :date1" +
-				"l.date_livraison < :date2" +
-				"l.livraison_produit LIKE :produit" +
-				"l.livraison_profil LIKE :profil", Livraison.class)
+				"l.date_livraison > :date1 AND " +
+				"l.date_livraison < :date2 AND " +
+				"l.livraison_produit LIKE :produit AND " +
+				"l.livraison_profil LIKE :profil ", Livraison.class)
 				.setParameter("date1", date1)
 				.setParameter("date2", date2)
 				.setParameter("produit", prod)

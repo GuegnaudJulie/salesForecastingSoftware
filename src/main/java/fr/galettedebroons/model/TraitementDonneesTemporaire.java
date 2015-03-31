@@ -37,7 +37,6 @@ public class TraitementDonneesTemporaire {
 	}
 	
 	public void insertionDonneeFin(){
-		System.out.println("On passe au remplissage de la table livraison !");
 		RemplissageLivraison rl = new RemplissageLivraison(main_);
 		rl.remplissage();
 		JOptionPane.showMessageDialog(panel_, "Les livraisons ont été ajoutées");
