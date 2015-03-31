@@ -20,6 +20,7 @@ import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -133,7 +134,7 @@ public class VueGlobalNvClient {
     	
     	int indice = 0;
     	if (panel_ == null){
-
+    		
     		GridBagLayout gbl = new GridBagLayout();
     		panelGeneral.setLayout(gbl);
     		GridBagConstraints gbc = new GridBagConstraints();
@@ -145,7 +146,7 @@ public class VueGlobalNvClient {
 		    	JComboBox jt = new JComboBox(tournee);
 		    	comboTournee[indice] = jt;
 	    		
-	    		NouveauClient np = new NouveauClient(main_, cli[1].toString(),cli[0].toString(), jt, jb);
+	    		NouveauClient np = new NouveauClient(main_, this, cli[1].toString(),cli[0].toString(), jt, jb);
 	    		
 	    		gbc.gridx = 0;
 	    		gbc.gridy = indice;
@@ -164,7 +165,7 @@ public class VueGlobalNvClient {
 			JComboBox jb = new JComboBox(gamme);
 			JComboBox jt = new JComboBox(tournee);
 			panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
-			NouveauClient np = new NouveauClient(main_, null, null, jt, jb);
+			NouveauClient np = new NouveauClient(main_, this, null, null, jt, jb);
     		panelGeneral.add(np);
     		listnvclient.add(np);
 		}
@@ -217,6 +218,46 @@ public class VueGlobalNvClient {
 		fenetre.setVisible(true);
 	}
 	
+	
+	/*
+	
+	JComboBox jb = new JComboBox(gamme);
+	comboGamme[indice] = jb;
+	    		
+	JComboBox jt = new JComboBox(tournee);
+	comboTournee[indice] = jt;
+	 */
+	
+	public void listTournee(){
+		//On crée des nouvelles combobox que l'on rajoute à chaque client en leur précisant l'objet qui a déjà été selectionné
+		String[] tournee = rd_.recuperationTournee();
+		
+		int indice = 0;
+		for (NouveauClient nc : listnvclient){
+			JComboBox jt = new JComboBox(tournee);
+			Object selection = nc.getSelectTournee();
+			
+			nc.majComboTournee(jt, selection);
+			
+			indice ++;
+		}
+    }
+    
+    public void listGamme(){
+    	//On crée des nouvelles combobox que l'on rajoute à chaque client en leur précisant l'objet qui a déjà été selectionné
+    	String[] gamme = rd_.recuperationGamme();
+    	
+    	int indice = 0;
+    	for (NouveauClient nc : listnvclient){
+    		JComboBox jg = new JComboBox(gamme);
+    		Object selection = nc.getSelectGamme();
+    		
+    		nc.majComboGamme(jg, selection);
+    		
+    		indice ++;
+    	}
+    }
+	
 	private void enregistrercliActionPerformed(ActionEvent evt) {
 		Client c;
 		Profil p;
@@ -250,8 +291,8 @@ public class VueGlobalNvClient {
 				List<Profil> profil = new ArrayList<Profil>();
 				profil.add(p);
 				c = new Client(nomClient, profil);
+				p.setClient_profil(c);
 				
-				main_.getManager().persist(p);
 				main_.getManager().persist(c);
 				
 				main_.getTransaction().commit();

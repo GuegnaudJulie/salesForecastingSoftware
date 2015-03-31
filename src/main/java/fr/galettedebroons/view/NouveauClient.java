@@ -17,9 +17,10 @@ import fr.galettedebroons.model.RecuperationDonnees;
 public class NouveauClient extends java.awt.Panel {
 
 	    /** Creates new form NouveauClient */
-	    public NouveauClient(Main main, String cc, String nc, JComboBox tournee, JComboBox gamme) {
+	    public NouveauClient(Main main, VueGlobalNvClient vue, String cc, String nc, JComboBox tournee, JComboBox gamme) {
 	    	main_ = main;
 	    	rd_ = new RecuperationDonnees(main);
+	    	vue_ = vue;
 	        initComponents(cc, nc, tournee, gamme);
 	    }
 	    
@@ -134,34 +135,39 @@ public class NouveauClient extends java.awt.Panel {
 	    	return fenetre;
 	    }
 	    
-	    public void listTournee(){
-			// récupération de la liste de tournee
-			String[] tournee = rd_.recuperationTournee();
-			jComboBox1.removeAllItems();
-	    	//jComboBox2 = new JComboBox(tournee);
-	    	DefaultComboBoxModel model = new DefaultComboBoxModel(tournee);
-	    	jComboBox1.setModel(model);
-	    }
-	    
-	    public void listGamme(){
-			// récupération de la liste de gamme
-	    	String[] gamme = rd_.recuperationGamme();
-	    	
-	    	jComboBox2.removeAllItems();
-	    	//jComboBox2 = new JComboBox(gamme);
-	    	DefaultComboBoxModel model = new DefaultComboBoxModel(gamme);
-	    	jComboBox2.setModel(model);
-	    }
-	    
 	    public void fermetureGamme(){
 	    	fenetre.setVisible(false);
-	    	listGamme();
+	    	vue_.listGamme();
 		}
 	    
 	    public void fermetureTournee(){
 	    	fenetre.setVisible(false);
-	    	listTournee();
+	    	System.out.println("on ferme la fenetre tournee");
+	    	vue_.listTournee();
 	    }
+	    
+	    public void majComboTournee(javax.swing.JComboBox combo, Object select){
+	    	jComboBox1.removeAllItems();
+	    	jComboBox1.setModel(combo.getModel());
+	    	
+	    	jComboBox1.setSelectedItem(select);
+	    	
+	    }
+	    
+	    public void majComboGamme(javax.swing.JComboBox combo, Object select){
+	    	jComboBox2.removeAllItems();
+	    	jComboBox2.setModel(combo.getModel());
+	    	
+	    	jComboBox2.setSelectedItem(select);
+	    }
+	    
+	    public Object getSelectTournee() {
+	    	return jComboBox1.getSelectedItem();
+		}
+	    
+	    public Object getSelectGamme() {
+	    	return jComboBox2.getSelectedItem();
+		}
 	    
 	    private void jButton1ActionPerformed(ActionEvent evt) {
 			ajoutTournee nvTournee = new ajoutTournee(main_, this);
@@ -201,5 +207,7 @@ public class NouveauClient extends java.awt.Panel {
 	    private JFrame fenetre;
 	    private Main main_;
 	    private RecuperationDonnees rd_;
+	    private VueGlobalNvClient vue_;
 	    // End of variables declaration
+		
 }

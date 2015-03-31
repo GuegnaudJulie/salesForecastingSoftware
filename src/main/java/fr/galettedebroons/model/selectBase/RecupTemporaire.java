@@ -21,7 +21,7 @@ public class RecupTemporaire {
 	
 	public List<Object[]> recuperationClientTemp(){
 		List<Object[]> produit = manager_.createQuery("select distinct t.nom_client, t.code_profil " +
-				"from Temporaire t where code_erreur = 'CP' or  code_erreur = 'P'", Object[].class).getResultList();
+				"from Temporaire t where code_erreur = 'CP' or  code_erreur = 'C'", Object[].class).getResultList();
 		return produit;
 	}
 	
