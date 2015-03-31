@@ -9,10 +9,10 @@ import javax.swing.JFileChooser;
 import javax.swing.DefaultCellEditor;
 
 import fr.galettedebroons.controller.LectureFichier;
+import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
-import fr.galettedebroons.test.Main;
 
 /**
  * @author  Julie Guegnaud

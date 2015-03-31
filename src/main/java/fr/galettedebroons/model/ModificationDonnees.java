@@ -6,7 +6,7 @@ import javax.persistence.EntityTransaction;
 import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
-import fr.galettedebroons.test.Main;
+import fr.galettedebroons.main.Main;
 
 public class ModificationDonnees {
 	

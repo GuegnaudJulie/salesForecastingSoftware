@@ -28,6 +28,13 @@ public class Profil {
 		this.actif = actif;
 	}
 	
+	public Profil(String code_client, Gamme code_gamme, List<Livraison> livraison, Boolean actif) {
+		this.code_client = code_client;
+		this.gamme_profil = code_gamme;
+		this.livraison_profil = livraison;
+		this.actif = actif;
+	}
+	
 	@Id
 	public String getCode_client() {
 		return code_client;

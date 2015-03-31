@@ -9,8 +9,9 @@ import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
+import fr.galettedebroons.main.Main;
+import fr.galettedebroons.model.selectBase.RecupGamme;
 import fr.galettedebroons.model.selectBase.RecupLivraison;
-import fr.galettedebroons.test.Main;
 
 import java.sql.Date;
 import java.util.Calendar;
@@ -20,9 +21,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 /**
- *
- * @author	Oumoul
  * @author	Julie Guegnaud
+ * @since	31/03/2015
  */
 
 public class RemplissageLivraison {
@@ -38,7 +38,9 @@ public class RemplissageLivraison {
 		main_ = main;
 	}     
 	
-	//Creation d'une vue si ta table temporaire contient quelque chose et calcul des quatites effectivement vendues.
+	/**
+	 * Remplissage de la table livraison
+	 */
 	public void remplissage(){
 		rd_ = new RecuperationDonnees(main_);
 		md_ = new ModificationDonnees(main_);
@@ -75,13 +77,16 @@ public class RemplissageLivraison {
 				if (joursLivraison[i] == jours)
 					prevu = true;
 			
-			//Recuperation de la livraison précédente pour vérifier le nombre de reprise
-			Livraison lprec = precedenteLivraison(date, produit, profil);
-			int precLivr = lprec.getQte_livraison();
+			//Recuperation duree entre un dépot et une reprise
+			RecupGamme rg = new RecupGamme(main_);
+			int nbJoursValidite = rg.recuperationValiditeGamme(produit.getProduit_gamme());
 			
-			//On effectue les traitements
-			if (prevu){
-				if (verifQte(precLivr, qr)){
+			//Recuperation de la quatite precedement livree
+			int precLivr = sommeQteLivrPrecedente(date, nbJoursValidite, produit, profil);
+			
+			//On vérifie que la quantité reprise est correct par rapport à la livraison
+			if (verifQte(precLivr, qr)){
+				if (prevu){
 					//On verifie que la donnee n est pas deja presente dans la base
 					Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
 					
@@ -90,14 +95,11 @@ public class RemplissageLivraison {
 					else
 						majLivraison(livr, ql, qr);
 				}
-			}
-			else{
-				Livraison lprec2 = precedenteLivraison(lprec.getDate_livraison(), produit, profil);
-				int qteLivr = lprec2.getQte_livraison() + ql;
-				int qteRepris = lprec.getQte_reprise() + qr;
-				
-				if (verifQte(qteLivr, qteRepris))
-					md_.updateLivraison(lprec, qteLivr, qteRepris);
+				else{
+					//Recuperation de la livraison précédente
+					Livraison lprec = precedenteLivraison(date, produit, profil);
+					majLivraison(lprec, ql, qr);
+				}
 			}
 		}
 	}
@@ -110,10 +112,9 @@ public class RemplissageLivraison {
 	 * @param nbrjours : le nombre de jours à rajouter à une date
 	 * @return la date precedente decaler au nombre de jours voulu
 	 */
-	public Date ajoutjours(Date d, int nbrjours){
+	public Date ajoutJours(Date d, int nbrjours){
 		return new Date(d.getTime() + (nbrjours * (24*3600*1000)));
 	}
-	
 	
 	/**
 	 * Fonction qui verifie que la quantite livree et la quantite reprise sont coherentes
@@ -123,7 +124,6 @@ public class RemplissageLivraison {
 	public boolean verifQte(int qtePlus, int qteMoins){
 		return (qtePlus > qteMoins);
 	}
-	
 	
 	/**
 	 * renvoie le jours de la semaine correspondant à une certaine date
@@ -158,11 +158,50 @@ public class RemplissageLivraison {
 		return jours;
 	}
 	
+	/**
+	 * Recupération de la livraison précédentes
+	 * 
+	 * @param date : date de la livraison à ajouter
+	 * @param prod : produit de la livraison à ajouter
+	 * @param profil : profil du client lié à la livraison à ajouter
+	 * @return la derniere livraison concernant le produit et le client avant la date indiquée
+	 */
 	public Livraison precedenteLivraison(Date date, Produit prod, Profil profil){
 		Livraison precLivraison = rl_.recupLivraisonPrec(prod, profil, date);
 		return precLivraison;
 	}
 	
+	/**
+	 * Somme des quantites livrées entre le jour d'une livraison et le jour de la reprise
+	 * 
+	 * @param date : date de la reprise
+	 * @param duree : duree de validite d'un produit chez un client
+	 * @param prod : produit associé à la livraison
+	 * @param profil : profil du client associé à la livraison
+	 * @return la somme des quantites livrées précédement
+	 */
+	public int sommeQteLivrPrecedente(Date date, int duree, Produit prod, Profil profil){
+		Date dateLivr = ajoutJours(date, -duree);
+		List<Livraison> list = rl_.recupLivraisonPrec(prod, profil, date, dateLivr);
+		
+		int sommeLivr = 0;
+		for (Livraison l : list){
+			sommeLivr += l.getQte_livraison();
+		}
+		
+		return sommeLivr;
+	}
+	
+	/**
+	 * Insertion de la livraison en base de donnee
+	 * 
+	 * @param bl : bon de livraison
+	 * @param profil : profil du client associé à la livraison
+	 * @param produit : produit associé à la livraison
+	 * @param date : date associé à la livraison
+	 * @param ql : quantité livrée
+	 * @param qr : quantité reprise
+	 */
 	public void ajoutLivraison(String bl, Profil profil, Produit produit, Date date, int ql, int qr){
 		EntityTransaction tx = manager_.getTransaction();
 		tx.begin();
@@ -174,11 +213,18 @@ public class RemplissageLivraison {
 		
 	}
 	
+	/**
+	 * Mise à jour d'une ligne de la table Livraison
+	 * 
+	 * @param livr : la livraison à mettre à jour
+	 * @param ql : quantité livrée supplémentaire
+	 * @param qr : quantité reprise supplémentaire
+	 */
 	private void majLivraison(Livraison livr, int ql, int qr) {
 		int qteLivr = livr.getQte_livraison() + ql;
 		int qteRepris = livr.getQte_reprise() + qr;
-		if (verifQte(qteLivr, qteRepris))
-			md_.updateLivraison(livr, qteLivr, qteRepris);
+		
+		md_.updateLivraison(livr, qteLivr, qteRepris);
 	}
 
 }

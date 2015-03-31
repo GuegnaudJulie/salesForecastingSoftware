@@ -8,9 +8,9 @@ package fr.galettedebroons.view;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
-import fr.galettedebroons.test.Main;
 
 /**
  *

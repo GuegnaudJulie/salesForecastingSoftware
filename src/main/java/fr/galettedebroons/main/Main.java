@@ -1,4 +1,4 @@
-package fr.galettedebroons.test;
+package fr.galettedebroons.main;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

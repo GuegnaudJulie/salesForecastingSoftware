@@ -2,8 +2,8 @@ package fr.galettedebroons.model;
 
 import javax.swing.JOptionPane;
 
+import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.selectBase.RecupTemporaire;
-import fr.galettedebroons.test.Main;
 import fr.galettedebroons.view.PanelEdition;
 import fr.galettedebroons.view.VueGlobalNvClient;
 import fr.galettedebroons.view.VueGlobalNvProduit;

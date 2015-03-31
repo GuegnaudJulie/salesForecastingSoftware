@@ -24,11 +24,11 @@ import javax.swing.JViewport;
 
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Produit;
+import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
 import fr.galettedebroons.model.selectBase.RecupTemporaire;
-import fr.galettedebroons.test.Main;
 
 public class VueGlobalNvProduit {
 	static List<Object[]> results;

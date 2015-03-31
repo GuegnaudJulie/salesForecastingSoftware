@@ -10,9 +10,9 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.swing.JComboBox;
 
+import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.ModificationDonnees;
 import fr.galettedebroons.model.RecuperationDonnees;
-import fr.galettedebroons.test.Main;
 
 /**
  *

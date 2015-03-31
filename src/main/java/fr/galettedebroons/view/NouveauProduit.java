@@ -4,8 +4,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
+import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RecuperationDonnees;
-import fr.galettedebroons.test.Main;
 
 
 /*

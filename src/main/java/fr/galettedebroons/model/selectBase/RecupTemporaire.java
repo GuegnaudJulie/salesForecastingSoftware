@@ -2,7 +2,8 @@ package fr.galettedebroons.model.selectBase;
 
 import java.util.List;
 import javax.persistence.EntityManager;
-import fr.galettedebroons.test.Main;
+
+import fr.galettedebroons.main.Main;
 
 public class RecupTemporaire {
 	

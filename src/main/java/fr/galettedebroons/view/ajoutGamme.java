@@ -8,7 +8,7 @@ package fr.galettedebroons.view;
 import java.awt.event.ActionEvent;
 
 import fr.galettedebroons.domain.Gamme;
-import fr.galettedebroons.test.Main;
+import fr.galettedebroons.main.Main;
 
 /**
  *

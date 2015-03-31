@@ -15,7 +15,7 @@ import javax.persistence.Persistence;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
-import fr.galettedebroons.test.Main;
+import fr.galettedebroons.main.Main;
 
 import java.util.ArrayList;
 

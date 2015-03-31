@@ -1,7 +1,8 @@
 package fr.galettedebroons.model.selectBase;
 
 import javax.persistence.EntityManager;
-import fr.galettedebroons.test.Main;
+
+import fr.galettedebroons.main.Main;
 
 public class RecupProduit {
 

@@ -36,11 +36,13 @@ import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.domain.Tournee;
+import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
+import fr.galettedebroons.model.selectBase.RecupGamme;
 import fr.galettedebroons.model.selectBase.RecupTemporaire;
-import fr.galettedebroons.test.Main;
+import fr.galettedebroons.model.selectBase.RecupTournee;
 import fr.galettedebroons.*;
 /**
  * Vue globale de la creation d'un nouveau client
@@ -73,7 +75,7 @@ public class VueGlobalNvClient {
 	List<Object[]> clients;
 	String nomClient;
 	String codeClient;
-	String textCombo;
+	String tourneeCombo;
 	String codeGamme;
 		
 	/**
@@ -130,7 +132,6 @@ public class VueGlobalNvClient {
     	comboTournee = new JComboBox[nbNewClient];
     	
     	int indice = 0;
-    	int indiceTournee = 0;
     	if (panel_ == null){
 
     		GridBagLayout gbl = new GridBagLayout();
@@ -142,7 +143,7 @@ public class VueGlobalNvClient {
 	    		comboGamme[indice] = jb;
 	    		
 		    	JComboBox jt = new JComboBox(tournee);
-		    	comboTournee[indiceTournee] = jt;
+		    	comboTournee[indice] = jt;
 	    		
 	    		NouveauClient np = new NouveauClient(main_, cli[1].toString(),cli[0].toString(), jt, jb);
 	    		
@@ -217,24 +218,42 @@ public class VueGlobalNvClient {
 	}
 	
 	private void enregistrercliActionPerformed(ActionEvent evt) {
-		Client c = new Client();
+		Client c;
 		Profil p;
-		//listnvclient
 		
+		int indice = 0;
 		for (NouveauClient listclient : listnvclient){
 			// reinitialisation des parametre de creation de produit
 			nomClient = "";
 			codeClient = "";
-			textCombo = "";
+			tourneeCombo = "";
 			codeGamme = "";
 			
 			nomClient = ((NouveauClient) listclient).getTextFieldNC().getText();
 			codeClient = ((NouveauClient) listclient).getTextFieldCC().getText();
+			codeGamme = comboGamme[indice].getSelectedItem().toString();
+			tourneeCombo = comboTournee[indice].getSelectedItem().toString();
 				
 			try{
+				RecupGamme rg = new RecupGamme(main_);
+				Gamme gamme = rg.recuperationGamme(codeGamme);
+				
+				RecupTournee rt = new RecupTournee(main_);
+				Tournee tournee = rt.recuperationTournee(tourneeCombo);
+				
 				main_.getTransaction().begin();
-				c = new Client(nomClient, null);
+				
+				List<Livraison> livr = new ArrayList<Livraison>();
+				p = new Profil(codeClient, gamme, livr, true);
+				p.setProfil_tournee(tournee);
+				
+				List<Profil> profil = new ArrayList<Profil>();
+				profil.add(p);
+				c = new Client(nomClient, profil);
+				
+				main_.getManager().persist(p);
 				main_.getManager().persist(c);
+				
 				main_.getTransaction().commit();
 				
 				fenetre.setVisible(false);
@@ -242,6 +261,8 @@ public class VueGlobalNvClient {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
+			
+			indice ++;
 		}
 		
 		if (panel_ != null)

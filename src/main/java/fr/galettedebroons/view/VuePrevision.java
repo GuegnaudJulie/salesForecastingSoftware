@@ -7,8 +7,8 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
+import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RecuperationDonnees;
-import fr.galettedebroons.test.Main;
 
 
 /*

@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
-import fr.galettedebroons.test.Main;
+import fr.galettedebroons.main.Main;
 
 public class RecupLivraison {
 
@@ -19,11 +19,11 @@ public class RecupLivraison {
 	}
 	
 	public Livraison recuperationLivraison(String bl, Date date, String code_prod){
-		Livraison livr = manager_.createQuery("select l from Livraison l, Produit p where " +
+		Livraison livr = manager_.createQuery("select l from Livraison l where " +
 				"l.bon_livraison LIKE :bl AND " +
 				"l.date_livraison LIKE :date" +
 				"l.livraison_produit.code_produit LIKE :code", Livraison.class)
-				.setParameter("bl", code_prod)
+				.setParameter("bl", bl)
 				.setParameter("date", date)
 				.setParameter("code", code_prod)
 				.getSingleResult();
@@ -46,11 +46,25 @@ public class RecupLivraison {
 	}
 	
 	public List<Object[]> recuperationListLivraison(){
-		List<Object[]> livr = manager_.createQuery("select l.bon_livraison, l.livraison_profil.code_client, l.livraison_produit.code_produit, l.date_livraison, l.qte_livraison, l.qte_reprise from " +
-				"Livraison l", Object[].class)
+		List<Object[]> livr = manager_.createQuery("select l.bon_livraison, l.livraison_profil.code_client, l.livraison_produit.code_produit, l.date_livraison, l.qte_livraison, l.qte_reprise " +
+				"from Livraison l", Object[].class)
 				.getResultList();
 		
 		return livr;
 	}
 	
+	public List<Livraison> recupLivraisonPrec(Produit prod, Profil profil, Date date1, Date date2){
+		List<Livraison> livr = manager_.createQuery("select l from Livraison l where " +
+				"l.date_livraison > :date1" +
+				"l.date_livraison < :date2" +
+				"l.livraison_produit LIKE :produit" +
+				"l.livraison_profil LIKE :profil", Livraison.class)
+				.setParameter("date1", date1)
+				.setParameter("date2", date2)
+				.setParameter("produit", prod)
+				.setParameter("profil", profil)
+				.getResultList();
+		
+		return livr;
+	}
 }
