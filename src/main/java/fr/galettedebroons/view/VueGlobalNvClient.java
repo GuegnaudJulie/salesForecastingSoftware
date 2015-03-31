@@ -169,37 +169,10 @@ public class VueGlobalNvClient {
     		panelGeneral.add(np);
     		listnvclient.add(np);
 		}
-		
-    	/*int i = 0;
-		for(Object[] result : results) {
-			panelGeneral.setLayout(new GridLayout(results.size()*2,0));
-			System.out.println("Je passe dans le for :");
-			
-			System.out.println("code Profil : " +result[0] + " nom client : " +result[1]);
-			
-			
-			nomClientLabel = "Nom Client"+i;
-			nomClientJTF = "jtfNomClient"+i;
-			codeClientLabel = "Code Client"+i;
-			codeClientJTF = "jtfCodeClient"+i;
-			List<Tournee> listeTournee = new ArrayList<Tournee>();
-			List<Gamme> listeGamme = new ArrayList<Gamme>();
-			
-			System.out.println("mon code client est : " +codeClientJTF + " " +nomClientJTF);
-			NouveauClient nv = new NouveauClient(result[1].toString(),result[0].toString(), comboTournee, comboGamme);
-			panelGeneral.add(nv);
-			//fenetre.setVisible(true);
-			//JButton bouton = new JButton("test");
-			//this.fenetre.getContentPane().add(bouton);
-			System.out.println("j'ajoute à ma fenetre");
-			
-			
-		}*/
     	
     	scrollPane = new JScrollPane(panelGeneral);
 		panelGlobal.setLayout(new BorderLayout());
 		panelGlobal.add(scrollPane, BorderLayout.CENTER);
-		//fenetre.add(panelGeneral);
 		
 		JButton boutonEnregistrer = new JButton();
 		boutonEnregistrer.setText("Enregistrer");
@@ -210,23 +183,11 @@ public class VueGlobalNvClient {
 	           }
 	    });
 		
-		//this.getContentPane().add(new JButton("CENTER"), BorderLayout.CENTER);
 		panelGlobal.add(panelBouton, BorderLayout.SOUTH);
 		fenetre.add(panelGlobal);
 		fenetre.setLocationRelativeTo(null);
-		//fenetre.add(panelBouton);
 		fenetre.setVisible(true);
 	}
-	
-	
-	/*
-	
-	JComboBox jb = new JComboBox(gamme);
-	comboGamme[indice] = jb;
-	    		
-	JComboBox jt = new JComboBox(tournee);
-	comboTournee[indice] = jt;
-	 */
 	
 	public void listTournee(){
 		//On crée des nouvelles combobox que l'on rajoute à chaque client en leur précisant l'objet qui a déjà été selectionné

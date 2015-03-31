@@ -170,6 +170,7 @@ public class NouveauClient extends java.awt.Panel {
 		}
 	    
 	    private void jButton1ActionPerformed(ActionEvent evt) {
+	    	fenetre = new JFrame();
 			ajoutTournee nvTournee = new ajoutTournee(main_, this);
 			fenetre.setSize(500, 500);
 	    	fenetre.add(nvTournee);
@@ -178,8 +179,9 @@ public class NouveauClient extends java.awt.Panel {
 		}
 	    
 	    private void jButton2ActionPerformed(ActionEvent evt) {
+	    	fenetre = new JFrame();
 			ajoutGamme nvGamme = new ajoutGamme(main_, null, this);
-			fenetre.setSize(500, 200);
+			fenetre.setSize(500, 250);
 	    	fenetre.add(nvGamme);
 	    	fenetre.setLocationRelativeTo(null);
 	    	fenetre.setVisible(true);
