@@ -260,8 +260,18 @@ public class RemplissageLivraison {
 	 * @param qr : quantité reprise supplémentaire
 	 */
 	private void majLivraison(Livraison livr, int ql, int qr) {
-		int qteLivr = livr.getQte_livraison() + ql;
-		int qteRepris = livr.getQte_reprise() + qr;
+		int qteLivr = 0;
+		int qteRepris = 0;
+		
+		if (ql == 0)
+			qteLivr = livr.getQte_livraison();
+		else
+			qteLivr = ql;
+		
+		if (qr == 0)
+			qteRepris = livr.getQte_livraison();
+		else
+			qteRepris = qr;
 		
 		md_.updateLivraison(livr, qteLivr, qteRepris);
 	}
