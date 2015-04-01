@@ -28,4 +28,17 @@ public class RecupGamme {
 		
 		return duree;
 	}
+	
+	public boolean gammePresent(String code){
+		boolean present;
+		try{
+			Gamme g = manager_.createQuery("select g from Gamme g where code_gamme LIKE :code", Gamme.class)
+					.setParameter("code", code)
+					.getSingleResult();
+			present = true;
+		} catch (Exception e) {
+			present = false;
+		}
+		return present;
+	}
 }

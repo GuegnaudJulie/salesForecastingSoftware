@@ -169,9 +169,7 @@ public class NouveauProduit extends java.awt.Panel {
                                         
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-    	ajoutGamme nvGamme = new ajoutGamme(main_, this, null);
-    	fenetreNvGamme.setSize(500, 200);
-    	fenetreNvGamme.add(nvGamme);
+    	JFrame fenetreNvGamme = new ajoutGamme(main_, this, null);
     	fenetreNvGamme.setLocationRelativeTo(null);
     	fenetreNvGamme.setVisible(true);
     }
@@ -195,8 +193,6 @@ public class NouveauProduit extends java.awt.Panel {
     }
     
     public void methode(){
-    	fenetreNvGamme.setVisible(false);
-    	
     	listGamme();
 	}
     

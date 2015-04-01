@@ -136,7 +136,6 @@ public class NouveauClient extends java.awt.Panel {
 	    }
 	    
 	    public void fermetureGamme(){
-	    	fenetre.setVisible(false);
 	    	vue_.listGamme();
 		}
 	    
@@ -179,10 +178,7 @@ public class NouveauClient extends java.awt.Panel {
 		}
 	    
 	    private void jButton2ActionPerformed(ActionEvent evt) {
-	    	fenetre = new JFrame();
-			ajoutGamme nvGamme = new ajoutGamme(main_, null, this);
-			fenetre.setSize(500, 250);
-	    	fenetre.add(nvGamme);
+	    	fenetre = new ajoutGamme(main_, null, this);
 	    	fenetre.setLocationRelativeTo(null);
 	    	fenetre.setVisible(true);
 		}
