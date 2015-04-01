@@ -54,7 +54,7 @@ public class LectureFichier {
 		
 		File file = new File(nomFichier);
 		
-		if (nomFichier.contains(".xlsx"))
+		if (nomFichier.contains(".xlsx") || nomFichier.contains(".xls"))
 			lectureExcel(file);
 		else if (nomFichier.contains(".ods"))
 			lectureCalc(file);
@@ -65,9 +65,10 @@ public class LectureFichier {
 	/**
 	 * Recuperation des donnees d'un fichier excel
 	 * 
-	 * @author	Melissa Poher, Julie Guegnaud
+	 * @author	Melissa Poher 
+	 * @author	Julie Guegnaud
 	 * @since	13/03/2015
-	 * @param	file fichier .xls
+	 * @param	file fichier .xls et .xlsx
 	 * @throws	InvalidFormatException
 	 * @throws	IOException
 	 */
@@ -78,16 +79,30 @@ public class LectureFichier {
 		final Sheet sheet = workbook.getSheetAt(0);
 		
 		// Lecture du fichier commence a la ligne 2 car titre ligne 0 et entete du tableau a la ligne 1
-		int index = 2;
+		int index = 1;
 		Row row = sheet.getRow(index);
 		//System.out.println("Valeur de row :" +row);
-			
+		int bwaa = 0;
+		
 		while (row != null){
-			for (int i = 0; i<tabChaine.length; i++){
-				tabChaine[i] = row.getCell(i).toString();
+			if (bwaa != 0){
+				for (int i = 0; i<tabChaine.length; i++){
+					tabChaine[i] = row.getCell(i).toString();
+					
+					if (tabChaine[i].matches("^[0-9]+,[0-9]+$")){
+						int ind = tabChaine[i].indexOf(",");
+						tabChaine[i] = tabChaine[i].substring(0, ind);
+					}
+					else if (tabChaine[i].matches("^[0-9]+\\.[0-9]+$")){
+						int ind = tabChaine[i].indexOf(".");
+						tabChaine[i] = tabChaine[i].substring(0, ind);
+					}
+					
+				}
+				remplissageTemp(tabChaine);
 			}
-			remplissageTemp(tabChaine);
 			row = sheet.getRow(index++);
+			bwaa++;
 		}
 	}
 	
@@ -113,6 +128,15 @@ public class LectureFichier {
 				for(int nColIndex = 0 ;nColIndex < nColCount; nColIndex++){
 					cell = sheet.getCellAt(nColIndex, nRowIndex);
 					donnees[nColIndex] = cell.getTextValue();
+					
+					if (donnees[nColIndex].matches("^[0-9]+,[0-9]+$")){
+						int ind = donnees[nColIndex].indexOf(",");
+						donnees[nColIndex] = donnees[nColIndex].substring(0, ind);
+					}
+					else if (donnees[nColIndex].matches("^[0-9]+\\.[0-9]+$")){
+						int ind = donnees[nColIndex].indexOf(".");
+						donnees[nColIndex] = donnees[nColIndex].substring(0, ind);
+					}
 				}
 				remplissageTemp(donnees);
 			}

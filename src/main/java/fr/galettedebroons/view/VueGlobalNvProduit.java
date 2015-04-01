@@ -217,19 +217,12 @@ public class VueGlobalNvProduit {
 			
 			// ajoute en base les elements recuperes
 			
-			Produit temp;
-			try{
-				main_.getTransaction().begin();
-				temp = new Produit(code_produit, nature_produit, nom_produit, presentation_produit, gamme, qte_produit);
-				main_.getManager().persist(temp);
-				main_.getTransaction().commit();
-				
-				fenetre.setVisible(false);
-				
-			} catch(Exception e){
-				e.printStackTrace();
-			}
+			main_.getTransaction().begin();
+			Produit temp = new Produit(code_produit, nature_produit, nom_produit, presentation_produit, gamme, qte_produit);
+			main_.getManager().persist(temp);
+			main_.getTransaction().commit();
 			
+			fenetre.setVisible(false);
 		}
 		
 		if (panel_ != null)

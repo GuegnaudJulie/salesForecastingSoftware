@@ -223,13 +223,14 @@ public class RemplissageLivraison {
 	 * @param qr : quantité reprise
 	 */
 	public void ajoutLivraison(String bl, Profil profil, Produit produit, Date date, int ql, int qr){
-		EntityTransaction tx = manager_.getTransaction();
+		EntityTransaction tx = main_.getTransaction();
 		tx.begin();
 		
 		// Création de la livraison
 		Livraison livr = new Livraison(bl, produit, profil, date, ql, qr);
 		livr.setLivraison_profil(profil);
 		manager_.persist(livr);
+		tx.commit();
 		
 		//liaison à produit
 		List<Livraison> listProd = new ArrayList<Livraison>();
@@ -248,8 +249,6 @@ public class RemplissageLivraison {
 			profil.setLivraison_profil(listProf);
 		}
 		profil.addLivraison(livr);
-		
-		tx.commit();
 		
 	}
 	

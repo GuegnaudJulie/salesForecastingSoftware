@@ -5,6 +5,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import fr.galettedebroons.model.RangerDonneeTemporaire;
+import fr.galettedebroons.model.TraitementDonneesTemporaire;
 import fr.galettedebroons.view.InterfaceGenerale;
 
 public class Main {
@@ -71,6 +73,9 @@ public class Main {
 		
 		tx.commit();
 		*/
+		
+		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main);
+		rdt.vidage();
 		
 		InterfaceGenerale IHM = new InterfaceGenerale(main);
 		IHM.setLocationRelativeTo(null);

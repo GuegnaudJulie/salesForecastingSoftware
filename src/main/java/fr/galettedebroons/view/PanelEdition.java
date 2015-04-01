@@ -75,6 +75,8 @@ public class PanelEdition extends javax.swing.JPanel {
         labelInfo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         labelInfo.setText("Renseigner les informations dans les champs ci-dessous ou indiquer le fichier");
 
+        valFichier.setText("Fichier .xslx, .xls, .ods, .txt, .csv");
+        
         boutonParcourir.setText("Parcourir");
         boutonParcourir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -382,7 +384,7 @@ public class PanelEdition extends javax.swing.JPanel {
     	messageErreur.setText("");
     	
         //Traitement d'un fichier
-    	if ( !valFichier.getText().isEmpty() && !valFichier.getText().equalsIgnoreCase("Fichier .xslx, .ods, .txt, .csv"))
+    	if ( !valFichier.getText().isEmpty() && !valFichier.getText().equalsIgnoreCase("Fichier .xslx, .xls, .ods, .txt, .csv"))
         	traitementFichier();
     	
     	//Traitement manuel
@@ -400,6 +402,18 @@ public class PanelEdition extends javax.swing.JPanel {
         }
     	if (messageErreur.getText() == ""){
     		TraitementDonneesTemporaire tdt = new TraitementDonneesTemporaire(main_, this);
+    		System.out.println("");
+    		System.out.println("");
+    		System.out.println("");
+    		System.out.println("");
+    		System.out.println("table temp rempli !!!");
+    		System.out.println("");
+    		System.out.println("");
+    		System.out.println("");
+    		System.out.println("");
+    		System.out.println("");
+    		System.out.println("");
+    		System.out.println("");
     		tdt.insertionDonnee();
     	}
     }
@@ -464,7 +478,7 @@ public class PanelEdition extends javax.swing.JPanel {
 
 	private void traitementFichier() {
     	//Vérifier l'extension du fichier
-    	String extention = "^.+\\.(xlsx|ods|txt|csv)$";
+    	String extention = "^.+\\.(xlsx|xls|ods|txt|csv)$";
     	if (valFichier.getText().matches(extention)){
     		LectureFichier lfe = new LectureFichier(main_);
             try {
@@ -476,7 +490,7 @@ public class PanelEdition extends javax.swing.JPanel {
             }
     	}
     	else{
-    		messageErreur.setText("Merci de renseigner un ficher avec une extention .xls, .ods, .csv ou .txt");
+    		messageErreur.setText("Merci de renseigner un ficher avec une extention .xlsx, .xls, .ods, .csv ou .txt");
     	}
 	}
 
