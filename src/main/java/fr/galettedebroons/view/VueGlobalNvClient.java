@@ -137,13 +137,16 @@ public class VueGlobalNvClient {
     	
     	int indice = 0;
     	if (panel_ == null){
+    		List<String> listClients = new ArrayList<String>();
     		
     		GridBagLayout gbl = new GridBagLayout();
     		panelGeneral.setLayout(gbl);
     		GridBagConstraints gbc = new GridBagConstraints();
     		
 			for(Object[] cli : clients){
-				if (!rcp_.recuperationProfil(cli[1].toString())){
+				if (!rcp_.recuperationProfil(cli[1].toString()) && !listClients.contains(cli[1].toString()) ){
+					listClients.add(cli[1].toString());
+					
 					JComboBox jb = new JComboBox(gamme);
 		    		comboGamme[indice] = jb;
 		    		
