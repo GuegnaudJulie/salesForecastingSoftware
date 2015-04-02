@@ -63,6 +63,8 @@ public class NouveauProduit extends java.awt.Panel {
         jLabel1.setText("Code Produit");
 
         jTextField1.setText(code_produit);
+        if (code_produit != null)
+        	jTextField1.setEditable(false);
 
         jLabel2.setText("Nature Produit");
 

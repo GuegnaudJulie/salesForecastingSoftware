@@ -1,6 +1,7 @@
 package fr.galettedebroons.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -74,6 +75,7 @@ public class VueGlobalNvClient {
 	JScrollPane scrollPane;
 	JComboBox[] comboTournee;
 	JComboBox[] comboGamme;
+	JLabel labelErreur;
 	List<NouveauClient> listnvclient;
 	List<Object[]> clients;
 	String nomClient;
@@ -100,6 +102,7 @@ public class VueGlobalNvClient {
 	 * initialisation des composants
 	 */
 	private void initialisationClients() {
+		labelErreur = new JLabel();
 		panelGeneral = new JPanel();
 		panelBouton = new JPanel();
 		panelGlobal = new JPanel();
@@ -179,7 +182,13 @@ public class VueGlobalNvClient {
 		}
     	
     	scrollPane = new JScrollPane(panelGeneral);
+    	
+		labelErreur.setPreferredSize(new Dimension(600, 30));
+		labelErreur.setForeground(new java.awt.Color(204, 0, 0));
+        labelErreur.setText("");
+    	
 		panelGlobal.setLayout(new BorderLayout());
+		panelGlobal.add(labelErreur, BorderLayout.NORTH);
 		panelGlobal.add(scrollPane, BorderLayout.CENTER);
 		
 		JButton boutonEnregistrer = new JButton();
@@ -228,35 +237,21 @@ public class VueGlobalNvClient {
     }
 	
 	private void enregistrercliActionPerformed(ActionEvent evt) {
+		String messageErreur = "";
 		Client c;
 		Profil p;
+		Tournee tournee;
+		RecupGamme rg = new RecupGamme(main_);
+		RecupTournee rt = new RecupTournee(main_);
 		
 		int indice = 0;
+		main_.getTransaction().begin();
 		for (NouveauClient listclient : listnvclient){
-			// reinitialisation des parametre de creation de produit
-			nomClient = "";
-			codeClient = "";
-			tourneeCombo = "";
-			codeGamme = "";
-			
-			nomClient = ((NouveauClient) listclient).getTextFieldNC().getText();
-			codeClient = ((NouveauClient) listclient).getTextFieldCC().getText();
-			
-			codeGamme = comboGamme[indice].getSelectedItem().toString();
-			tourneeCombo = comboTournee[indice].getSelectedItem().toString();
-				
 			try{
-				RecupGamme rg = new RecupGamme(main_);
-				Gamme gamme = rg.recuperationGamme(codeGamme);
-				
-				RecupTournee rt = new RecupTournee(main_);
-				Tournee tournee = rt.recuperationTournee(tourneeCombo);
-				
-				main_.getTransaction().begin();
-				
 				//Création d'un profil
 				List<Livraison> livr = new ArrayList<Livraison>();
-				p = new Profil(codeClient, gamme, livr, true);
+				p = new Profil(listclient.getTextFieldCC().getText(), rg.recuperationGamme(codeGamme), livr, true);
+				tournee = rt.recuperationTournee(tourneeCombo);
 				p.setProfil_tournee(tournee);
 				
 				//Création d'un client
@@ -271,25 +266,29 @@ public class VueGlobalNvClient {
 					tournee.setProfil_tournee(profil);
 				else
 					tournee.addProfil(p);
-				
-				main_.getManager().persist(c);
-				
-				main_.getTransaction().commit();
-				
-				fenetre.setVisible(false);
-				
-			}catch(Exception e){
-				e.printStackTrace();
+					
+					main_.getManager().persist(c);
+			} catch (Exception e) {
+				messageErreur = "Erreur : des informations sont manquantes ou erronées";
 			}
 			
 			indice ++;
 		}
 		
-		if (panel_ != null)
-			panel_.terminerAjoutClient();
-		
-		if (ClasseTraitement_ != null)
-			ClasseTraitement_.insertionProduit();
+		if (messageErreur == ""){
+			main_.getTransaction().commit();
+			fenetre.setVisible(false);
+			
+			if (panel_ != null)
+				panel_.terminerAjoutClient();
+			
+			if (ClasseTraitement_ != null)
+				ClasseTraitement_.insertionProduit();
+		}
+		else{
+			main_.getTransaction().rollback();
+			labelErreur.setText(messageErreur);
+		}
 	}
 	
 }

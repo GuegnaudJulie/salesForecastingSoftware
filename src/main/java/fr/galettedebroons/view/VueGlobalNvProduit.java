@@ -1,6 +1,7 @@
 package fr.galettedebroons.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -11,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -28,6 +30,7 @@ import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
+import fr.galettedebroons.model.selectBase.RecupGamme;
 import fr.galettedebroons.model.selectBase.RecupTemporaire;
 
 public class VueGlobalNvProduit {
@@ -37,16 +40,11 @@ public class VueGlobalNvProduit {
 	static JPanel panelGlobal;
 	static JPanel panelBouton;
 	static JScrollPane scrollPane;
+	static JLabel labelErreur;
 	static JFrame fenetre;
 	static JComboBox[] comboGamme;
 	static List<NouveauProduit> listnvproduit;
 	
-	static String code_produit;
-	static String nature_produit;
-	static String nom_produit;
-	static int qte_produit;
-	static String presentation_produit;
-	static String gamme_produit;
 	static String textCombo;
 	static Main main_;
 	static PanelEdition panel_;
@@ -67,6 +65,7 @@ public class VueGlobalNvProduit {
 	 * initialisation dynamique des nouveaux clients dans la base temporaire
 	 */
 	private static void initialisationProduits() {
+		labelErreur = new JLabel();
 		panelGeneral = new JPanel();
 		panelGlobal = new JPanel();
 		panelBouton = new JPanel();
@@ -139,7 +138,12 @@ public class VueGlobalNvProduit {
     	
     	scrollPane = new JScrollPane(panelGeneral);
     	
+    	labelErreur.setPreferredSize(new Dimension(600, 30));
+		labelErreur.setForeground(new java.awt.Color(204, 0, 0));
+        labelErreur.setText("");
+    	
     	panelGlobal.setLayout(new BorderLayout());
+    	panelGlobal.add(labelErreur, BorderLayout.NORTH);
 		panelGlobal.add(scrollPane, BorderLayout.CENTER);
 		//fenetre.add(panelGeneral);
 		
@@ -169,68 +173,54 @@ public class VueGlobalNvProduit {
 	 */
 	private static void enregistrercliActionPerformed(ActionEvent evt) {
 		JViewport viewport = new JViewport();
+		RecupGamme rg = new RecupGamme(main_);
+		String messageErreur = "";
 		
 		for (NouveauProduit listprod : listnvproduit){
-			// reinitialisation des parametre de creation de produit
-			code_produit = "";
-			nature_produit = "";
-			nom_produit = "";
-			qte_produit = 0;
-			presentation_produit = "";
-			gamme_produit = "";
-			textCombo = "";
-			
-			// qté/lot
-			//System.out.println(((JLabel) (listprod.getComponent(0))).getText());
-			//qte_produit = Integer.parseInt(((JTextField) listprod.getComponent(1)).getText());
-			
-			String s = ((JTextField) listprod.getComponent(1)).getText();
 			try{
-				qte_produit = Integer.parseInt(s);
-			}catch(Exception e){
-				System.out.println("la quantité n'est pas bonne");
-				qte_produit = 0;
+				Gamme gamme = rg.recuperationGamme((String) listprod.getCombo().getSelectedItem());
+				
+				main_.getTransaction().begin();
+				Produit temp = new Produit(((JTextField) listprod.getComponent(5)).getText(), 
+						((JTextField) listprod.getComponent(3)).getText(), 
+						((JTextField) listprod.getComponent(7)).getText(), 
+						((JTextArea) viewport.getComponent(0)).getText(), 
+						gamme, 
+						Integer.parseInt(((JTextField) listprod.getComponent(1)).getText()));
+				
+				main_.getManager().persist(temp);
+			} catch (Exception e){
+				messageErreur = "Erreur : des informations sont manquantes ou erronées";
 			}
 			
-			// nature produit
-			nature_produit = ((JTextField) listprod.getComponent(3)).getText();
-			
-			// code produit
-			code_produit = ((JTextField) listprod.getComponent(5)).getText();
-			
-			// nom produit
-			nom_produit = ((JTextField) listprod.getComponent(7)).getText();
-			
-			// label présentation produit
-			viewport = ((JScrollPane)listprod.getComponent(10)).getViewport();
-			presentation_produit = ((JTextArea) viewport.getComponent(0)).getText();
-			
 			//gamme label
-			gamme_produit = ((JLabel) listprod.getComponent(9)).getText();
+			//gamme_produit = ((JLabel) listprod.getComponent(9)).getText();
 			
 			// gamme
-			textCombo = (String) listprod.getCombo().getSelectedItem();
-			String[] t = textCombo.split(" ");
+			//textCombo = (String) listprod.getCombo().getSelectedItem();
+			//String[] t = textCombo.split(" ");
 			
 			//Gamme gamme = new Gamme(t[0], Integer.parseInt(t[1]), null, null);
-			Gamme gamme = new Gamme(t[0], 2, null, null);
+			//Gamme gamme = new Gamme(t[0], 2, null, null);
 			
 			// ajoute en base les elements recuperes
-			
-			main_.getTransaction().begin();
-			Produit temp = new Produit(code_produit, nature_produit, nom_produit, presentation_produit, gamme, qte_produit);
-			main_.getManager().persist(temp);
-			main_.getTransaction().commit();
-			
-			fenetre.setVisible(false);
+			//Produit temp = new Produit(code_produit, nature_produit, nom_produit, presentation_produit, gamme, qte_produit);
 		}
 		
-		if (panel_ != null)
-			panel_.terminerAjoutProduit();
-		
-		if (ClasseTraitement_ != null)
-			ClasseTraitement_.insertionDonneeFin();
-		
+		if (messageErreur == ""){
+			main_.getTransaction().commit();
+			fenetre.setVisible(false);
+			
+			if (panel_ != null)
+				panel_.terminerAjoutClient();
+			
+			if (ClasseTraitement_ != null)
+				ClasseTraitement_.insertionProduit();
+		}
+		else{
+			main_.getTransaction().rollback();
+			labelErreur.setText(messageErreur);
+		}
 	}
 
 }

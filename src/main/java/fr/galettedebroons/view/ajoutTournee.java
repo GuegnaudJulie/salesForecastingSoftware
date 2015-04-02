@@ -48,6 +48,7 @@ public class ajoutTournee extends javax.swing.JFrame {
         boutonEnregistrer = new javax.swing.JButton();
         boutonAnnuler = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         setTitle("Ajout tounée");
         setPreferredSize(new java.awt.Dimension(598, 300));
         setResizable(false);

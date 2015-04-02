@@ -48,11 +48,15 @@ public class NouveauClient extends java.awt.Panel {
 		        jLabel1.setText("Nom Client");
 	
 		        jTextField1.setText(nc);
+		        if (nc != null)
+		        	jTextField1.setEditable(false);
 		        
 		        jLabel2.setText("code Client");
 	
 		        jTextField2.setText(cc);
-	
+		        if (cc != null)
+		        	jTextField2.setEditable(false);
+		        
 		        jLabel3.setText("Tournée");
 	
 		        jComboBox1 = tournee;

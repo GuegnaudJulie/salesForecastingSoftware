@@ -48,7 +48,8 @@ public class ajoutGamme extends javax.swing.JFrame {
         valDuree = new javax.swing.JTextField();
         labelUnite = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        setTitle("Ajout gamme");
         setResizable(false);
 
         labelTitre.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -58,7 +59,7 @@ public class ajoutGamme extends javax.swing.JFrame {
         labelCodeGamme.setText("Code de la gamme :");
 
         labelErreur.setForeground(new java.awt.Color(204, 0, 0));
-        labelErreur.setText("Erreur : ");
+        labelErreur.setText("");
 
         labelDureeGamme.setText("Durée entre une livraison et une reprise :");
 
