@@ -164,6 +164,8 @@ public class MargeModification extends javax.swing.JPanel {
 	     */
 	    private void jButton2ActionPerformed(ActionEvent evt) {
 	    	double pourcentage = 0.0;
+	    	double tauxreprise = 0.0;
+	    	jLabel1.setText("Taux de reprise actuel : ");
 	    	String nomprofil = "";
 	    	String nomproduit = "";
 	    	
@@ -175,6 +177,8 @@ public class MargeModification extends javax.swing.JPanel {
 			System.out.println("mon pourcentaaaaa : " +nomprofil);
 			
 			md.updateTauxReprise(pourcentage, nomprofil, nomproduit);
+			tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);
+			jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
 		}
 
 	    // Variables declaration - do not modify

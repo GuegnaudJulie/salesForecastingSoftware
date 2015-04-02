@@ -23,6 +23,7 @@ public class ModificationDonnees {
 	
 	
 	public void updateTauxReprise(double pourcen, String nomprofil, String nomproduit){
+		tx_.begin();
 		System.out.println("mon pourcen : " +pourcen);
 		RecuperationDonnees rd = new RecuperationDonnees(main_);
 		Produit np = rd.recuperationProduitComp(nomproduit);
