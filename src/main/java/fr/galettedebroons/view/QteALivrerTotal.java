@@ -1,8 +1,16 @@
 package fr.galettedebroons.view;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import fr.galettedebroons.main.Main;
+import fr.galettedebroons.model.RecuperationDonnees;
 
 /**
 *
@@ -45,6 +53,8 @@ public class QteALivrerTotal extends javax.swing.JPanel {
 	        jLabel2 = new javax.swing.JLabel();
 	        jLabel3 = new javax.swing.JLabel();
 	        jButton1 = new javax.swing.JButton();
+	        
+	        rd = new RecuperationDonnees(main_);
 	        
 	        jButton1.setText("Voir");
 	        jButton1.addActionListener(new java.awt.event.ActionListener(){
@@ -120,7 +130,76 @@ public class QteALivrerTotal extends javax.swing.JPanel {
 	    }// </editor-fold>
 	    
 	    private void jButton1ActionPerformed(ActionEvent evt) {
+	    	java.util.Date dateDebut = null;
+	    	dateDebut = jDateChooser1.getDate();
+	    	java.util.Date dateFin = null;
+	    	dateFin = jDateChooser2.getDate();
 	    	
+	    	String monProduit = "";
+    		int maQuantite = 0;
+    		List<Object[]> malisteAAffichee = new ArrayList<Object[]>();
+    		
+    		ConcurrentHashMap<String, Integer> mapAAffichee = new ConcurrentHashMap();
+    		
+	    	System.out.println("ma date de début : " +dateDebut);
+	    	System.out.println("ma date de fin : " +dateFin);
+	    	List<Object[]> maliste = rd.recupSommeProduit(dateDebut, dateFin);
+	    	
+	    	// parcours de ma liste de produit - quantité
+	    	for (Object[] p : maliste){
+    			System.out.println("Mon produit " +p[1]);
+    			monProduit = (String) p[1];
+    			System.out.println("Ma quantité " +p[0]);
+    			maQuantite = (int) p[0];
+    			
+    			// tant que j'ai un produit dans ma map a afficher je parcours 
+    			// pour voir si le produit n'existe pas déjà
+    			Iterator<Map.Entry<String, Integer>> it = mapAAffichee.entrySet().iterator();
+
+    			// si ma liste est vide j'ajoute mon 1er produit
+    			if(mapAAffichee.isEmpty()){
+        			mapAAffichee.put(monProduit, maQuantite);
+        		}
+    				
+    			else if(mapAAffichee.containsKey(monProduit)){
+    				int valeur = mapAAffichee.get(monProduit);
+	    			valeur += maQuantite;
+	    			    	
+	    			mapAAffichee.put(monProduit, valeur);
+    			}else{
+	    			mapAAffichee.put(monProduit, maQuantite);
+	    		}
+    		}
+	    	
+	    	// fin somme dans hashmap -----------
+			
+	    	// Affichage dans notre JTable1
+	    	jTable1.getTableHeader().getColumnModel().getColumn(0).setHeaderValue("Produit");
+	    	jTable1.getTableHeader().getColumnModel().getColumn(1).setHeaderValue("Somme");
+	    	
+	    	int ligneProduit = 0;
+			int colonneProduit = 0;
+			int ligneQuantité = 0;
+			int colonneQuantité = 1;
+	    	
+	    	Iterator<Map.Entry<String, Integer>> it2 = mapAAffichee.entrySet().iterator();
+			while(it2.hasNext()) {
+				
+				
+				Map.Entry entry = (Map.Entry) it2.next();
+				String cle = (String) entry.getKey();
+ 			    Integer valeur = (Integer) entry.getValue();
+				System.out.println("MA clé : " +cle +"et ma valeur : " +valeur);
+				jTable1.getModel().setValueAt(cle, ligneProduit, colonneProduit);
+				ligneProduit++;
+				jTable1.getModel().setValueAt(valeur, ligneQuantité, colonneQuantité);
+				ligneQuantité++;
+			}
+			
+			
+			
+			
+			
 	    }
 
 
@@ -134,7 +213,7 @@ public class QteALivrerTotal extends javax.swing.JPanel {
 	    private javax.swing.JScrollPane jScrollPane1;
 	    private javax.swing.JTable jTable1;
 	    // End of variables declaration
-
-
+	    
+	    RecuperationDonnees rd;
 
 }

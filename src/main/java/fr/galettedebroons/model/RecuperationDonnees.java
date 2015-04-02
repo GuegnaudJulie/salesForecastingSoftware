@@ -278,4 +278,19 @@ public class RecuperationDonnees {
 		return listePrevision;
 	}
 	
+	/**
+	 * Recupere somme des produits à livrer pour la vue QteALivrerTotal
+	 */
+	public List<Object[]> recupSommeProduit(java.util.Date dateDebut, java.util.Date dateFin){
+		List<Object[]> listePrevision = null;
+		
+		listePrevision = manager_.createQuery("select p.quantite, p.prevision_produit.code_produit "
+				+ "from Prevision p where p.date BETWEEN :dateDeb and :dateFi", Object[].class)
+				.setParameter("dateDeb", dateDebut)
+				.setParameter("dateFi", dateFin)
+				.getResultList();
+		System.out.println("Ma liste de qte à livrer par produit : " +listePrevision);
+		return listePrevision;
+	}
+	
 }

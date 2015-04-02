@@ -230,7 +230,6 @@ public class VuePrevision extends javax.swing.JPanel {
     	// appel de recuperation des previsions
     	//rd.recuperationPrevision(data, nomTournee);
     	// si seulement tournee selectionnee
-    	System.out.println("MA TOURNEEEEE : " +nomTournee);
     	
     	//si un profil est selectionné en particulier
     	if(!nomProfil.toString().contains("Tous") && data != null){
