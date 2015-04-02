@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 import fr.galettedebroons.model.RecuperationDonnees;
@@ -58,6 +59,7 @@ public class VuePrevision extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         
         rd = new RecuperationDonnees(main_);
         
@@ -123,6 +125,13 @@ public class VuePrevision extends javax.swing.JPanel {
         		jButton1ActionPerformed(evt);
 			}
         });
+        
+        jButton2.setText("Qté Total produit");
+        jButton2.addActionListener(new java.awt.event.ActionListener(){
+        	public void actionPerformed(java.awt.event.ActionEvent evt) {
+        		jButton2ActionPerformed(evt);
+			}
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -145,7 +154,8 @@ public class VuePrevision extends javax.swing.JPanel {
                                 .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(159, 159, 159)
                             .addComponent(jButton1))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton2))
                 .addContainerGap(622, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -170,6 +180,7 @@ public class VuePrevision extends javax.swing.JPanel {
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton2)
                 .addGap(275, 275, 275))
         );
     }// </editor-fold>
@@ -330,6 +341,14 @@ public class VuePrevision extends javax.swing.JPanel {
     	}
 	}
     
+    private void jButton2ActionPerformed(ActionEvent evt) {
+    	QteALivrerTotal qteaLivrer = new fr.galettedebroons.view.QteALivrerTotal(main_);
+    	JFrame fenetre = new JFrame();
+    	fenetre.setSize(500, 500);
+    	fenetre.add(qteaLivrer);
+    	fenetre.setVisible(true);
+    }
+    
     /**
      * reinitialisation de l'affichage de la table
      */
@@ -360,6 +379,7 @@ public class VuePrevision extends javax.swing.JPanel {
 
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private com.toedter.calendar.JDateChooser jDateChooser1;
