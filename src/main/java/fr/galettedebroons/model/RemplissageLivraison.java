@@ -282,3 +282,231 @@ public class RemplissageLivraison {
 	}
 
 }
+/*
+public class RemplissageLivraison {
+	
+	private EntityManager manager_;
+	private Main main_;
+	private RecuperationDonnees rd_;
+	private RecupLivraison rl_;
+	private RecupTournee rt_;
+	private RecupGamme rg_;
+	private RecupPrevision rprev_;
+	private ModificationDonnees md_;
+	
+	public RemplissageLivraison(Main main){
+		manager_ = main.getManager();
+		main_ = main;
+	}     
+	
+	public void remplissage(){
+		
+		rd_ = new RecuperationDonnees(main_);
+		md_ = new ModificationDonnees(main_);
+		rl_ = new RecupLivraison(main_);
+		rt_ = new RecupTournee(main_);
+		rg_ = new RecupGamme(main_);
+		
+		// Tri sur les donnees de la table temporaire
+		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC", Temporaire.class).getResultList();   
+		
+		for(Temporaire t : temp){
+			
+			//récuperation des informations
+			String bl = t.getBon_livraison();
+			String code_profil = t.getCode_profil();
+			String code_produit = t.getCode_produit();
+			int ql = t.getQuantite_livree();
+			int qr = t.getQuantite_reprise();
+			Date date = t.getDate();
+			
+			//recuperation du profil du client
+			Profil profil = rd_.recupProfil(code_profil);
+			
+			//recuperation du produit de la livraison
+			Produit produit = rd_.recupProduit(code_produit);
+			
+			//recuperation de la gamme du produit
+			Gamme gamme = rg_.recuperationGammeProd(produit);
+			
+			//recuperation des jours de livraison normaux
+			Tournee tournee = profil.getProfil_tournee();
+			String[] joursTournee = rt_.recuperationJoursTournee(profil);
+			
+			//Jours de la semaine de la livraison actuelle
+			String jours = joursSemaine(date);
+			
+			//On verifie que le jours de la livraison été prévu
+			boolean prevu = false;
+			for(int i = 0; i<joursTournee.length; i++){
+				if (joursTournee[i] == jours)
+					prevu = true;
+			}
+			
+			if (gamme.getCode_gamme().equals("PE")){
+				if(prevu){
+					Date dateLivrPrec = ajoutJours(date, -2);
+					List<Livraison> listPrecLivr = rl_.recupLivraisonPrec(produit, profil, date, dateLivrPrec);
+					int qteLivPrec = 0;
+					for (Livraison l : listPrecLivr){
+						qteLivPrec += l.getQte_livraison();
+					}
+					
+					if(verifQte(qteLivPrec, qr)){
+						Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
+						
+						if (livr == null){
+							ajoutLivraison(bl, profil, produit, date, ql, qr);
+							ajoutPrevision((qteLivPrec-qr), profil, produit, dateLivrPrec);
+						}
+						else{
+							majLivraison(livr, ql, qr);
+							Prevision prev = rprev_.prevision(profil, produit, dateLivrPrec);
+							majPrevision(prev, qteLivPrec-qr);
+						}
+					}
+				}
+				else{
+					//Recuperation de la livraison précédente
+					Livraison lprec = precedenteLivraison(date, produit, profil);
+					if (lprec != null){
+						majLivraison(lprec, lprec.getQte_livraison() + ql, 0);
+					}
+					else{
+						ajoutLivraison(bl, profil, produit, date, ql, 0);
+					}
+				}
+			}
+			
+			else if (gamme.getCode_gamme().equals("LS")){
+				//Recuperation des jours de la tournée
+				if (tournee.isLundi() && tournee.isMercredi() && tournee.isVendredi()){
+					//On vérifie qu'elle été prévue
+					if (prevu){
+						if (jours.equals("vendredi")){
+							//On récupère les invendu du lundi prec => -4j
+							Date dateLundi = ajoutJours(date, -4);
+							Livraison livrLundi = rl_.recupLivraison(produit, profil, dateLundi);
+							
+							//On vérifie qu'il n'y a pas d'erreur de 
+						}
+					}
+				}
+				else if (tournee.isMardi() && tournee.isVendredi()){
+					//On vérifie qu'elle été prévue
+					if (prevu){
+						
+					}
+				}
+			}
+			
+		}
+	}*/
+
+	
+	
+	/**
+	 * Somme des quantites livrées entre le jour d'une livraison et le jour de la reprise
+	 * 
+	 * @param date : date de la reprise
+	 * @param duree : duree de validite d'un produit chez un client
+	 * @param prod : produit associé à la livraison
+	 * @param profil : profil du client associé à la livraison
+	 * @return la somme des quantites livrées précédement
+	 */
+	/*public int sommeQteLivrPrecedente(Date date, int duree, Produit prod, Profil profil){
+		Date dateLivr = ajoutJours(date, -duree);
+		List<Livraison> list = rl_.recupLivraisonPrec(prod, profil, date, dateLivr);
+		
+		int sommeLivr = 0;
+		for (Livraison l : list){
+			sommeLivr += l.getQte_livraison();
+		}
+		
+		return sommeLivr;
+	}*/
+	
+	/**
+	 * Insertion de la livraison en base de donnee
+	 * 
+	 * @param bl : bon de livraison
+	 * @param profil : profil du client associé à la livraison
+	 * @param produit : produit associé à la livraison
+	 * @param date : date associé à la livraison
+	 * @param ql : quantité livrée
+	 * @param qr : quantité reprise
+	 */
+	/*public void ajoutLivraison(String bl, Profil profil, Produit produit, Date date, int ql, int qr){
+		EntityTransaction tx = main_.getTransaction();
+		tx.begin();
+		
+		// Création de la livraison
+		Livraison livr = new Livraison(bl, produit, profil, date, ql, qr);
+		livr.setLivraison_profil(profil);
+		manager_.persist(livr);
+		tx.commit();
+		
+		//liaison à produit
+		try{
+			produit.addLivraison(livr);
+		} catch (Exception e){
+			List<Livraison> listProd = new ArrayList<Livraison>();
+			listProd.add(livr);
+			produit.setLivraison_produit(listProd);
+		}
+		
+		//liaison à profil
+		try{
+			profil.addLivraison(livr);
+		} catch (Exception e){
+			List<Livraison> listProf = new ArrayList<Livraison>();
+			listProf.add(livr);
+			profil.setLivraison_profil(listProf);
+		}
+	}*/
+
+	/**
+	 * Ajout d'une ligne dans la table Prevision
+	 */
+	/*private void ajoutPrevision(int i, Profil profil, Produit produit, Date dateLivrPrec) {
+		EntityTransaction tx = main_.getTransaction();
+		tx.begin();
+		
+		// Création de la livraison
+		Prevision prev = new Prevision(i, profil, produit, dateLivrPrec);
+		manager_.persist(prev);
+		tx.commit();
+		
+		//liaison à produit
+		try{
+			produit.addPrevision(prev);
+		} catch (Exception e){
+			List<Prevision> listPrev = new ArrayList<Prevision>();
+			listPrev.add(prev);
+			produit.setPrevision_produit(listPrev);
+		}
+		
+		//liaison à profil
+		try{
+			profil.addPrevision(prev);
+		} catch (Exception e){
+			List<Prevision> listPrev = new ArrayList<Prevision>();
+			listPrev.add(prev);
+			profil.setPrevision_profil(listPrev);
+		}
+	}*/
+	
+	/**
+	 * Mise à jour d'une ligne de la table Livraison
+	 * 
+	 * @param livr : la livraison à mettre à jour
+	 * @param ql : quantité livrée supplémentaire
+	 * @param qr : quantité reprise supplémentaire
+	 */
+	/*private void majPrevision(Prevision prev, int qte) {
+		prev.setQuantite(qte);
+	}
+
+}
+
+ */

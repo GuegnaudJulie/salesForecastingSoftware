@@ -36,6 +36,24 @@ public class RecupLivraison {
 		
 		return livr;
 	}
+	
+	public Livraison recupLivraison(Produit prod, Profil profil, Date date){
+		Livraison livraison;
+		try{
+			livraison =  manager_.createQuery("select l from Livraison l WHERE " +
+						"livraison_profil LIKE :profil AND " +
+						"livraison_produit LIKE :produit AND " +
+						"date_livraison LIKE :date", Livraison.class)
+						.setParameter("profil", profil)
+						.setParameter("produit", prod)
+						.setParameter("date", date)
+						.getSingleResult();
+		} catch (Exception e){
+			livraison = null;
+		}
+		
+		return livraison;
+	}
 
 	public Livraison recupLivraisonPrec(Produit prod, Profil profil, Date date){
 		Livraison livraison;
