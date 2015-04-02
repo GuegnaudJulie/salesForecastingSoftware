@@ -140,8 +140,6 @@ public class NouveauClient extends java.awt.Panel {
 		}
 	    
 	    public void fermetureTournee(){
-	    	fenetre.setVisible(false);
-	    	System.out.println("on ferme la fenetre tournee");
 	    	vue_.listTournee();
 	    }
 	    
@@ -169,10 +167,7 @@ public class NouveauClient extends java.awt.Panel {
 		}
 	    
 	    private void jButton1ActionPerformed(ActionEvent evt) {
-	    	fenetre = new JFrame();
-			ajoutTournee nvTournee = new ajoutTournee(main_, this);
-			fenetre.setSize(500, 500);
-	    	fenetre.add(nvTournee);
+	    	fenetre = new ajoutTournee(main_, this);
 	    	fenetre.setLocationRelativeTo(null);
 	    	fenetre.setVisible(true);
 		}
