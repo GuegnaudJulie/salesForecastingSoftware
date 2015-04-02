@@ -7,6 +7,7 @@ package fr.galettedebroons.view;
 
 import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.main.Main;
+import fr.galettedebroons.model.selectBase.RecupTournee;
 
 /**
 *
@@ -175,9 +176,14 @@ public class ajoutTournee extends javax.swing.JFrame {
 
     private void boutonEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {
     	//Vérification d'erreur
+    	RecupTournee rt = new RecupTournee(main_);
     	String messErreur = "";
+    	
 		if (valTournee.getText().isEmpty())
 			messErreur += "un nom de tournée doit être rempli";
+		else if (rt.tourneePresente(valTournee.getText())){
+			messErreur += "ce nom de tournée est déjà utilisé";
+		}
 		
 		boolean check = false;
 		if(chekboxLundi.isSelected() || chekboxMardi.isSelected() || chekboxMercredi.isSelected() || 

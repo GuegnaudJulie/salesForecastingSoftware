@@ -24,6 +24,20 @@ public class RecupTournee {
 		return tournee;
 	}
 	
+	public boolean tourneePresente(String nom){
+		boolean present;
+		try{
+			Tournee tournee = manager_.createQuery("select t from Tournee t where nom LIKE :nom", Tournee.class)
+					.setParameter("nom", nom)
+					.getSingleResult();
+			present = true;
+		} catch(Exception e) {
+			present = false;
+		}
+		
+		return present;
+	}
+	
 	public String[] recuperationJoursTournee(Profil profil){
 		String[] joursTournee = new String[7];
 		
