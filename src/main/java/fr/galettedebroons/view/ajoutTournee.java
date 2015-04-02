@@ -215,7 +215,9 @@ public class ajoutTournee extends javax.swing.JFrame {
 			main_.getTransaction().commit();
 			
 			this.setVisible(false);
+			nc_.MAJComboG();
 			nc_.fermetureTournee();
+			
     	}
     	else
     		labelErreur.setText("Erreur : " + messErreur);

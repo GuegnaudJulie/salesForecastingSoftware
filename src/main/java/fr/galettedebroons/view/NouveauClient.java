@@ -135,7 +135,23 @@ public class NouveauClient extends java.awt.Panel {
 		    }// </editor-fold>
 	    
 
-	    public JFrame getJFrame(){
+	    public javax.swing.JComboBox getjComboBox1() {
+			return jComboBox1;
+		}
+
+		public void setjComboBox1(javax.swing.JComboBox jComboBox1) {
+			this.jComboBox1 = jComboBox1;
+		}
+
+		public javax.swing.JComboBox getjComboBox2() {
+			return jComboBox2;
+		}
+
+		public void setjComboBox2(javax.swing.JComboBox jComboBox2) {
+			this.jComboBox2 = jComboBox2;
+		}
+
+		public JFrame getJFrame(){
 	    	return fenetre;
 	    }
 	    
@@ -154,6 +170,7 @@ public class NouveauClient extends java.awt.Panel {
 	    	jComboBox1.setSelectedItem(select);
 	    	
 	    }
+	   
 	    
 	    public void majComboGamme(javax.swing.JComboBox combo, Object select){
 	    	jComboBox2.removeAllItems();
@@ -173,7 +190,7 @@ public class NouveauClient extends java.awt.Panel {
 	    private void jButton1ActionPerformed(ActionEvent evt) {
 	    	fenetre = new ajoutTournee(main_, this);
 	    	fenetre.setLocationRelativeTo(null);
-	    	fenetre.setVisible(true);
+	    	fenetre.setVisible(true);	    	
 		}
 	    
 	    private void jButton2ActionPerformed(ActionEvent evt) {
@@ -206,5 +223,11 @@ public class NouveauClient extends java.awt.Panel {
 	    private RecuperationDonnees rd_;
 	    private VueGlobalNvClient vue_;
 	    // End of variables declaration
+	    
+	    
+		public void MAJComboG() {
+			this.jComboBox1.repaint();
+			this.jComboBox1.validate();
+		}
 		
 }
