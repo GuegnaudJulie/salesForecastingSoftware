@@ -172,39 +172,21 @@ public class VueGlobalNvProduit {
 	 * @param evt
 	 */
 	private static void enregistrercliActionPerformed(ActionEvent evt) {
-		JViewport viewport = new JViewport();
+		labelErreur.setText("");
 		RecupGamme rg = new RecupGamme(main_);
 		String messageErreur = "";
 		
 		for (NouveauProduit listprod : listnvproduit){
 			try{
-				Gamme gamme = rg.recuperationGamme((String) listprod.getCombo().getSelectedItem());
+				Gamme gamme = rg.recuperationGamme(listprod.getCombo().getSelectedItem().toString());
 				
 				main_.getTransaction().begin();
-				Produit temp = new Produit(((JTextField) listprod.getComponent(5)).getText(), 
-						((JTextField) listprod.getComponent(3)).getText(), 
-						((JTextField) listprod.getComponent(7)).getText(), 
-						((JTextArea) viewport.getComponent(0)).getText(), 
-						gamme, 
-						Integer.parseInt(((JTextField) listprod.getComponent(1)).getText()));
+				Produit temp = new Produit(listprod.getSelectCode(), listprod.getSelectNature(), listprod.getSelectNom(), listprod.getSelectPresentation(), gamme, Integer.parseInt(listprod.getSelectQte()));
 				
 				main_.getManager().persist(temp);
 			} catch (Exception e){
 				messageErreur = "Erreur : des informations sont manquantes ou erronées";
 			}
-			
-			//gamme label
-			//gamme_produit = ((JLabel) listprod.getComponent(9)).getText();
-			
-			// gamme
-			//textCombo = (String) listprod.getCombo().getSelectedItem();
-			//String[] t = textCombo.split(" ");
-			
-			//Gamme gamme = new Gamme(t[0], Integer.parseInt(t[1]), null, null);
-			//Gamme gamme = new Gamme(t[0], 2, null, null);
-			
-			// ajoute en base les elements recuperes
-			//Produit temp = new Produit(code_produit, nature_produit, nom_produit, presentation_produit, gamme, qte_produit);
 		}
 		
 		if (messageErreur == ""){
@@ -215,7 +197,7 @@ public class VueGlobalNvProduit {
 				panel_.terminerAjoutClient();
 			
 			if (ClasseTraitement_ != null)
-				ClasseTraitement_.insertionProduit();
+				ClasseTraitement_.insertionDonneeFin();
 		}
 		else{
 			main_.getTransaction().rollback();

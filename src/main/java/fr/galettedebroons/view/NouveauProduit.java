@@ -198,6 +198,30 @@ public class NouveauProduit extends java.awt.Panel {
     	listGamme();
 	}
     
+    public String getSelectCode(){
+    	return jTextField1.getText();
+    }
+    
+    public String getSelectNom(){
+    	return jTextField3.getText();
+    }
+    
+    public String getSelectNature(){
+    	return jTextField2.getText();
+    }
+    
+    public String getSelectGamme(){
+    	return jComboBox1.getSelectedItem().toString();
+    }
+    
+    public String getSelectQte(){
+    	return jTextField4.getText();
+    }
+    
+    public String getSelectPresentation(){
+    	return jTextArea1.getText();
+    }
+    
     // Variables declaration - do not modify
     @SuppressWarnings("rawtypes")
     private javax.swing.JButton jButton1;

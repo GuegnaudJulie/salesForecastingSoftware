@@ -114,6 +114,10 @@ public class RemplissageLivraison {
 					}	
 				}
 			}
+			
+			//Si on a livré quelques choses la veille, 
+			//if ()
+			
 		}
 	}
 
@@ -233,22 +237,23 @@ public class RemplissageLivraison {
 		tx.commit();
 		
 		//liaison à produit
-		List<Livraison> listProd = new ArrayList<Livraison>();
 		try{
-			listProd = produit.getLivraison_produit();
+			produit.addLivraison(livr);
 		} catch (Exception e){
+			List<Livraison> listProd = new ArrayList<Livraison>();
+			listProd.add(livr);
 			produit.setLivraison_produit(listProd);
 		}
-		produit.addLivraison(livr);
 		
 		//liaison à profil
-		List<Livraison> listProf = new ArrayList<Livraison>();
 		try{
-			listProf = profil.getLivraison_profil();
+			profil.addLivraison(livr);
 		} catch (Exception e){
+			List<Livraison> listProf = new ArrayList<Livraison>();
+			listProf.add(livr);
 			profil.setLivraison_profil(listProf);
 		}
-		profil.addLivraison(livr);
+		
 		
 	}
 	

@@ -237,6 +237,7 @@ public class VueGlobalNvClient {
     }
 	
 	private void enregistrercliActionPerformed(ActionEvent evt) {
+		labelErreur.setText("");
 		String messageErreur = "";
 		Client c;
 		Profil p;
@@ -248,8 +249,13 @@ public class VueGlobalNvClient {
 		main_.getTransaction().begin();
 		for (NouveauClient listclient : listnvclient){
 			try{
+				//Recuperation code gamme
+				codeGamme = listclient.getSelectGamme().toString();
+				tourneeCombo = listclient.getSelectTournee().toString();
+			
 				//Création d'un profil
 				List<Livraison> livr = new ArrayList<Livraison>();
+				System.out.println("le code gamme est " + codeGamme);
 				p = new Profil(listclient.getTextFieldCC().getText(), rg.recuperationGamme(codeGamme), livr, true);
 				tournee = rt.recuperationTournee(tourneeCombo);
 				p.setProfil_tournee(tournee);
@@ -262,12 +268,13 @@ public class VueGlobalNvClient {
 				
 				//Liaison du profil et de la tournee
 				List<Profil> listP = tournee.getProfil_tournee();
-				if (listP.isEmpty())
+				if (listP == null)
 					tournee.setProfil_tournee(profil);
 				else
 					tournee.addProfil(p);
 					
-					main_.getManager().persist(c);
+				main_.getManager().persist(c);
+					
 			} catch (Exception e) {
 				messageErreur = "Erreur : des informations sont manquantes ou erronées";
 			}

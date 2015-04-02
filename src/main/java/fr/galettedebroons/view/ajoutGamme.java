@@ -171,6 +171,8 @@ public class ajoutGamme extends javax.swing.JFrame {
 		}
 		
 		if (messErreur == "") {
+			setVisible(false);
+			
 			labelErreur.setText("");
 			main_.getTransaction().begin();
 			
