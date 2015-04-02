@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
@@ -164,10 +165,14 @@ public class RecuperationDonnees {
 		
 		//Query query = (Query) manager_.createQuery("select ml.taux_reprise from MargeLivraison ml " +
 		//		"where ml.marge_produit_code_produit = '" +code_prod + "' and ml.marge_profil_code_client = '" +code_client +"'", Double.class);
-		res = manager_.createQuery("select m.taux_reprise from MargeLivraison m " +
+		try{
+			res = manager_.createQuery("select m.taux_reprise from MargeLivraison m " +
 				"WHERE m.marge_produit LIKE :paramcode_prod AND m.marge_profil LIKE :paramcode_client ", Double.class)
-		.setParameter("paramcode_prod", np)
-		.setParameter("paramcode_client", pp).getSingleResult();
+				.setParameter("paramcode_prod", np)
+				.setParameter("paramcode_client", pp).getSingleResult();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		System.out.println("mon res : " +res);
 		

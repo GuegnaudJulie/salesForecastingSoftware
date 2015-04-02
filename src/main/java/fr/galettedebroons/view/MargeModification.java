@@ -152,8 +152,25 @@ public class MargeModification extends javax.swing.JPanel {
 			codeProduit = (String) jComboBox2.getSelectedItem();
 			
 			tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);
-			jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
-			this.repaint();
+			if(tauxreprise == 0.0){
+				double nvTauxReprise = 0.0;
+				try{
+					nvTauxReprise = Integer.parseInt(jTextField1.getText());
+					md.insertNvTxReprise(nvTauxReprise, enseigne_client, codeProduit);
+					System.out.println("j'ai modifier ma marge !!! ");
+					// réaffichage de mon label avec la nouvelle valeur 
+					tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);
+					jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
+					
+				}catch(NumberFormatException e){
+					System.out.println("toto");
+				}
+			}
+			else{
+				jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
+				this.repaint();
+			}
+			
 			
 		}
 	    

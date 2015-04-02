@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import fr.galettedebroons.domain.Livraison;
+import fr.galettedebroons.domain.MargeLivraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.main.Main;
@@ -46,6 +47,20 @@ public class ModificationDonnees {
 	public void updateLivraison(Livraison l, int qtePlus, int qteMoins){
 		l.setQte_livraison(qtePlus);
 		l.setQte_reprise(qteMoins);
+	}
+	
+	public void insertNvTxReprise(double nvTauxReprise, String nomprofil, String nomproduit){
+		tx_.begin();
+		RecuperationDonnees rd = new RecuperationDonnees(main_);
+		Produit np = rd.recuperationProduitComp(nomproduit);
+		System.out.println("mon produit :  " +np);
+		Profil pp = rd.recuperationProfil(nomprofil);
+		System.out.println("mon profil ; " +pp);
+		// double taux_reprise, Profil marge_profil, Produit marge_produit
+		MargeLivraison margeL = new MargeLivraison(nvTauxReprise, pp, np);
+		manager_.persist(margeL);
+		tx_.commit();
+		
 	}
 	
 }
