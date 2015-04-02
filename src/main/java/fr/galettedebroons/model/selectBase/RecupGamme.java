@@ -3,6 +3,7 @@ package fr.galettedebroons.model.selectBase;
 import javax.persistence.EntityManager;
 
 import fr.galettedebroons.domain.Gamme;
+import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.main.Main;
 
 public class RecupGamme {
@@ -40,5 +41,13 @@ public class RecupGamme {
 			present = false;
 		}
 		return present;
+	}
+	
+	public Gamme recuperationGammeProd(Produit prod){
+		Gamme gamme = manager_.createNamedQuery("select p.produit_gamme from Produit p where p LIKE :prod", Gamme.class)
+				.setParameter("prod", prod)
+				.getSingleResult();
+		
+		return gamme;
 	}
 }

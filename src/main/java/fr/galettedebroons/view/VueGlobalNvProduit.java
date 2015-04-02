@@ -176,14 +176,14 @@ public class VueGlobalNvProduit {
 		RecupGamme rg = new RecupGamme(main_);
 		String messageErreur = "";
 		
+		main_.getTransaction().begin();
 		for (NouveauProduit listprod : listnvproduit){
 			try{
 				Gamme gamme = rg.recuperationGamme(listprod.getCombo().getSelectedItem().toString());
 				
-				main_.getTransaction().begin();
 				Produit temp = new Produit(listprod.getSelectCode(), listprod.getSelectNature(), listprod.getSelectNom(), listprod.getSelectPresentation(), gamme, Integer.parseInt(listprod.getSelectQte()));
-				
 				main_.getManager().persist(temp);
+				
 			} catch (Exception e){
 				messageErreur = "Erreur : des informations sont manquantes ou erronées";
 			}
