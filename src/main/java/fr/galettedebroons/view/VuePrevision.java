@@ -221,6 +221,44 @@ public class VuePrevision extends javax.swing.JPanel {
     	// si seulement tournee selectionnee
     	System.out.println("MA TOURNEEEEE : " +nomTournee);
     	
+    	//si un profil est selectionné en particulier
+    	if(!nomProfil.toString().contains("Tous") && data != null){
+    		String profil = "";
+    		String monProfil = "";
+    		String monProduit = "";
+    		int maQuantité = 0;
+    		
+        	profil = (String) jComboBox2.getSelectedItem();
+        	List<Object[]> maliste = rd.recupuniqueProfil(data, profil);
+        	System.out.println("la taille de ma liste" +maliste.size());
+        	
+        	jTable1.getTableHeader().getColumnModel().getColumn(0).setHeaderValue("Profil");
+    		jTable1.repaint();
+    		
+    		jTable1.getTableHeader().repaint();
+    		//jTable1.getModel().setValueAt(monProfil, 0, 0);
+    		
+    		
+    		int indiceTitre = 1;
+    		int colonneProduitQte = 1;
+    		int ligneProduitQte = 0;
+    		for (Object[] p : maliste){
+    			System.out.println("Mon profil " +p[1]);
+    			monProfil = (String) p[1];
+    			System.out.println("Mon produit " +p[2]);
+    			monProduit = (String) p[2];
+    			System.out.println("Ma quantité " +p[0]);
+    			maQuantité = (int) p[0];
+    			
+    			jTable1.getModel().setValueAt(monProfil, 0, 0);
+    			jTable1.getTableHeader().getColumnModel().getColumn(indiceTitre).setHeaderValue(monProduit);
+    			indiceTitre++;
+    			jTable1.getModel().setValueAt(maQuantité, ligneProduitQte, colonneProduitQte);
+    			colonneProduitQte++;
+    		}
+    	}
+    	
+    	// si on veut voir les prévisions pour tous les profil de la tournee
     	if(nomTournee != "" && nomProfil.toString().contains("Tous") && data != null){
     		List<Object[]> maliste = rd.recupPrevTournee(nomTournee, data);
     		String monProfilPrecedent = "";

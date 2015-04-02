@@ -141,13 +141,13 @@ public class RecuperationDonnees {
 		return profil;
 	}
 	
-	public String[] recupJoursLivraison(Profil profil){
+	/*public String[] recupJoursLivraison(Profil profil){
 		String[] joursLivraison = manager_.createQuery("select t.jour_tournee from Tournee t where profil_tournee LIKE :profil", String[].class)
 				.setParameter("profil", profil)
 				.getSingleResult();
 		
 		return joursLivraison;
-	}
+	}*/
 	
 	public Gamme recuperationGammeProduit(String code_produit){
 		Gamme gamme = manager_.createQuery("select p.produit_gamme from Produit p where code_produit LIKE :cp", Gamme.class).setParameter("cp", code_produit).getSingleResult();	
@@ -261,6 +261,21 @@ public class RecuperationDonnees {
 			System.out.println("MA LISTE RECUPDONNEE : " +listeprev.size());
 		}
 		return listeprev;
+	}
+	
+	public List<Object[]> recupuniqueProfil(java.util.Date data, String profil){
+		List<Object[]> listePrevision = null;
+		System.out.println("Mon profil : " +profil);
+		
+		listePrevision = manager_.createQuery("select p.quantite, p.prevision_profil.code_client, "
+					+ "p.prevision_produit.code_produit from Prevision p where p.date LIKE :date "
+					+ "and p.prevision_profil.code_client LIKE :profil"
+					, Object[].class)
+					.setParameter("date", data)
+					.setParameter("profil", profil)
+					.getResultList();
+		
+		return listePrevision;
 	}
 	
 }
