@@ -298,4 +298,28 @@ public class RecuperationDonnees {
 		return listePrevision;
 	}
 	
+	/**
+	 * Recupere marge de livraison en fonction d'un profil et d'un produit
+	 * pour intégrer à l'interface de prévision de vente
+	 * tableau (prévision + marge)
+	 * @return le taux de reprise 
+	 */
+	public double recuperationMargeLivraison(String profil, String produit){
+		double margeLivraison = 0.0;
+		System.out.println("Récupère le profil en fonction du String passé en paramètre");
+		Profil monProfil = recuperationProfil(profil);
+		System.out.println("Récupère le produit en fonction du String passé en paramètre");
+		Produit monProduit = recuperationProduitComp(produit);
+		
+		margeLivraison = manager_.createQuery("select ml.taux_reprise from MargeLivraison "
+				+"where ml.marge_profil LIKE :prof and ml.marge_produit LIKE :prod ", Double.class)
+				.setParameter("prof", monProfil)
+				.setParameter("prod", monProduit)
+				.getSingleResult();
+				
+		
+		return margeLivraison;
+		
+	}
+	
 }
