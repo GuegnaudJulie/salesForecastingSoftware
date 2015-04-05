@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fr.galettedebroons.model;
 
 import fr.galettedebroons.domain.Gamme;
@@ -29,7 +24,7 @@ import javax.persistence.EntityTransaction;
 
 /**
  * @author	Julie Guegnaud
- * @since	31/03/2015
+ * @since	05/04/2015
  */
 
 public class RemplissageLivraison {
@@ -48,9 +43,6 @@ public class RemplissageLivraison {
 	}     
 	
 	public void remplissage(){
-		
-		
-		
 		rd_ = new RecuperationDonnees(main_);
 		md_ = new ModificationDonnees(main_);
 		rl_ = new RecupLivraison(main_);
@@ -394,15 +386,194 @@ public class RemplissageLivraison {
 		}
 	}
 	
+	public void remplissage3(){
+		rd_ = new RecuperationDonnees(main_);
+		md_ = new ModificationDonnees(main_);
+		rl_ = new RecupLivraison(main_);
+		rt_ = new RecupTournee(main_);
+		rprev_ = new RecupPrevision(main_);
+		
+		// Tri sur les donnees de la table temporaire
+		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC", Temporaire.class).getResultList();   
+		
+		for(Temporaire t : temp){
+			//récuperation des informations
+			String bl = t.getBon_livraison();
+			String code_profil = t.getCode_profil();
+			String code_produit = t.getCode_produit();
+			int ql = t.getQuantite_livree();
+			int qr = t.getQuantite_reprise();
+			Date date = t.getDate();
+			
+			//recuperation du profil du client
+			Profil profil = rd_.recupProfil(code_profil);
+			
+			//recuperation du produit de la livraison
+			Produit produit = rd_.recupProduit(code_produit);
+			
+			//recuperation de la gamme du produit
+			Gamme gamme = produit.getProduit_gamme();
+			
+			//recuperation des jours de livraison normaux
+			Tournee tournee = profil.getProfil_tournee();
+			String[] joursTournee = rt_.recuperationJoursTournee(profil);
+			
+			//Jours de la semaine de la livraison actuelle
+			String jours = joursSemaine(date);
+			
+			//On verifie que le jours de la livraison été prévu
+			boolean prevu = false;
+			for(int i = 0; i<joursTournee.length; i++){
+				if (joursTournee[i] == jours)
+					prevu = true;
+			}
+			
+			//On vérifie qu'il n'y a pas de jours fériés dans cette semaine
+			boolean semaineNonFerie = true;
+			GregorianCalendar calendar = new GregorianCalendar();
+			calendar.setTime(date);
+			int semaineLivr = calendar.get(Calendar.WEEK_OF_YEAR);
+			List<Integer> listSemaineFeries = getSemaineFeries(calendar.YEAR);
+			if (listSemaineFeries.contains(semaineLivr))
+				semaineNonFerie = false;
+			
+			
+			if (prevu && semaineNonFerie){
+				List<Livraison> listLivr = null;
+				
+				if (gamme.getCode_gamme().equals("PE")){
+					//On récupère les BL des 2 et 3 derniers jours
+					Date date2j = ajoutJours(date, -2);
+					Date date3j = ajoutJours(date, -3);
+					listLivr = rl_.recupLivraisonPrec(produit, profil, date3j, date2j);
+				}
+				else if (gamme.getCode_gamme().equals("LS")){
+					//On récupère les BL des 4 et 5 derniers jours
+					Date date5j = ajoutJours(date, -5);
+					Date date4j = ajoutJours(date, -4);
+					listLivr = rl_.recupLivraisonPrec(produit, profil, date5j, date4j);
+				}
+			
+				int sommeLivr = 0;
+				Date dateLivrPrec = null;
+				for (Livraison l : listLivr){
+					sommeLivr += l.getQte_livraison();
+					dateLivrPrec = l.getDate_livraison();
+				}
+					
+				if(verifQte(sommeLivr, qr)){
+					Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
+					
+					//On vérifie qu'il n'est pas déjà présent
+					if (livr == null){
+						ajoutLivraison(bl, profil, produit, date, ql, qr);
+						ajoutPrevision((sommeLivr-qr), profil, produit, dateLivrPrec);
+					}
+					else{
+						majLivraison(livr, ql, qr);
+						Prevision prev;
+						try{
+							prev = rprev_.prevision(profil, produit, dateLivrPrec) ;
+							majPrevision(prev, sommeLivr-qr);
+						} catch (Exception e){}
+					}
+				}
+			}
+			// si la livraison n'est pas prévu, on l'ajoute à la livraison précédente
+			else if (!prevu && semaineNonFerie){
+				//Recuperation de la livraison précédente
+				Livraison lprec = precedenteLivraison(date, produit, profil);
+				if (lprec != null){
+					majLivraison(lprec, lprec.getQte_livraison() + ql, 0);
+				}
+				else{
+					ajoutLivraison(bl, profil, produit, date, ql, 0);
+				}
+			}
+		} // fin du for
+	}
+	
 	/**
 	 * Fonction de decalage de la date
 	 * 
 	 * @param d : une date
 	 * @param nbrjours : le nombre de jours à rajouter à une date
 	 * @return la date precedente decaler au nombre de jours voulu
-	 */
+	*/
 	public Date ajoutJours(Date d, int nbrjours){
 		return new Date(d.getTime() + (nbrjours * (24*3600*1000)));
+	}
+	
+	/**
+	 * 
+	 * @param annee
+	 * @return	la liste des jours fériés
+	 */
+	public List<Integer> getSemaineFeries(int annee) {
+		List<Integer> semainesFeries = new ArrayList<Integer>();
+
+		// Jour de l'an
+		GregorianCalendar jourAn = new GregorianCalendar(annee, 0, 1);
+		int semaineJourAn = jourAn.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semaineJourAn);
+
+		// Lundi de pacques
+		GregorianCalendar pacques = calculLundiPacques(annee);
+		int semainePacques = pacques.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semainePacques);
+
+		// Fete du travail
+		GregorianCalendar premierMai = new GregorianCalendar(annee, 4, 1);
+		int semainePremierMai = premierMai.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semainePremierMai);
+
+		// 8 mai
+		GregorianCalendar huitMai = new GregorianCalendar(annee, 4, 8);
+		int semaineHuitMai = huitMai.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semaineHuitMai);
+
+		// Ascension (= pâques + 38 jours)
+		GregorianCalendar ascension = new GregorianCalendar(annee,
+				pacques.get(GregorianCalendar.MONTH),
+				pacques.get(GregorianCalendar.DAY_OF_MONTH));
+		ascension.add(GregorianCalendar.DAY_OF_MONTH, 38);
+		int semaineAscension = ascension.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semaineAscension);
+
+		// Pentecôte (= pâques + 49 jours)
+		GregorianCalendar pentecote = new GregorianCalendar(annee,
+				pacques.get(GregorianCalendar.MONTH),
+				pacques.get(GregorianCalendar.DAY_OF_MONTH));
+		pentecote.add(GregorianCalendar.DAY_OF_MONTH, 49);
+		int semainePentecote = pentecote.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semainePentecote);
+
+		// Fête Nationale
+		GregorianCalendar quatorzeJuillet = new GregorianCalendar(annee, 6, 14);
+		int semaineQuatorzeJuillet = quatorzeJuillet.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semaineQuatorzeJuillet);
+
+		// Assomption
+		GregorianCalendar assomption = new GregorianCalendar(annee, 7, 15);
+		int semaineAssomption = assomption.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semaineAssomption);
+
+		// La Toussaint
+		GregorianCalendar toussaint = new GregorianCalendar(annee, 10, 1);
+		int semaineToussaint = toussaint.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semaineToussaint);
+
+		// L'Armistice
+		GregorianCalendar armistice = new GregorianCalendar(annee, 10, 11);
+		int semaineArmistice = armistice.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semaineArmistice);
+
+		// Noël
+		GregorianCalendar noel = new GregorianCalendar(annee, 11, 25);
+		int semaineNoel = noel.get(Calendar.WEEK_OF_YEAR);
+		semainesFeries.add(semaineNoel);
+
+		return semainesFeries;
 	}
 	
 	/**
