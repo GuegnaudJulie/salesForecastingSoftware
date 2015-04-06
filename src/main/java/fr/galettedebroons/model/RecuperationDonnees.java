@@ -1,17 +1,13 @@
 package fr.galettedebroons.model;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 
 import fr.galettedebroons.domain.Gamme;
-import fr.galettedebroons.domain.Livraison;
-import fr.galettedebroons.domain.MargeLivraison;
 import fr.galettedebroons.domain.Prevision;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
@@ -142,14 +138,6 @@ public class RecuperationDonnees {
 		return profil;
 	}
 	
-	/*public String[] recupJoursLivraison(Profil profil){
-		String[] joursLivraison = manager_.createQuery("select t.jour_tournee from Tournee t where profil_tournee LIKE :profil", String[].class)
-				.setParameter("profil", profil)
-				.getSingleResult();
-		
-		return joursLivraison;
-	}*/
-	
 	public Gamme recuperationGammeProduit(String code_produit){
 		Gamme gamme = manager_.createQuery("select p.produit_gamme from Produit p where code_produit LIKE :cp", Gamme.class).setParameter("cp", code_produit).getSingleResult();	
 		return gamme;
@@ -194,7 +182,6 @@ public class RecuperationDonnees {
 			//System.out.println("coucouuuu " +it.next());
 			
 			Profil p = (Profil) it.next();
-			System.out.println("mon profil : " +p.getCode_client() + " " +p.getGamme_profil());
 			tableauProfil[i] = p.getCode_client();
 			i++;
 			

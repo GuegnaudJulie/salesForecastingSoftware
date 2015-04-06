@@ -20,9 +20,8 @@ public class ajoutGamme extends javax.swing.JFrame {
     /**
      * Creates new form AjoutGamme
      */
-    public ajoutGamme(Main main, NouveauProduit np, NouveauClient nc) {
+    public ajoutGamme(Main main, NouveauProduit np) {
     	this.np_ = np;
-    	this.nc_ = nc;
     	this.main_ = main;
     	this.rg_ = new RecupGamme(main);
         initComponents();
@@ -184,10 +183,7 @@ public class ajoutGamme extends javax.swing.JFrame {
 			main_.getManager().persist(nvGamme);
 			main_.getTransaction().commit();
 			
-			if (np_ != null)
-				np_.methode();
-			else if (nc_ != null)
-				nc_.fermetureGamme();
+			np_.methode();
 		}
 		else{
 			labelErreur.setText("Erreur : " + messErreur);
@@ -203,7 +199,6 @@ public class ajoutGamme extends javax.swing.JFrame {
     private RecupGamme rg_;
     private Main main_;
 	private NouveauProduit np_;
-	private NouveauClient nc_;
     // Variables declaration - do not modify                     
     private javax.swing.JButton boutonAnnuler;
     private javax.swing.JButton boutonEnregistrer;

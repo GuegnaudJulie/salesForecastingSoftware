@@ -76,7 +76,6 @@ public class VueGlobalNvClient {
 	JPanel panelGlobal;
 	JScrollPane scrollPane;
 	JComboBox[] comboTournee;
-	JComboBox[] comboGamme;
 	JLabel labelErreur;
 	List<NouveauClient> listnvclient;
 	List<Object[]> clients;
@@ -137,7 +136,6 @@ public class VueGlobalNvClient {
 		
 		// récupération de la liste de gamme
     	String[] gamme = rd_.recuperationGamme();
-    	comboGamme = new JComboBox[nbNewClient];
     	comboTournee = new JComboBox[nbNewClient];
     	
     	int indice = 0;
@@ -151,14 +149,11 @@ public class VueGlobalNvClient {
 			for(Object[] cli : clients){
 				if (!rcp_.recuperationProfil(cli[1].toString()) && !listClients.contains(cli[1].toString()) ){
 					listClients.add(cli[1].toString());
-					
-					JComboBox jb = new JComboBox(gamme);
-		    		comboGamme[indice] = jb;
 		    		
 			    	JComboBox jt = new JComboBox(tournee);
 			    	comboTournee[indice] = jt;
 		    		
-		    		NouveauClient np = new NouveauClient(main_, this, cli[1].toString(),cli[0].toString(), jt, jb);
+		    		NouveauClient np = new NouveauClient(main_, this, cli[1].toString(),cli[0].toString(), jt);
 		    		
 		    		gbc.gridx = 0;
 		    		gbc.gridy = indice;
@@ -175,10 +170,9 @@ public class VueGlobalNvClient {
 	    	}
     	}
     	else{
-			JComboBox jb = new JComboBox(gamme);
 			JComboBox jt = new JComboBox(tournee);
 			panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
-			NouveauClient np = new NouveauClient(main_, this, null, null, jt, jb);
+			NouveauClient np = new NouveauClient(main_, this, null, null, jt);
     		panelGeneral.add(np);
     		listnvclient.add(np);
 		}
@@ -222,21 +216,6 @@ public class VueGlobalNvClient {
 			indice ++;
 		}
     }
-    
-    public void listGamme(){
-    	//On crée des nouvelles combobox que l'on rajoute à chaque client en leur précisant l'objet qui a déjà été selectionné
-    	String[] gamme = rd_.recuperationGamme();
-    	
-    	int indice = 0;
-    	for (NouveauClient nc : listnvclient){
-    		JComboBox jg = new JComboBox(gamme);
-    		Object selection = nc.getSelectGamme();
-    		
-    		nc.majComboGamme(jg, selection);
-    		
-    		indice ++;
-    	}
-    }
 	
 	private void enregistrercliActionPerformed(ActionEvent evt) {
 		labelErreur.setText("");
@@ -244,7 +223,6 @@ public class VueGlobalNvClient {
 		Client c;
 		Profil p;
 		Tournee tournee;
-		RecupGamme rg = new RecupGamme(main_);
 		RecupTournee rt = new RecupTournee(main_);
 		
 		int indice = 0;
@@ -252,14 +230,13 @@ public class VueGlobalNvClient {
 		for (NouveauClient listclient : listnvclient){
 			try{
 				//Recuperation code gamme
-				codeGamme = listclient.getSelectGamme().toString();
 				tourneeCombo = listclient.getSelectTournee().toString();
 			
 				//Création d'un profil
 				List<Livraison> livr = new ArrayList<Livraison>();
 				List<Prevision> prev = new ArrayList<Prevision>();
 				List<QuantiteReelle> qr = new ArrayList<QuantiteReelle>();
-				p = new Profil(listclient.getTextFieldCC().getText(), rg.recuperationGamme(codeGamme), livr, prev, qr, true);
+				p = new Profil(listclient.getTextFieldCC().getText(), livr, prev, qr, true);
 				tournee = rt.recuperationTournee(tourneeCombo);
 				p.setProfil_tournee(tournee);
 				

@@ -13,7 +13,6 @@ public class Profil {
 	
 	private String code_client;
 	private Client client_profil;
-	private Gamme gamme_profil;
 	private List<Livraison> livraison_profil;
 	private Boolean actif;
 	private Tournee profil_tournee;
@@ -23,15 +22,13 @@ public class Profil {
 	
 	public Profil(){}
 	
-	public Profil(Gamme code_gamme, List<Livraison> livraison, Boolean actif) {
-		this.gamme_profil = code_gamme;
+	public Profil(List<Livraison> livraison, Boolean actif) {
 		this.livraison_profil = livraison;
 		this.actif = actif;
 	}
 	
-	public Profil(String code_client, Gamme code_gamme, List<Livraison> livraison,List<Prevision> prev, List<QuantiteReelle> reel_profil, Boolean actif) {
+	public Profil(String code_client, List<Livraison> livraison,List<Prevision> prev, List<QuantiteReelle> reel_profil, Boolean actif) {
 		this.code_client = code_client;
-		this.gamme_profil = code_gamme;
 		this.livraison_profil = livraison;
 		this.prevision_profil = prev;
 		this.reel_profil = reel_profil;
@@ -53,15 +50,6 @@ public class Profil {
 
 	public void setActif(Boolean actif) {
 		this.actif = actif;
-	}
-	
-	@ManyToOne
-	public Gamme getGamme_profil() {
-		return gamme_profil;
-	}
-	
-	public void setGamme_profil(Gamme gamme_profil) {
-		this.gamme_profil = gamme_profil;
 	}
 	
 	@OneToMany(mappedBy="livraison_profil", cascade=CascadeType.PERSIST)
