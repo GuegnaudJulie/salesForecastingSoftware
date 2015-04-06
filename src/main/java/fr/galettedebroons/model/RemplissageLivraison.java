@@ -5,12 +5,14 @@ import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Prevision;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
+import fr.galettedebroons.domain.QuantiteReelle;
 import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.selectBase.RecupGamme;
 import fr.galettedebroons.model.selectBase.RecupLivraison;
 import fr.galettedebroons.model.selectBase.RecupPrevision;
+import fr.galettedebroons.model.selectBase.RecupQuantiteReelle;
 import fr.galettedebroons.model.selectBase.RecupTournee;
 
 import java.sql.Date;
@@ -34,19 +36,20 @@ public class RemplissageLivraison {
 	private RecuperationDonnees rd_;
 	private RecupLivraison rl_;
 	private RecupTournee rt_;
-	private RecupPrevision rprev_;
 	private ModificationDonnees md_;
+	private RecupQuantiteReelle rqr_;
 	
 	public RemplissageLivraison(Main main){
 		manager_ = main.getManager();
 		main_ = main;
-	}     
+	}
 	
 	public void remplissage(){
 		rd_ = new RecuperationDonnees(main_);
 		md_ = new ModificationDonnees(main_);
 		rl_ = new RecupLivraison(main_);
 		rt_ = new RecupTournee(main_);
+		rqr_ = new RecupQuantiteReelle(main_);
 		
 		// Tri sur les donnees de la table temporaire
 		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC", Temporaire.class).getResultList();   
@@ -66,433 +69,118 @@ public class RemplissageLivraison {
 			//recuperation du produit de la livraison
 			Produit produit = rd_.recupProduit(code_produit);
 			
-			//recuperation des jours de livraison normaux
-			String[] joursTournee = rt_.recuperationJoursTournee(profil);
-			
-			//Jours de la semaine de la livraison actuelle
-			String jours = joursSemaine(date);
-			
-			//On verifie que le jours de la livraison été prévu
-			boolean prevu = false;
-			for(int i = 0; i<joursTournee.length; i++){
-				if (joursTournee[i] == jours)
-					prevu = true;
+			//Vérification de l'existence de la livraison
+			Livraison livr;
+			try {
+				livr = rl_.recuperationLivraison(bl, date, code_produit);
+			} catch (Exception e){
+				livr = null;
 			}
 			
-			//Recuperation duree entre un dépot et une reprise
-			RecupGamme rg = new RecupGamme(main_);
-			int nbJoursValidite = rg.recuperationValiditeGamme(produit.getProduit_gamme());
+			boolean modif = true;
+			if (livr == null)
+				ajoutLivraison(bl, profil, produit, date, ql, qr);
+			else if (livr != null && (livr.getQte_livraison() != ql || livr.getQte_reprise() != qr))
+				majLivraison(livr, ql, qr);
+			else
+				modif = false;
 			
-			//Recuperation de la quatite precedement livree
-			int precLivr = sommeQteLivrPrecedente(date, nbJoursValidite, produit, profil);
-			
-			//On vérifie que la quantité reprise est correct par rapport à la livraison
-			if (verifQte(precLivr, qr)){
-				if (prevu){
-					//On verifie que la donnee n est pas deja presente dans la base
-					Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
-					
-					if (livr == null){
-						ajoutLivraison(bl, profil, produit, date, ql, qr);
-					}
-					else{
-						majLivraison(livr, ql, qr);
-					}
-				}
-				else{
-					//Recuperation de la livraison précédente
-					Livraison lprec = precedenteLivraison(date, produit, profil);
-					if (lprec != null){
-						majLivraison(lprec, ql, qr);
-					}
-					else{
-						ajoutLivraison(bl, profil, produit, date, ql, qr);
-					}	
-				}
-			}
-		}
-	}
-
-	public void remplissage2(){
-		rd_ = new RecuperationDonnees(main_);
-		md_ = new ModificationDonnees(main_);
-		rl_ = new RecupLivraison(main_);
-		rt_ = new RecupTournee(main_);
-		rprev_ = new RecupPrevision(main_);
-		
-		// Tri sur les donnees de la table temporaire
-		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC", Temporaire.class).getResultList();   
-		
-		for(Temporaire t : temp){
-			
-			//récuperation des informations
-			String bl = t.getBon_livraison();
-			String code_profil = t.getCode_profil();
-			String code_produit = t.getCode_produit();
-			int ql = t.getQuantite_livree();
-			int qr = t.getQuantite_reprise();
-			Date date = t.getDate();
-			
-			//recuperation du profil du client
-			Profil profil = rd_.recupProfil(code_profil);
-			
-			//recuperation du produit de la livraison
-			Produit produit = rd_.recupProduit(code_produit);
-			
-			//recuperation de la gamme du produit
-			Gamme gamme = produit.getProduit_gamme();
-			
-			//recuperation des jours de livraison normaux
-			Tournee tournee = profil.getProfil_tournee();
-			String[] joursTournee = rt_.recuperationJoursTournee(profil);
-			
-			//Jours de la semaine de la livraison actuelle
-			String jours = joursSemaine(date);
-			
-			//On verifie que le jours de la livraison été prévu
-			boolean prevu = false;
-			for(int i = 0; i<joursTournee.length; i++){
-				if (joursTournee[i] == jours)
-					prevu = true;
-			}
-			
-			if (gamme.getCode_gamme().equals("PE")){
-				if(prevu){
-					Date dateLivrPrec = ajoutJours(date, -2);
-					List<Livraison> listPrecLivr = rl_.recupLivraisonPrec(produit, profil, date, dateLivrPrec);
-					int qteLivPrec = 0;
-					for (Livraison l : listPrecLivr){
-						qteLivPrec += l.getQte_livraison();
-					}
-					
-					if(verifQte(qteLivPrec, qr)){
-						Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
-						
-						if (livr == null){
-							ajoutLivraison(bl, profil, produit, date, ql, qr);
-							ajoutPrevision((qteLivPrec-qr), profil, produit, dateLivrPrec);
-						}
-						else{
-							majLivraison(livr, ql, qr);
-							Prevision prev;
-							try{
-								prev = rprev_.prevision(profil, produit, dateLivrPrec) ;
-								majPrevision(prev, qteLivPrec-qr);
-							} catch (Exception e){}
-								
-						}
-					}
-				}
-				else{
-					//Recuperation de la livraison précédente
-					Livraison lprec = precedenteLivraison(date, produit, profil);
-					if (lprec != null){
-						majLivraison(lprec, lprec.getQte_livraison() + ql, 0);
-					}
-					else{
-						ajoutLivraison(bl, profil, produit, date, ql, 0);
-					}
-				}
-			}
-			
-			else if (gamme.getCode_gamme().equals("LS")){
-				//Recuperation des jours de la tournée
-				if (tournee.isLundi() && tournee.isMercredi() && tournee.isVendredi()){
-					//On vérifie qu'elle été prévue
-					if (prevu){
-						if (jours.equals("lundi")){
-							//On récupère les invendu du vendredi prec (=>-3) et du mercredi (=>-5)
-							Date dateVendredi = ajoutJours(date, -3);
-							Date dateMercredi = ajoutJours(date, -5);
-							Livraison livrVendredi = rl_.recupLivraison(produit, profil, dateVendredi);
-							Livraison livrMercredi = rl_.recupLivraison(produit, profil, dateMercredi);
-							
-							//On fait la somme des qte livré
-							int sommeLivr = 0;
-							if (livrVendredi != null && livrMercredi != null)
-								sommeLivr = livrVendredi.getQte_livraison() + livrMercredi.getQte_livraison();
-							else if (livrVendredi != null)
-								sommeLivr = livrVendredi.getQte_livraison();
-							else if	(livrMercredi != null)
-								sommeLivr = livrMercredi.getQte_livraison();
-								
-							//On vérifie qu'il n'y a pas d'erreur sur les quantites
-							if(verifQte(sommeLivr, qr)){
-								int qteRDivise = (int) qr/2;
-								
-								Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
-								
-								if (livr == null){
-									ajoutLivraison(bl, profil, produit, date, ql, qr);
-									
-									if (livrVendredi != null)
-										ajoutPrevision((sommeLivr-qteRDivise), profil, produit, livrVendredi.getDate_livraison());
-									if (livrMercredi != null)
-										ajoutPrevision((sommeLivr-qteRDivise), profil, produit, livrMercredi.getDate_livraison());
-								}
-								else{
-									majLivraison(livr, ql, qr);
-									
-									Prevision prevVendredi;
-									try{
-										prevVendredi = rprev_.prevision(profil, produit, dateVendredi) ;
-										majPrevision(prevVendredi, sommeLivr-qteRDivise);
-									} catch (Exception e){}
-									
-									Prevision prevMercredi;
-									try{
-										prevMercredi = rprev_.prevision(profil, produit, dateMercredi) ;
-										majPrevision(prevMercredi, sommeLivr-qteRDivise);
-									} catch (Exception e){}
-									
-								}
-							}
-						}
-						else if (jours.equals("mercredi")){
-							//On récupère les invendu du vendredi prec => -5j
-							Date dateVendredi = ajoutJours(date, -5);
-							Livraison livrVendredi = rl_.recupLivraison(produit, profil, dateVendredi);
-							
-							int qteLivr = 0;
-							if (livrVendredi != null)
-								qteLivr = livrVendredi.getQte_livraison();
-							
-							//On vérifie qu'il n'y a pas d'erreur sur les quantites
-							if(verifQte(qteLivr, qr)){
-								Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
-								
-								if (livr == null){
-									ajoutLivraison(bl, profil, produit, date, ql, qr);
-									if(livrVendredi != null)
-										ajoutPrevision((qteLivr-qr), profil, produit, livrVendredi.getDate_livraison());
-								}
-								else{
-									majLivraison(livr, ql, qr);
-									
-									Prevision prevVendredi;
-									try{
-										prevVendredi = rprev_.prevision(profil, produit, dateVendredi) ;
-										majPrevision(prevVendredi, qteLivr-qr);
-									} catch (Exception e){}
-								}
-							}
-						}
-						else if (jours.equals("vendredi")){
-							//On récupère les invendu du lundi prec => -4j
-							Date dateLundi = ajoutJours(date, -4);
-							Livraison livrLundi = rl_.recupLivraison(produit, profil, dateLundi);
-							
-							int qteLivr = 0;
-							if (livrLundi != null)
-								qteLivr = livrLundi.getQte_livraison();
-								
-							//On vérifie qu'il n'y a pas d'erreur sur les quantites
-							if(verifQte(qteLivr, qr)){
-								//Si le bl n'existe pas déjà, on le créer
-								Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
-								
-								if (livr != null){
-									ajoutLivraison(bl, profil, produit, date, ql, qr);
-									if (livrLundi != null)
-										ajoutPrevision((qteLivr-qr), profil, produit, livrLundi.getDate_livraison());
-								}
-								else{
-									majLivraison(livr, ql, qr);
-									
-									Prevision prevLundi;
-									try{
-										prevLundi = rprev_.prevision(profil, produit, dateLundi) ;
-										majPrevision(prevLundi, qteLivr-qr);
-									} catch (Exception e){}
-								}
-							}
-						}
-					}
-					else{
-						//si livraison pas prévu, on rajoute à la précédente livraison
-						Livraison lprec = precedenteLivraison(date, produit, profil);
-						if (lprec != null){
-							majLivraison(lprec, lprec.getQte_livraison() + ql, 0);
-						}
-						else{
-							ajoutLivraison(bl, profil, produit, date, ql, 0);
-						}
-					}
-				}
-				else if (tournee.isMardi() && tournee.isVendredi()){
-					//On vérifie qu'elle été prévue
-					if (prevu){
-						if (jours.equals("mardi")){
-							//On récupère les invendu du Mardi prec (=>-7) et du vendredi (=>-4)
-							Date dateMardiPrec = ajoutJours(date, -7);
-							Date dateVendredi = ajoutJours(date, -4);
-							Livraison livrMardiPrec = rl_.recupLivraison(produit, profil, dateMardiPrec);
-							Livraison livrVendredi = rl_.recupLivraison(produit, profil, dateVendredi);
-							
-							//On fait la somme des qte livré
-							int sommeLivr = 0;
-							if (livrVendredi != null && livrMardiPrec != null)
-								sommeLivr = livrVendredi.getQte_livraison() + livrMardiPrec.getQte_livraison();
-							else if (livrVendredi != null)
-								sommeLivr = livrVendredi.getQte_livraison();
-							else if	(livrMardiPrec != null)
-								sommeLivr = livrMardiPrec.getQte_livraison();
-							
-							//On vérifie qu'il n'y a pas d'erreur sur les quantites
-							if(verifQte(sommeLivr, qr)){
-								int qteRDivise = (int) qr/2;
-								
-								Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
-								
-								if (livr == null){
-									ajoutLivraison(bl, profil, produit, date, ql, qr);
-
-									if (livrMardiPrec != null)
-										ajoutPrevision((sommeLivr-qteRDivise), profil, produit, livrMardiPrec.getDate_livraison());
-									if (livrVendredi != null)
-										ajoutPrevision((sommeLivr-qteRDivise), profil, produit, livrVendredi.getDate_livraison());
-								}
-								else{
-									majLivraison(livr, ql, qr);
-									
-									Prevision prevVendredi;
-									try{
-										prevVendredi = rprev_.prevision(profil, produit, dateVendredi) ;
-										majPrevision(prevVendredi, sommeLivr-qteRDivise);
-									} catch (Exception e){}
-									
-									Prevision prevMardi;
-									try{
-										prevMardi = rprev_.prevision(profil, produit, dateMardiPrec) ;
-										majPrevision(prevMardi, sommeLivr-qteRDivise);
-									} catch (Exception e){}
-								}
-							}
-						}
-					}
-					else{
-						//si livraison pas prévu, on rajoute à la précédente livraison
-						Livraison lprec = precedenteLivraison(date, produit, profil);
-						if (lprec != null){
-							majLivraison(lprec, lprec.getQte_livraison() + ql, 0);
-						}
-						else{
-							ajoutLivraison(bl, profil, produit, date, ql, 0);
-						}
-					}
-				}
-			}
-			
-		}
-	}
-	
-	public void remplissage3(){
-		rd_ = new RecuperationDonnees(main_);
-		md_ = new ModificationDonnees(main_);
-		rl_ = new RecupLivraison(main_);
-		rt_ = new RecupTournee(main_);
-		rprev_ = new RecupPrevision(main_);
-		
-		// Tri sur les donnees de la table temporaire
-		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC", Temporaire.class).getResultList();   
-		
-		for(Temporaire t : temp){
-			//récuperation des informations
-			String bl = t.getBon_livraison();
-			String code_profil = t.getCode_profil();
-			String code_produit = t.getCode_produit();
-			int ql = t.getQuantite_livree();
-			int qr = t.getQuantite_reprise();
-			Date date = t.getDate();
-			
-			//recuperation du profil du client
-			Profil profil = rd_.recupProfil(code_profil);
-			
-			//recuperation du produit de la livraison
-			Produit produit = rd_.recupProduit(code_produit);
-			
-			//recuperation de la gamme du produit
-			Gamme gamme = produit.getProduit_gamme();
-			
-			//recuperation des jours de livraison normaux
-			Tournee tournee = profil.getProfil_tournee();
-			String[] joursTournee = rt_.recuperationJoursTournee(profil);
-			
-			//Jours de la semaine de la livraison actuelle
-			String jours = joursSemaine(date);
-			
-			//On verifie que le jours de la livraison été prévu
-			boolean prevu = false;
-			for(int i = 0; i<joursTournee.length; i++){
-				if (joursTournee[i] == jours)
-					prevu = true;
-			}
-			
-			//On vérifie qu'il n'y a pas de jours fériés dans cette semaine
-			boolean semaineNonFerie = true;
-			GregorianCalendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			int semaineLivr = calendar.get(Calendar.WEEK_OF_YEAR);
-			List<Integer> listSemaineFeries = getSemaineFeries(calendar.YEAR);
-			if (listSemaineFeries.contains(semaineLivr))
-				semaineNonFerie = false;
-			
-			
-			if (prevu && semaineNonFerie){
-				List<Livraison> listLivr = null;
+			if (modif){
+				//recuperation de la gamme du produit
+				Gamme gamme = produit.getProduit_gamme();
 				
+				//recuperation des jours de livraison normaux
+				String[] joursTournee = rt_.recuperationJoursTournee(profil);
+				
+				//Jours de la semaine de la livraison actuelle
+				String jours = joursSemaine(date);
+				
+				//On verifie que le jours de la livraison été prévu
+				boolean prevu = false;
+				for(int i = 0; i<joursTournee.length; i++){
+					if (joursTournee[i] == jours)
+						prevu = true;
+				}
+				
+				//On vérifie qu'il n'y a pas de jours fériés dans cette semaine
+				boolean semaineNonFerie = true;
+				GregorianCalendar calendar = new GregorianCalendar();
+				calendar.setTime(date);
+				int semaineLivr = calendar.get(Calendar.WEEK_OF_YEAR);
+				List<Integer> listSemaineFeries = getSemaineFeries(calendar.YEAR);
+				if (listSemaineFeries.contains(semaineLivr))
+					semaineNonFerie = false;
+				
+				Date date1 = null;
+				Date date2 = null;
 				if (gamme.getCode_gamme().equals("PE")){
-					//On récupère les BL des 2 et 3 derniers jours
-					Date date2j = ajoutJours(date, -2);
-					Date date3j = ajoutJours(date, -3);
-					listLivr = rl_.recupLivraisonPrec(produit, profil, date3j, date2j);
+					date1 = ajoutJours(date, -3);
+					date2 = ajoutJours(date, -2);
 				}
 				else if (gamme.getCode_gamme().equals("LS")){
-					//On récupère les BL des 4 et 5 derniers jours
-					Date date5j = ajoutJours(date, -5);
-					Date date4j = ajoutJours(date, -4);
-					listLivr = rl_.recupLivraisonPrec(produit, profil, date5j, date4j);
+					date1 = ajoutJours(date, -5);
+					date2 = ajoutJours(date, -4);
 				}
-			
-				int sommeLivr = 0;
-				Date dateLivrPrec = null;
-				for (Livraison l : listLivr){
-					sommeLivr += l.getQte_livraison();
-					dateLivrPrec = l.getDate_livraison();
+				QuantiteReelle qrPrec;
+				try {
+					qrPrec = rqr_.recuperationQR(profil, produit, date1, date2);
+				} catch (Exception e) {
+					qrPrec = null;
 				}
+				
+				Livraison livrPrec;
+				int qteLivr = 0;
+				boolean rupture = false;
+				try{
+					livrPrec = rl_.recupLivraisonPrec(produit, profil, date1, date2);
+					qteLivr = livrPrec.getQte_livraison();
+					if ((qteLivr - qr) == 0)
+						rupture = true;
 					
-				if(verifQte(sommeLivr, qr)){
-					Livraison livr = rl_.recuperationLivraison(bl, date, code_produit);
-					
-					//On vérifie qu'il n'est pas déjà présent
-					if (livr == null){
-						ajoutLivraison(bl, profil, produit, date, ql, qr);
-						ajoutPrevision((sommeLivr-qr), profil, produit, dateLivrPrec);
-					}
-					else{
-						majLivraison(livr, ql, qr);
-						Prevision prev;
-						try{
-							prev = rprev_.prevision(profil, produit, dateLivrPrec) ;
-							majPrevision(prev, sommeLivr-qr);
-						} catch (Exception e){}
+				} catch (Exception e){
+					livrPrec = null;
+				}
+				
+				if (prevu && semaineNonFerie){
+					Date dateLivrPrec = livrPrec.getDate_livraison();
+						
+					if(verifQte(qteLivr, qr)){
+						//On ajoute dans la table quantiteReelle
+						if (qrPrec == null)
+							ajoutQuantiteReelle((qteLivr-qr), profil, produit, dateLivrPrec, rupture);
+						else
+							majQuantiteReelles(qrPrec, (qteLivr-qr), rupture);
 					}
 				}
-			}
-			// si la livraison n'est pas prévu, on l'ajoute à la livraison précédente
-			else if (!prevu && semaineNonFerie){
-				//Recuperation de la livraison précédente
-				Livraison lprec = precedenteLivraison(date, produit, profil);
-				if (lprec != null){
-					majLivraison(lprec, lprec.getQte_livraison() + ql, 0);
-				}
-				else{
-					ajoutLivraison(bl, profil, produit, date, ql, 0);
-				}
-			}
-		} // fin du for
+				// si la livraison n'est pas prévu, on l'ajoute à la livraison précédente
+				else if (!prevu && semaineNonFerie){
+					//Recuperation de la livraison précédente
+					if (qrPrec != null)
+						majQuantiteReelles(qrPrec, qrPrec.getQuantite(), rupture);
+					else
+						ajoutQuantiteReelle(ql, profil, produit, date, rupture);
+				}	
+			} // fin if (crea || modif)
+		} // fin for
 	}
 	
+	private void majQuantiteReelles(QuantiteReelle qrPrec, int i, boolean rupture) {
+		qrPrec.setQuantite(i);
+		qrPrec.setRupture_stock(rupture);
+	}
+
+	private void ajoutQuantiteReelle(int i, Profil profil, Produit produit, Date dateLivrPrec, boolean rupture) {
+		main_.getTransaction().begin();
+		
+		QuantiteReelle qr = new QuantiteReelle(i, profil, produit, dateLivrPrec, rupture);
+		main_.getManager().persist(qr);
+		
+		profil.addReel(qr);
+		produit.addReel(qr);
+		
+		main_.getTransaction().commit();
+	}
+
 	/**
 	 * Fonction de decalage de la date
 	 * 
@@ -507,7 +195,7 @@ public class RemplissageLivraison {
 	/**
 	 * 
 	 * @param annee
-	 * @return	la liste des jours fériés
+	 * @return	la liste des semaines avec un jour férié
 	 */
 	public List<Integer> getSemaineFeries(int annee) {
 		List<Integer> semainesFeries = new ArrayList<Integer>();
@@ -574,67 +262,6 @@ public class RemplissageLivraison {
 		semainesFeries.add(semaineNoel);
 
 		return semainesFeries;
-	}
-	
-	/**
-	 * 
-	 * @param annee
-	 * @return	la liste des jours fériés
-	 */
-	public List<Date> getJourFeries(int annee) {
-		List<Date> datesFeries = new ArrayList<Date>();
-
-		// Jour de l'an
-		GregorianCalendar jourAn = new GregorianCalendar(annee, 0, 1);
-		datesFeries.add(new Date(jourAn.getTimeInMillis()));
-
-		// Lundi de pacques
-		GregorianCalendar pacques = calculLundiPacques(annee);
-		datesFeries.add(new Date(pacques.getTimeInMillis()));
-
-		// Fete du travail
-		GregorianCalendar premierMai = new GregorianCalendar(annee, 4, 1);
-		datesFeries.add(new Date(premierMai.getTimeInMillis()));
-
-		// 8 mai
-		GregorianCalendar huitMai = new GregorianCalendar(annee, 4, 8);
-		datesFeries.add(new Date(huitMai.getTimeInMillis()));
-
-		// Ascension (= pâques + 38 jours)
-		GregorianCalendar ascension = new GregorianCalendar(annee,
-				pacques.get(GregorianCalendar.MONTH),
-				pacques.get(GregorianCalendar.DAY_OF_MONTH));
-		ascension.add(GregorianCalendar.DAY_OF_MONTH, 38);
-		datesFeries.add(new Date(ascension.getTimeInMillis()));
-
-		// Pentecôte (= pâques + 49 jours)
-		GregorianCalendar pentecote = new GregorianCalendar(annee,
-				pacques.get(GregorianCalendar.MONTH),
-				pacques.get(GregorianCalendar.DAY_OF_MONTH));
-		pentecote.add(GregorianCalendar.DAY_OF_MONTH, 49);
-		datesFeries.add(new Date(pentecote.getTimeInMillis()));
-
-		// Fête Nationale
-		GregorianCalendar quatorzeJuillet = new GregorianCalendar(annee, 6, 14);
-		datesFeries.add(new Date(quatorzeJuillet.getTimeInMillis()));
-
-		// Assomption
-		GregorianCalendar assomption = new GregorianCalendar(annee, 7, 15);
-		datesFeries.add(new Date(assomption.getTimeInMillis()));
-
-		// La Toussaint
-		GregorianCalendar toussaint = new GregorianCalendar(annee, 10, 1);
-		datesFeries.add(new Date(toussaint.getTimeInMillis()));
-
-		// L'Armistice
-		GregorianCalendar armistice = new GregorianCalendar(annee, 10, 11);
-		datesFeries.add(new Date(armistice.getTimeInMillis()));
-
-		// Noël
-		GregorianCalendar noel = new GregorianCalendar(annee, 11, 25);
-		datesFeries.add(new Date(noel.getTimeInMillis()));
-
-		return datesFeries;
 	}
 	
 	public GregorianCalendar calculLundiPacques(int annee) {
@@ -723,27 +350,6 @@ public class RemplissageLivraison {
 	}
 	
 	/**
-	 * Somme des quantites livrées entre le jour d'une livraison et le jour de la reprise
-	 * 
-	 * @param date : date de la reprise
-	 * @param duree : duree de validite d'un produit chez un client
-	 * @param prod : produit associé à la livraison
-	 * @param profil : profil du client associé à la livraison
-	 * @return la somme des quantites livrées précédement
-	 */
-	public int sommeQteLivrPrecedente(Date date, int duree, Produit prod, Profil profil){
-		Date dateLivr = ajoutJours(date, -duree);
-		List<Livraison> list = rl_.recupLivraisonPrec(prod, profil, date, dateLivr);
-		
-		int sommeLivr = 0;
-		for (Livraison l : list){
-			sommeLivr += l.getQte_livraison();
-		}
-		
-		return sommeLivr;
-	}
-	
-	/**
 	 * Insertion de la livraison en base de donnee
 	 * 
 	 * @param bl : bon de livraison
@@ -763,53 +369,8 @@ public class RemplissageLivraison {
 		manager_.persist(livr);
 		tx.commit();
 		
-		//liaison à produit
-		try{
-			produit.addLivraison(livr);
-		} catch (Exception e){
-			List<Livraison> listProd = new ArrayList<Livraison>();
-			listProd.add(livr);
-			produit.setLivraison_produit(listProd);
-		}
-		
-		//liaison à profil
-		try{
-			profil.addLivraison(livr);
-		} catch (Exception e){
-			List<Livraison> listProf = new ArrayList<Livraison>();
-			listProf.add(livr);
-			profil.setLivraison_profil(listProf);
-		}
-		
-		
-	}
-	
-	private void ajoutPrevision(int i, Profil profil, Produit produit, Date dateLivrPrec) {
-		EntityTransaction tx = main_.getTransaction();
-		tx.begin();
-		
-		// Création de la livraison
-		Prevision prev = new Prevision(i, profil, produit, dateLivrPrec);
-		manager_.persist(prev);
-		tx.commit();
-		
-		//liaison à produit
-		try{
-			produit.addPrevision(prev);
-		} catch (Exception e){
-			List<Prevision> listPrev = new ArrayList<Prevision>();
-			listPrev.add(prev);
-			produit.setPrevision_produit(listPrev);
-		}
-		
-		//liaison à profil
-		try{
-			profil.addPrevision(prev);
-		} catch (Exception e){
-			List<Prevision> listPrev = new ArrayList<Prevision>();
-			listPrev.add(prev);
-			profil.setPrevision_profil(listPrev);
-		}
+		produit.addLivraison(livr);
+		profil.addLivraison(livr);
 	}
 	
 	/**
@@ -836,8 +397,4 @@ public class RemplissageLivraison {
 		md_.updateLivraison(livr, qteLivr, qteRepris);
 	}
 	
-	private void majPrevision(Prevision prev, int qte) {
-		prev.setQuantite(qte);
-	}
-
 }

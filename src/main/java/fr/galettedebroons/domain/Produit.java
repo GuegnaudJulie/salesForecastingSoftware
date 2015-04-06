@@ -20,17 +20,30 @@ public class Produit {
 	private List<Livraison> livraison_produit;
 	private List<MargeLivraison> marge_produit;
 	private List<Prevision> prevision_produit;
+	private List<QuantiteReelle> reel_produit;
 	
 	public Produit(){}
 	
 	public Produit(String code_produit, String nature_produit, String nom_produit, String presentation_produit, Gamme code_gamme, int qte_lot) {
-		super();
 		this.code_produit = code_produit;
 		this.nature_produit = nature_produit;
 		this.nom_produit = nom_produit;
 		this.presentation_produit = presentation_produit;
 		this.produit_gamme = code_gamme;
 		this.qte_lot = qte_lot;
+	}
+	
+	public Produit(String code_produit, String nature_produit, String nom_produit, String presentation_produit, Gamme code_gamme, int qte_lot, 
+			List<Livraison> livraison_produit, List<Prevision> prevision_produit, List<QuantiteReelle> reel_produit) {
+		this.code_produit = code_produit;
+		this.nature_produit = nature_produit;
+		this.nom_produit = nom_produit;
+		this.presentation_produit = presentation_produit;
+		this.produit_gamme = code_gamme;
+		this.qte_lot = qte_lot;
+		this.livraison_produit = livraison_produit;
+		this.prevision_produit = prevision_produit;
+		this.reel_produit = reel_produit;
 	}
 	
 	@Id
@@ -120,5 +133,18 @@ public class Produit {
 	
 	public void addPrevision(Prevision previson){
 		prevision_produit.add(previson);
+	}
+
+	@OneToMany(mappedBy="reel_produit", cascade=CascadeType.PERSIST)
+	public List<QuantiteReelle> getReel_produit() {
+		return reel_produit;
+	}
+
+	public void setReel_produit(List<QuantiteReelle> reel_produit) {
+		this.reel_produit = reel_produit;
+	}
+	
+	public void addReel(QuantiteReelle reel){
+		reel_produit.add(reel);
 	}
 }

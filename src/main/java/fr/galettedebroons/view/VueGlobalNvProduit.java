@@ -25,7 +25,10 @@ import javax.swing.JTextField;
 import javax.swing.JViewport;
 
 import fr.galettedebroons.domain.Gamme;
+import fr.galettedebroons.domain.Livraison;
+import fr.galettedebroons.domain.Prevision;
 import fr.galettedebroons.domain.Produit;
+import fr.galettedebroons.domain.QuantiteReelle;
 import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
@@ -181,7 +184,12 @@ public class VueGlobalNvProduit {
 			try{
 				Gamme gamme = rg.recuperationGamme(listprod.getCombo().getSelectedItem().toString());
 				
-				Produit temp = new Produit(listprod.getSelectCode(), listprod.getSelectNature(), listprod.getSelectNom(), listprod.getSelectPresentation(), gamme, Integer.parseInt(listprod.getSelectQte()));
+				List<Livraison> livr = new ArrayList<Livraison>();
+				List<Prevision> prev = new ArrayList<Prevision>();
+				List<QuantiteReelle> qr = new ArrayList<QuantiteReelle>();
+				
+				Produit temp = new Produit(listprod.getSelectCode(), listprod.getSelectNature(), listprod.getSelectNom(), listprod.getSelectPresentation(), 
+						gamme, Integer.parseInt(listprod.getSelectQte()), livr, prev, qr);
 				main_.getManager().persist(temp);
 				
 			} catch (Exception e){

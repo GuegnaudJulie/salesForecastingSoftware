@@ -82,8 +82,8 @@ public class RecupLivraison {
 		return livr;
 	}
 	
-	public List<Livraison> recupLivraisonPrec(Produit prod, Profil profil, Date date1, Date date2){
-		List<Livraison> livr = manager_.createQuery("select l from Livraison l where " +
+	public Livraison recupLivraisonPrec(Produit prod, Profil profil, Date date1, Date date2){
+		Livraison livr = manager_.createQuery("select l from Livraison l where " +
 				"l.date_livraison > :date1 AND " +
 				"l.date_livraison < :date2 AND " +
 				"l.livraison_produit LIKE :produit AND " +
@@ -92,7 +92,7 @@ public class RecupLivraison {
 				.setParameter("date2", date2)
 				.setParameter("produit", prod)
 				.setParameter("profil", profil)
-				.getResultList();
+				.getSingleResult();
 		
 		return livr;
 	}

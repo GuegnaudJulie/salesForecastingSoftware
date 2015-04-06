@@ -19,6 +19,7 @@ public class Profil {
 	private Tournee profil_tournee;
 	private List<MargeLivraison> marge_profil;
 	private List<Prevision> prevision_profil;
+	private List<QuantiteReelle> reel_profil;
 	
 	public Profil(){}
 	
@@ -28,10 +29,12 @@ public class Profil {
 		this.actif = actif;
 	}
 	
-	public Profil(String code_client, Gamme code_gamme, List<Livraison> livraison, Boolean actif) {
+	public Profil(String code_client, Gamme code_gamme, List<Livraison> livraison,List<Prevision> prev, List<QuantiteReelle> reel_profil, Boolean actif) {
 		this.code_client = code_client;
 		this.gamme_profil = code_gamme;
 		this.livraison_profil = livraison;
+		this.prevision_profil = prev;
+		this.reel_profil = reel_profil;
 		this.actif = actif;
 	}
 	
@@ -117,5 +120,17 @@ public class Profil {
 	public void addPrevision(Prevision p){
 		prevision_profil.add(p);
 	}
+
+	@OneToMany(mappedBy="reel_profil", cascade=CascadeType.PERSIST)
+	public List<QuantiteReelle> getReel_profil() {
+		return reel_profil;
+	}
+
+	public void setReel_profil(List<QuantiteReelle> reel_profil) {
+		this.reel_profil = reel_profil;
+	}
 	
+	public void addReel(QuantiteReelle p){
+		reel_profil.add(p);
+	}
 }

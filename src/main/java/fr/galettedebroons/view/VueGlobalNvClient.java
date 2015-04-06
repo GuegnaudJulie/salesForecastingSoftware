@@ -34,8 +34,10 @@ import javax.swing.JTextField;
 import fr.galettedebroons.domain.Client;
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
+import fr.galettedebroons.domain.Prevision;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
+import fr.galettedebroons.domain.QuantiteReelle;
 import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.main.Main;
@@ -255,8 +257,9 @@ public class VueGlobalNvClient {
 			
 				//Création d'un profil
 				List<Livraison> livr = new ArrayList<Livraison>();
-				System.out.println("le code gamme est " + codeGamme);
-				p = new Profil(listclient.getTextFieldCC().getText(), rg.recuperationGamme(codeGamme), livr, true);
+				List<Prevision> prev = new ArrayList<Prevision>();
+				List<QuantiteReelle> qr = new ArrayList<QuantiteReelle>();
+				p = new Profil(listclient.getTextFieldCC().getText(), rg.recuperationGamme(codeGamme), livr, prev, qr, true);
 				tournee = rt.recuperationTournee(tourneeCombo);
 				p.setProfil_tournee(tournee);
 				
