@@ -63,4 +63,24 @@ public class ModificationDonnees {
 		
 	}
 	
+	public void updateMargeLivraisonManuelle(java.util.Date date, int quantite, String produit, String profil){
+		tx_.begin();
+		RecuperationDonnees rd = new RecuperationDonnees(main_);
+		Produit np = rd.recuperationProduitComp(produit);
+		System.out.println("mon produit :  " +np);
+		Profil pp = rd.recuperationProfil(profil);
+		System.out.println("mon profil ; " +pp);
+		
+		manager_.createQuery("UPDATE Prevision pr SET quantite = :quantite "
+				+ "WHERE pr.prevision_produit LIKE :paramcode_prod AND pr.prevision_profil LIKE :paramcode_client")
+				.setParameter("quantite", quantite)
+				.setParameter("paramcode_prod", np)
+				.setParameter("paramcode_client", pp)
+				.executeUpdate();
+		this.tx_ = main_.getTransaction();
+		System.out.println("je re passe");
+		tx_.commit();
+	
+	}
+	
 }

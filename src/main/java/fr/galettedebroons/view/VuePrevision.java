@@ -1,5 +1,7 @@
 package fr.galettedebroons.view;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
@@ -10,8 +12,16 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
+import fr.galettedebroons.model.ModificationDonnees;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.main.Main;
 
@@ -31,7 +41,7 @@ import fr.galettedebroons.main.Main;
  *
  * @author poher
  */
-public class VuePrevision extends javax.swing.JPanel {
+public class VuePrevision extends javax.swing.JPanel implements TableCellRenderer {
 	
 	private Main main_;
 
@@ -65,6 +75,7 @@ public class VuePrevision extends javax.swing.JPanel {
         jTable2 = new javax.swing.JTable();
         
         rd = new RecuperationDonnees(main_);
+        md = new ModificationDonnees(main_);
         
         //recuperation tournee
         listeTournee = rd.recuperationTournee();
@@ -112,7 +123,44 @@ public class VuePrevision extends javax.swing.JPanel {
                 }
             ));*/
         jTable1.setAutoCreateColumnsFromModel(false);
+        jTable2.setAutoCreateColumnsFromModel(false);
         
+        jTable2.getModel().addTableModelListener(new TableModelListener() {
+
+            public void tableChanged(TableModelEvent e) {
+               System.out.println("COUCOUUUUUU");
+            }
+          });
+        
+        jTable2.getDefaultEditor(String.class).addCellEditorListener(new CellEditorListener() {
+            public void editingCanceled(ChangeEvent e) {
+                System.out.println("The user canceled editing.");
+            }
+
+			@Override
+			public void editingStopped(ChangeEvent arg0) {
+				java.util.Date data = null;
+				int ligneModif = jTable2.getSelectedRow();
+				int colonneModif = jTable2.getSelectedColumn();
+				int nouvellePrev = 0;
+				nouvellePrev = Integer.valueOf((String) jTable2.getModel().getValueAt(ligneModif, colonneModif));
+				String produit = jTable2.getColumnName(colonneModif);
+				//int profil = (int) jTable2.getModel().getValueAt(ligneModif, 0);
+				
+				String produit1 = listeProduit[colonneModif-1];
+				String profil1 = listProfilEditable[ligneModif+1];
+				System.out.println("PROFIL 111 : " +profil1);
+				System.out.println("PRODUIT 111 : " +produit1);
+				
+				data = jDateChooser1.getDate();
+				//System.out.println("mon profil : " +profil);
+				System.out.println("ma row : " +ligneModif + 
+						"ma colonne : " +colonneModif);
+				System.out.println(jTable2.getModel().getValueAt(ligneModif, colonneModif));
+				// enregistrement de la nouvelle valeur :
+				md.updateMargeLivraisonManuelle(data, nouvellePrev, produit1, profil1);
+			}
+        });
         
         jScrollPane1.setViewportView(jTable1);
 
@@ -236,15 +284,18 @@ public class VuePrevision extends javax.swing.JPanel {
 	}
     
     /**
-     * action sur le bouton prevision pour voir afficher nos previsions 
+     * action sur le bouton prevision pour voir afficher nos previsions :
      * dans la table 1 seulement les prévisions en fonction des clients et des produits
      * dans la table 2 prévisions + marge de livraison en fonction des clients et des produits
      * @param evt
      */
     private void jButton1ActionPerformed(ActionEvent evt) {
+    	// remise à zéro de mes 2 tables
     	reinitialiserJTable1();
-    	
+    	reinitialiserJTable2();
     	jTable1.repaint();
+    	jTable2.repaint();
+    	
     	String nomTournee = "";
     	String nomProfil = "";
     	String date = "";
@@ -261,10 +312,6 @@ public class VuePrevision extends javax.swing.JPanel {
     	date = String.valueOf(jDateChooser1.getDate());
     	System.out.println("ma date : " +date);
     	
-    	// appel de recuperation des previsions
-    	//rd.recuperationPrevision(data, nomTournee);
-    	// si seulement tournee selectionnee
-    	
     	//si un profil est selectionné en particulier
     	if(!nomProfil.toString().contains("Tous") && data != null){
     		String profil = "";
@@ -278,13 +325,20 @@ public class VuePrevision extends javax.swing.JPanel {
         	
         	jTable1.getTableHeader().getColumnModel().getColumn(0).setHeaderValue("Profil");
     		jTable1.repaint();
-    		
     		jTable1.getTableHeader().repaint();
     		//jTable1.getModel().setValueAt(monProfil, 0, 0);
+    		
+    		jTable2.getTableHeader().getColumnModel().getColumn(0).setHeaderValue("Profil");
+    		jTable2.repaint();
+    		jTable2.getTableHeader().repaint();
     		
     		
     		int indiceTitre = 1;
     		int colonneProduitQte = 1;
+    		// table 2
+    		int indiceTitreTable2 = 1;
+    		int colonneProduitQteTable2 = 1;
+    		
     		int ligneProduitQte = 0;
     		for (Object[] p : maliste){
     			System.out.println("Mon profil " +p[1]);
@@ -299,16 +353,37 @@ public class VuePrevision extends javax.swing.JPanel {
     			indiceTitre++;
     			jTable1.getModel().setValueAt(maQuantité, ligneProduitQte, colonneProduitQte);
     			colonneProduitQte++;
+    			
+    			// jtable2 :
+    			jTable2.getModel().setValueAt(monProfil, 0, 0);
+    			jTable2.getTableHeader().getColumnModel().getColumn(indiceTitre).setHeaderValue(monProduit);
+    			indiceTitreTable2++;
+    			jTable2.getModel().setValueAt(maQuantité, ligneProduitQte, colonneProduitQte);
+    			colonneProduitQteTable2++;
     		}
     	}
     	
-    	// si on veut voir les prévisions pour tous les profil de la tournee
+    	// si on veut voir les prévisions pour TOUS les profils de la tournee
     	if(nomTournee != "" && nomProfil.toString().contains("Tous") && data != null){
+    		//jTable2.getModel().setValueAt(Color.RED, 1, 1);
+    		//jTable2.setValueAt(Color.red, 1, 1);
+    		
+    		
+    		/**
+    		 * Change la couleur de toute la table :
+    		 */
+    		Component comp = jTable2.getComponentAt(1, 1);
+    		System.out.println("mon composent : " +comp);
+    		//Component comp = (Component) jTable2.getModel().getValueAt(1,1);
+    		Color clr = new Color(255, 226, 198);
+    		comp.setBackground(clr);
+    		jTable2.repaint();
+    		
     		List<Object[]> maliste = rd.recupPrevTournee(nomTournee, data);
     		String monProfilPrecedent = "";
     		String monProfil = "";
     		String monProduit = "";
-    		int maQuantité = 0;
+    		int maQuantite = 0;
     		String[] mesTitre = new String[100];
     		int tabTitre = 0;
     		int ligne = 0;
@@ -320,14 +395,26 @@ public class VuePrevision extends javax.swing.JPanel {
     		jTable1.repaint();
     		
     		jTable1.getTableHeader().repaint();
+    		
+    		// table 2
+    		jTable2.getTableHeader().getColumnModel().getColumn(0).setHeaderValue("Profil");
+    		jTable2.repaint();
+    		jTable2.getTableHeader().repaint();
     		int k = 1;
+    		
+    		// insère les produits dans ma liste !!!
+    		this.listeProduit = new String[maliste.size()];
+    		this.listProfilEditable = new String[maliste.size()];
+    		int indiceListeProduit = 0;
+    		int indiceProfilEditable = 0;
+    		
     		for (Object[] p : maliste){
     			System.out.println("Mon profil " +p[1]);
     			monProfil = (String) p[1];
     			System.out.println("Mon produit " +p[2]);
     			monProduit = (String) p[2];
     			System.out.println("Ma quantité " +p[0]);
-    			maQuantité = (int) p[0];
+    			maQuantite = (int) p[0];
     			
     			// si meme profil alors ajout du produit après ancient produit ajouté
     			System.out.println("la valeur de mon profil : " +monProfilPrecedent);
@@ -336,11 +423,26 @@ public class VuePrevision extends javax.swing.JPanel {
     				System.out.println("je rentre bien dans ma condition");
     				jTable1.getModel().setValueAt(monProfil, ligneprofil, colonneprofil);
     				jTable1.getTableHeader().getColumnModel().getColumn(k).setHeaderValue(monProduit);
+    				
+    				
+    				// table 2
+    				jTable2.getModel().setValueAt(monProfil, ligneprofil, colonneprofil);
+    				listProfilEditable[indiceProfilEditable] = monProfil;
+    				indiceProfilEditable++;
+    				jTable2.getTableHeader().getColumnModel().getColumn(k).setHeaderValue(monProduit);
+    				listeProduit[indiceListeProduit] = monProduit;
+    				indiceListeProduit++;
+    				
     				mesTitre[tabTitre] = monProduit;
     				tabTitre++;
     				colonne++;
-    				System.out.println("ma quantité : " +maQuantité);
-    				jTable1.getModel().setValueAt(maQuantité, ligne, colonne);
+    				System.out.println("ma quantité : " +maQuantite);
+    				
+    				// maQuantite + 25% :
+    				// maQuantite = maQuantite + 25*maQuantite/100
+    				jTable1.getModel().setValueAt(maQuantite, ligne, colonne);
+    				// table 2
+    				jTable2.getModel().setValueAt(maQuantite, ligne, colonne);
     				monProfilPrecedent = monProfil;
     				
     				System.out.println("la valeur de ma colonne : " +colonne);
@@ -351,6 +453,12 @@ public class VuePrevision extends javax.swing.JPanel {
     				System.out.println("mon profil différent : " +monProfil);
     				ligneprofil++;
     				jTable1.getModel().setValueAt(monProfil, ligneprofil, colonneprofil);
+    				// table 2
+    				jTable2.getModel().setValueAt(monProfil, ligneprofil, colonneprofil);
+    				listProfilEditable[indiceProfilEditable] = monProfil;
+    				indiceProfilEditable++;
+    				
+    				
     				// si mon produit est différent d'un produit déjà existant alors on avance
     				k = 0;
     				System.out.println("c'est quoiii ? " +mesTitre[0]);
@@ -360,13 +468,21 @@ public class VuePrevision extends javax.swing.JPanel {
     						System.out.println("monproduit : " +mesTitre[k] + "mon indice : " +k);
     						System.out.println("ligne profil : " +ligneprofil);
     						System.out.println("colonne profil : " +colonneprofil);
-    						jTable1.getModel().setValueAt(maQuantité, ligneprofil, k+1);
+    						jTable1.getModel().setValueAt(maQuantite, ligneprofil, k+1);
+    						// table 2
+    						// maQuantite = maQuantite + 25%
+    						jTable2.getModel().setValueAt(maQuantite, ligneprofil, k+1);
+    						
     						ligne++;
     					}
     					k++;
     				}
     				
     				jTable1.getTableHeader().getColumnModel().getColumn(k+1).setHeaderValue(monProduit);
+    				// table 2
+    				jTable2.getTableHeader().getColumnModel().getColumn(k+1).setHeaderValue(monProduit);
+    				listeProduit[indiceListeProduit] = monProduit;
+    				indiceListeProduit++;
     				monProfilPrecedent = monProfil;
     				k++;
     			}
@@ -453,6 +569,19 @@ public class VuePrevision extends javax.swing.JPanel {
     private javax.swing.JTable jTable2;
 
     RecuperationDonnees rd;
+    ModificationDonnees md;
     String[] listClient;
     String[] listeTournee;
+    String[] listeProduit;
+    String[] listProfilEditable;
+
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		
+		Component comp = getTableCellRendererComponent(
+		        table, value, isSelected, hasFocus, row, column);
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

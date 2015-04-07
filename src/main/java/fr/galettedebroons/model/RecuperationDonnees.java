@@ -91,6 +91,7 @@ public class RecuperationDonnees {
 	}
 	
 	public Produit recuperationProduitComp(String codeProd){
+		System.out.println("mon produit : " +codeProd);
 		Produit produit = manager_.createQuery("select p from Produit p where code_produit LIKE :cp ", Produit.class)
 				.setParameter("cp", codeProd)
 				.getSingleResult();
