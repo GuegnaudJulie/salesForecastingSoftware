@@ -1,4 +1,4 @@
-package fr.galettedebroons.controller;
+package fr.galettedebroons.model;
 
 /* import */
 import java.io.BufferedReader;
@@ -14,8 +14,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jopendocument.dom.spreadsheet.MutableCell;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
+import fr.galettedebroons.controller.ControllerFichier;
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.RangerDonneeTemporaire;
 
 /**
  * Classe permettant la lecture d'un fichier d'extension .xls, .ods, .csv ou .txt

@@ -8,8 +8,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.DefaultCellEditor;
 
-import fr.galettedebroons.controller.LectureFichier;
 import fr.galettedebroons.main.Main;
+import fr.galettedebroons.model.LectureFichier;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.RecuperationDonnees;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
@@ -325,9 +325,6 @@ public class PanelEdition extends javax.swing.JPanel {
             // chemin absolu du fichier choisi
             valFichier.setText(choix.getSelectedFile().getAbsolutePath());
         }
-        // pas de fichier choisi
-        else
-            System.out.println("Aucun fichier choisi") ;
     }                                               
 
     private void valListeClientActionPerformed(java.awt.event.ActionEvent evt) {                                               
@@ -402,18 +399,6 @@ public class PanelEdition extends javax.swing.JPanel {
         }
     	if (messageErreur.getText() == ""){
     		TraitementDonneesTemporaire tdt = new TraitementDonneesTemporaire(main_, this);
-    		System.out.println("");
-    		System.out.println("");
-    		System.out.println("");
-    		System.out.println("");
-    		System.out.println("table temp rempli !!!");
-    		System.out.println("");
-    		System.out.println("");
-    		System.out.println("");
-    		System.out.println("");
-    		System.out.println("");
-    		System.out.println("");
-    		System.out.println("");
     		tdt.insertionDonnee();
     	}
     }

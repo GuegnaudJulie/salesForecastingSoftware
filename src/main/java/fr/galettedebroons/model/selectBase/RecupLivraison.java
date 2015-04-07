@@ -56,22 +56,25 @@ public class RecupLivraison {
 	}
 
 	public Livraison recupLivraisonPrec(Produit prod, Profil profil, Date date){
-		Livraison livraison;
-		try{
-			livraison =  manager_.createQuery("select l from Livraison l WHERE " +
+		List<Livraison> listLivraison =  manager_.createQuery("select l from Livraison l WHERE " +
 						"livraison_profil LIKE :profil AND " +
 						"livraison_produit LIKE :produit AND " +
 						"date_livraison < :date " +
-						"ORDER BY date_livraison ASC LIMIT 1", Livraison.class)
+						"ORDER BY date_livraison DESC LIMIT 1", Livraison.class)
 						.setParameter("profil", profil)
 						.setParameter("produit", prod)
 						.setParameter("date", date)
-						.getSingleResult();
-		} catch (Exception e){
-			livraison = null;
+						.getResultList();
+		
+		Livraison livr = null ;
+		int i = 0;
+		for(Livraison l : listLivraison){
+			if (i == 0)
+				livr = l;
+			i++;
 		}
 		
-		return livraison;
+		return livr;
 	}
 	
 	public List<Object[]> recuperationListLivraison(){
@@ -84,8 +87,8 @@ public class RecupLivraison {
 	
 	public Livraison recupLivraisonPrec(Produit prod, Profil profil, Date date1, Date date2){
 		Livraison livr = manager_.createQuery("select l from Livraison l where " +
-				"l.date_livraison > :date1 AND " +
-				"l.date_livraison < :date2 AND " +
+				"l.date_livraison >= :date1 AND " +
+				"l.date_livraison <= :date2 AND " +
 				"l.livraison_produit LIKE :produit AND " +
 				"l.livraison_profil LIKE :profil ", Livraison.class)
 				.setParameter("date1", date1)

@@ -52,7 +52,7 @@ public class RemplissageLivraison {
 		rqr_ = new RecupQuantiteReelle(main_);
 		
 		// Tri sur les donnees de la table temporaire
-		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC", Temporaire.class).getResultList();   
+		List<Temporaire> temp = manager_.createQuery("select t from Temporaire t order by t.date ASC, t.quantite_livree DESC", Temporaire.class).getResultList();   
 		
 		for(Temporaire t : temp){
 			//récuperation des informations
@@ -69,100 +69,108 @@ public class RemplissageLivraison {
 			//recuperation du produit de la livraison
 			Produit produit = rd_.recupProduit(code_produit);
 			
-			//Vérification de l'existence de la livraison
-			Livraison livr;
-			try {
-				livr = rl_.recuperationLivraison(bl, date, code_produit);
-			} catch (Exception e){
-				livr = null;
+			//recuperation de la gamme du produit
+			Gamme gamme = produit.getProduit_gamme();
+				
+			//recuperation des jours de livraison normaux
+			String[] joursTournee = rt_.recuperationJoursTournee(profil);
+				
+			//Jours de la semaine de la livraison actuelle
+			String jours = joursSemaine(date);
+				
+			//On verifie que le jours de la livraison été prévu
+			boolean prevu = false;
+			for(int i = 0; i<joursTournee.length; i++){
+				if (joursTournee[i] == jours)
+					prevu = true;
 			}
 			
-			boolean modif = true;
-			if (livr == null)
-				ajoutLivraison(bl, profil, produit, date, ql, qr);
-			else if (livr != null && (livr.getQte_livraison() != ql || livr.getQte_reprise() != qr))
-				majLivraison(livr, ql, qr);
-			else
-				modif = false;
+			//On vérifie qu'il n'y a pas de jours fériés dans cette semaine
+			boolean semaineNonFerie = true;
+			GregorianCalendar calendar = new GregorianCalendar();
+			calendar.setTime(date);
+			int semaineLivr = calendar.get(Calendar.WEEK_OF_YEAR);
+			List<Integer> listSemaineFeries = getSemaineFeries(calendar.YEAR);
+			if (listSemaineFeries.contains(semaineLivr))
+				semaineNonFerie = false;
 			
-			if (modif){
-				//recuperation de la gamme du produit
-				Gamme gamme = produit.getProduit_gamme();
-				
-				//recuperation des jours de livraison normaux
-				String[] joursTournee = rt_.recuperationJoursTournee(profil);
-				
-				//Jours de la semaine de la livraison actuelle
-				String jours = joursSemaine(date);
-				
-				//On verifie que le jours de la livraison été prévu
-				boolean prevu = false;
-				for(int i = 0; i<joursTournee.length; i++){
-					if (joursTournee[i] == jours)
-						prevu = true;
-				}
-				
-				//On vérifie qu'il n'y a pas de jours fériés dans cette semaine
-				boolean semaineNonFerie = true;
-				GregorianCalendar calendar = new GregorianCalendar();
-				calendar.setTime(date);
-				int semaineLivr = calendar.get(Calendar.WEEK_OF_YEAR);
-				List<Integer> listSemaineFeries = getSemaineFeries(calendar.YEAR);
-				if (listSemaineFeries.contains(semaineLivr))
-					semaineNonFerie = false;
-				
-				Date date1 = null;
-				Date date2 = null;
-				if (gamme.getCode_gamme().equals("PE")){
-					date1 = ajoutJours(date, -3);
-					date2 = ajoutJours(date, -2);
-				}
-				else if (gamme.getCode_gamme().equals("LS")){
-					date1 = ajoutJours(date, -5);
-					date2 = ajoutJours(date, -4);
-				}
-				QuantiteReelle qrPrec;
+			//On récupère les dates de la livraison correspondante
+			Date date1 = null;
+			Date date2 = null;
+			if (gamme.getCode_gamme().equals("PE")){
+				date1 = ajoutJours(date, -3);
+				date2 = ajoutJours(date, -2);
+			}
+			else if (gamme.getCode_gamme().equals("LS")){
+				date1 = ajoutJours(date, -5);
+				date2 = ajoutJours(date, -4);
+			}
+			
+			//On récupère la livraison précédente
+			Livraison lprec;
+			try{
+				lprec = rl_.recupLivraisonPrec(produit, profil, date1, date2);
+			} catch (Exception e){
+				lprec = null;
+			}
+			
+			//On recupère la QuantiteReelle precedente
+			QuantiteReelle qtPrec;
+			try{
+				qtPrec = rqr_.recuperationQR(profil, produit, date1, date2);
+			} catch (Exception e){
+				qtPrec = null;
+			}
+
+			//On calcule la quantite effective
+			int qteReelle = ql;
+			if (lprec != null){
+				qteReelle = lprec.getQte_livraison() + qr ;
+			}
+			
+			boolean rupture = true;
+			
+			if (prevu && semaineNonFerie){
+				//On regarde si la livraison existe déjà
+				Livraison livr;
 				try {
-					qrPrec = rqr_.recuperationQR(profil, produit, date1, date2);
-				} catch (Exception e) {
-					qrPrec = null;
-				}
-				
-				Livraison livrPrec;
-				int qteLivr = 0;
-				boolean rupture = false;
-				try{
-					livrPrec = rl_.recupLivraisonPrec(produit, profil, date1, date2);
-					qteLivr = livrPrec.getQte_livraison();
-					if ((qteLivr - qr) == 0)
-						rupture = true;
-					
+					livr = rl_.recupLivraison(produit, profil, date);
 				} catch (Exception e){
-					livrPrec = null;
+					livr = null;
 				}
 				
-				if (prevu && semaineNonFerie){
-					Date dateLivrPrec = date;
-					if (livrPrec != null)
-						dateLivrPrec = livrPrec.getDate_livraison();
-						
-					if(verifQte(qteLivr, qr)){
-						//On ajoute dans la table quantiteReelle
-						if (qrPrec == null)
-							ajoutQuantiteReelle((qteLivr-qr), profil, produit, dateLivrPrec, rupture);
-						else
-							majQuantiteReelles(qrPrec, (qteLivr-qr), rupture);
+				if (qteReelle >= 0){
+					if (lprec == null || qteReelle != lprec.getQte_livraison())
+						rupture = false;
+					
+					//Ajout ou modif de la livraison
+					if (livr == null)
+						ajoutLivraison(bl, profil, produit, date, ql, qr);
+					else
+						majLivraison(livr, ql, qr);
+					
+					//Ajout ou modif de la qteRelle de la livraison précédente
+					if (lprec != null && qtPrec != null){
+						majQuantiteReelles(qtPrec, (lprec.getQte_livraison()+qr), rupture);
+					}
+					else if (lprec != null && qtPrec == null){
+						ajoutQuantiteReelle(qteReelle, profil, produit, lprec.getDate_livraison(), rupture);
 					}
 				}
-				// si la livraison n'est pas prévu, on l'ajoute à la livraison précédente
-				else if (!prevu && semaineNonFerie){
-					//Recuperation de la livraison précédente
-					if (qrPrec != null)
-						majQuantiteReelles(qrPrec, qrPrec.getQuantite(), rupture);
-					else
-						ajoutQuantiteReelle(ql, profil, produit, date, rupture);
-				}	
-			} // fin if (crea || modif)
+			}
+			else if (!prevu && semaineNonFerie){
+				lprec = rl_.recupLivraisonPrec(produit, profil, date);
+				qtPrec = rqr_.recuperationPrecQR(profil, produit, date);
+				
+				if (qteReelle >= 0){
+					if (lprec != null)
+						majLivraison(lprec, (lprec.getQte_livraison()+ql), (lprec.getQte_reprise()+qr));
+					
+					if (qtPrec != null){
+						majQuantiteReelles(qtPrec, (lprec.getQte_livraison()+qr), rupture);
+					}
+				}
+			}
 		} // fin for
 	}
 	
@@ -339,19 +347,6 @@ public class RemplissageLivraison {
 	}
 	
 	/**
-	 * Recupération de la livraison précédentes
-	 * 
-	 * @param date : date de la livraison à ajouter
-	 * @param prod : produit de la livraison à ajouter
-	 * @param profil : profil du client lié à la livraison à ajouter
-	 * @return la derniere livraison concernant le produit et le client avant la date indiquée
-	 */
-	public Livraison precedenteLivraison(Date date, Produit prod, Profil profil){
-		Livraison precLivraison = rl_.recupLivraisonPrec(prod, profil, date);
-		return precLivraison;
-	}
-	
-	/**
 	 * Insertion de la livraison en base de donnee
 	 * 
 	 * @param bl : bon de livraison
@@ -392,7 +387,7 @@ public class RemplissageLivraison {
 			qteLivr = ql;
 		
 		if (qr == 0)
-			qteRepris = livr.getQte_livraison();
+			qteRepris = livr.getQte_reprise();
 		else
 			qteRepris = qr;
 		
