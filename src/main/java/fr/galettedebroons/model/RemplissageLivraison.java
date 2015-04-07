@@ -142,7 +142,9 @@ public class RemplissageLivraison {
 				}
 				
 				if (prevu && semaineNonFerie){
-					Date dateLivrPrec = livrPrec.getDate_livraison();
+					Date dateLivrPrec = date;
+					if (livrPrec != null)
+						dateLivrPrec = livrPrec.getDate_livraison();
 						
 					if(verifQte(qteLivr, qr)){
 						//On ajoute dans la table quantiteReelle
@@ -292,7 +294,7 @@ public class RemplissageLivraison {
 	 * @return true si c'est coherent
 	 */
 	public boolean verifQte(int qtePlus, int qteMoins){
-		return (qtePlus >= qteMoins);
+		return (qtePlus > qteMoins);
 	}
 	
 	/**

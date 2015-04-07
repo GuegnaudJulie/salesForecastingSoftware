@@ -13,7 +13,6 @@ public class Gamme {
 	private String code_gamme;
 	private int duree_conservation;
 	private List<Produit> produit_gamme;
-	private List<Profil> gamme_profil;
 	
 	public Gamme(){}
 	
@@ -26,11 +25,10 @@ public class Gamme {
 		this.duree_conservation = duree_conservation;
 	}
 	
-	public Gamme(String code_gamme, int duree_conservation, List<Produit> produit_gamme, List<Profil> gamme_profil) {
+	public Gamme(String code_gamme, int duree_conservation, List<Produit> produit_gamme) {
 		this.code_gamme = code_gamme;
 		this.duree_conservation = duree_conservation;
 		this.produit_gamme = produit_gamme;
-		this.gamme_profil = gamme_profil;
 	}
 	
 	@Id
@@ -61,18 +59,5 @@ public class Gamme {
 
 	public void addProduit(Produit produit){
 		produit_gamme.add(produit);
-	}
-	
-	@OneToMany(mappedBy="gamme_profil", cascade=CascadeType.PERSIST)
-	public List<Profil> getGamme_profil() {
-		return gamme_profil;
-	}
-
-	public void setGamme_profil(List<Profil> gamme_profil) {
-		this.gamme_profil = gamme_profil;
-	}
-	
-	public void addProfil(Profil profil){
-		gamme_profil.add(profil);
 	}
 }
