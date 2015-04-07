@@ -34,7 +34,7 @@ public class Produit {
 	}
 	
 	public Produit(String code_produit, String nature_produit, String nom_produit, String presentation_produit, Gamme code_gamme, int qte_lot, 
-			List<Livraison> livraison_produit, List<Prevision> prevision_produit, List<QuantiteReelle> reel_produit) {
+			List<Livraison> livraison_produit, List<Prevision> prevision_produit, List<QuantiteReelle> reel_produit, List<MargeLivraison> marge_produit) {
 		this.code_produit = code_produit;
 		this.nature_produit = nature_produit;
 		this.nom_produit = nom_produit;
@@ -44,6 +44,7 @@ public class Produit {
 		this.livraison_produit = livraison_produit;
 		this.prevision_produit = prevision_produit;
 		this.reel_produit = reel_produit;
+		this.marge_produit = marge_produit;
 	}
 	
 	@Id

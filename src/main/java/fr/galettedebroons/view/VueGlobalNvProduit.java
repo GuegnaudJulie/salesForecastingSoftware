@@ -26,6 +26,7 @@ import javax.swing.JViewport;
 
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
+import fr.galettedebroons.domain.MargeLivraison;
 import fr.galettedebroons.domain.Prevision;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.QuantiteReelle;
@@ -187,9 +188,10 @@ public class VueGlobalNvProduit {
 				List<Livraison> livr = new ArrayList<Livraison>();
 				List<Prevision> prev = new ArrayList<Prevision>();
 				List<QuantiteReelle> qr = new ArrayList<QuantiteReelle>();
+				List<MargeLivraison> ml = new ArrayList<MargeLivraison>();
 				
 				Produit temp = new Produit(listprod.getSelectCode(), listprod.getSelectNature(), listprod.getSelectNom(), listprod.getSelectPresentation(), 
-						gamme, Integer.parseInt(listprod.getSelectQte()), livr, prev, qr);
+						gamme, Integer.parseInt(listprod.getSelectQte()), livr, prev, qr, ml);
 				main_.getManager().persist(temp);
 				
 			} catch (Exception e){

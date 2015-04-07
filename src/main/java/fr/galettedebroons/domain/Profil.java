@@ -27,11 +27,12 @@ public class Profil {
 		this.actif = actif;
 	}
 	
-	public Profil(String code_client, List<Livraison> livraison,List<Prevision> prev, List<QuantiteReelle> reel_profil, Boolean actif) {
+	public Profil(String code_client, List<Livraison> livraison,List<Prevision> prev, List<QuantiteReelle> reel_profil, List<MargeLivraison> marge_profil, Boolean actif) {
 		this.code_client = code_client;
 		this.livraison_profil = livraison;
 		this.prevision_profil = prev;
 		this.reel_profil = reel_profil;
+		this.marge_profil = marge_profil;
 		this.actif = actif;
 	}
 	

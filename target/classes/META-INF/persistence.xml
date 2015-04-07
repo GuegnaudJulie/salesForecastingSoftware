@@ -10,24 +10,24 @@
     
       <properties>
       
-	    <!--<property name="hibernate.hbm2ddl.auto" value="update"/>
+	    <property name="hibernate.hbm2ddl.auto" value="update"/>
 		<property name="toplink.target-database" value="MySQL"/>
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 		<property name="hibernate.show_sql" value="true"/>
 		<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
 		<property name="hibernate.connection.url" value="jdbc:mysql://anteros.istic.univ-rennes1.fr/base_14010287"/>
 		<property name="hibernate.connection.username" value="user_14010287"/>
-		<property name="hibernate.connection.password" value="toor"/>-->
+		<property name="hibernate.connection.password" value="toor"/>
 		
 		<!-- LOCALHOST MELISSA -->
-		<property name="hibernate.hbm2ddl.auto" value="update"/>
+		<!-- <property name="hibernate.hbm2ddl.auto" value="update"/>
 		<property name="toplink.target-database" value="MySQL"/>
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 		<property name="hibernate.show_sql" value="true"/>
 		<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
 		<property name="hibernate.connection.url" value="jdbc:mysql://localhost/galette_broons"/>
 		<property name="hibernate.connection.username" value="root"/>
-		<property name="hibernate.connection.password" value=""/>
+		<property name="hibernate.connection.password" value=""/>-->
        
          <!-- cache configuration -->
          <!-- <property name="hibernate.ejb.classcache.org.hibernate.ejb.test.Item" value="read-write"/>-->

@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import fr.galettedebroons.domain.Client;
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
+import fr.galettedebroons.domain.MargeLivraison;
 import fr.galettedebroons.domain.Prevision;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
@@ -236,7 +237,8 @@ public class VueGlobalNvClient {
 				List<Livraison> livr = new ArrayList<Livraison>();
 				List<Prevision> prev = new ArrayList<Prevision>();
 				List<QuantiteReelle> qr = new ArrayList<QuantiteReelle>();
-				p = new Profil(listclient.getTextFieldCC().getText(), livr, prev, qr, true);
+				List<MargeLivraison> ml = new ArrayList<MargeLivraison>();
+				p = new Profil(listclient.getTextFieldCC().getText(), livr, prev, qr, ml, true);
 				tournee = rt.recuperationTournee(tourneeCombo);
 				p.setProfil_tournee(tournee);
 				
