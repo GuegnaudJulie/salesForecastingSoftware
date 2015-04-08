@@ -169,7 +169,7 @@ public class VuePrevision extends javax.swing.JPanel {
 
         jLabel4.setText("Date");
         
-        jLabel5.setText("Prévision + Marge de reprise");
+        jLabel5.setText("Prévision + Marge de reprise/Marge de rupture");
 
         jScrollPane2.setViewportView(jTable2);
 
@@ -356,14 +356,22 @@ public class VuePrevision extends javax.swing.JPanel {
 				}
 				// maQuantite + 25% :
 				// maQuantite = maQuantite + 25*maQuantite/100
+				double taux = 0.0;
 				if(recupBool){
 					maQuantite = maQuantite + (maQuantite * 25 /100);
+					taux = 25.0;
+				}else {
+					maQuantite = maQuantite + (maQuantite * 15/100);
+					taux = 15.0;
 				}
     			jTable2.getModel().setValueAt(monProfil, 0, 0);
-    			jTable2.getTableHeader().getColumnModel().getColumn(indiceTitre).setHeaderValue(monProduit);
+    			jTable2.getTableHeader().getColumnModel().getColumn(indiceTitreTable2).setHeaderValue(monProduit);
     			indiceTitreTable2++;
-    			jTable2.getModel().setValueAt(maQuantite, ligneProduitQte, colonneProduitQte);
+    			jTable2.getModel().setValueAt(maQuantite, ligneProduitQte, colonneProduitQteTable2);
     			colonneProduitQteTable2++;
+    			
+    			// ajout dans la table MargeLivraison : maQuantite, monProduit, monProfil
+    			md.updateMargeLivraisonApresRepriseOuRupture(monProfil, monProduit, taux);
     		}
     	}
     	
@@ -447,9 +455,16 @@ public class VuePrevision extends javax.swing.JPanel {
     				}
     				// maQuantite + 25% :
     				// maQuantite = maQuantite + 25*maQuantite/100
+    				double taux = 0.0;
     				if(recupBool){
     					maQuantite = maQuantite + (maQuantite * 25 /100);
+    					taux = 25.0;
+    				} else {
+    					maQuantite = maQuantite + (maQuantite * 15/100);
+    					taux = 15.0;
     				}
+    				
+    				md.updateMargeLivraisonApresRepriseOuRupture(monProfil, monProduit, taux);
     				
     				
     				// table 2
@@ -479,9 +494,15 @@ public class VuePrevision extends javax.swing.JPanel {
     	    				}
     	    				// maQuantite + 25% :
     	    				// maQuantite = maQuantite + 25*maQuantite/100
+    	    				double taux = 0.0;
     	    				if(recupBool){
     	    					maQuantite = maQuantite + (maQuantite * 25 /100);
+    	    					taux = 25.0;
+    	    				}else {
+    	    					maQuantite = maQuantite + (maQuantite * 15/100);
+    	    					taux = 15.0;
     	    				}
+    	    				md.updateMargeLivraisonApresRepriseOuRupture(monProfil, monProduit, taux);
     						
     						// table 2
     						// maQuantite = maQuantite + 25%

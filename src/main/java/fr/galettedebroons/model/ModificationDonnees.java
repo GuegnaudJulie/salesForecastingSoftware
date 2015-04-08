@@ -2,6 +2,7 @@ package fr.galettedebroons.model;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 
 import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.MargeLivraison;
@@ -81,6 +82,61 @@ public class ModificationDonnees {
 		System.out.println("je re passe");
 		tx_.commit();
 	
+	}
+	
+	public void updateMargeLivraisonApresRepriseOuRupture(String profil, String produit, double taux_reprise){
+		tx_.begin();
+		RecuperationDonnees rd = new RecuperationDonnees(main_);
+		Produit np = rd.recuperationProduitComp(produit);
+		System.out.println("mon produit :  " +np);
+		Profil pp = rd.recuperationProfil(profil);
+		System.out.println("mon profilllllll ; " +pp);
+		
+		MargeLivraison margeL = null;
+		try{margeL = manager_.createQuery("select ml from MargeLivraison ml "
+				+ "WHERE ml.marge_produit LIKE :paramcode_prod AND ml.marge_profil LIKE :paramcode_client"
+				, MargeLivraison.class)
+				.setParameter("paramcode_prod", np)
+				.setParameter("paramcode_client", pp)
+				.getSingleResult();
+		
+			System.out.println("Ma ligne existe déjà donc je l'a met à jour");
+			manager_.createQuery("UPDATE MargeLivraison ml SET taux_reprise = :taux_reprise "
+					+ "WHERE ml.marge_produit LIKE :paramcode_prod AND ml.marge_profil LIKE :paramcode_client")
+					.setParameter("taux_reprise", taux_reprise)
+					.setParameter("paramcode_prod", np)
+					.setParameter("paramcode_client", pp)
+					.executeUpdate();
+			
+			this.tx_ = main_.getTransaction();
+			tx_.commit();
+			
+		}catch(NoResultException e){
+			System.out.println("PAs de ligne correspondante, création d'une nouvelle marge livraison !");
+			MargeLivraison ml = new MargeLivraison(taux_reprise, pp, np);
+			main_.getManager().persist(ml);
+			main_.getTransaction().commit();
+		}
+		
+		/*if(margeL != null){
+			System.out.println("Ma ligne existe déjà donc je l'a met à jour");
+			manager_.createQuery("UPDATE MargeLivraison ml SET taux_reprise = :taux_reprise "
+					+ "WHERE ml.marge_produit LIKE :paramcode_prod AND ml.marge_profil LIKE :paramcode_client")
+					.setParameter("taux_reprise", taux_reprise)
+					.setParameter("paramcode_prod", np)
+					.setParameter("paramcode_client", pp)
+					.executeUpdate();
+			
+			this.tx_ = main_.getTransaction();
+			tx_.commit();
+		
+		}*//* else {
+			System.out.println("PAs de ligne correspondante, création d'une nouvelle marge livraison !");
+			MargeLivraison ml = new MargeLivraison(taux_reprise, pp, np);
+			main_.getManager().persist(ml);
+			main_.getTransaction().commit();
+		}*/
+		
 	}
 	
 }
