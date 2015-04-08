@@ -192,6 +192,9 @@ public class NouveauProduit extends java.awt.Panel {
     	//jComboBox2 = new JComboBox(gamme);
     	DefaultComboBoxModel model = new DefaultComboBoxModel(gamme);
     	jComboBox1.setModel(model);
+
+    	jComboBox1.repaint();
+    	jComboBox1.validate();
     }
     
     public void methode(){

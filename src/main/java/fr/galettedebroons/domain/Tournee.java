@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Tournee {
@@ -123,7 +123,7 @@ public class Tournee {
 		this.dimanche = dimanche;
 	}
 
-	@OneToMany(mappedBy="profil_tournee", cascade=CascadeType.PERSIST)
+	@ManyToMany(mappedBy="profil_tournee", cascade=CascadeType.PERSIST)
 	public List<Profil> getProfil_tournee() {
 		return profil_tournee;
 	}

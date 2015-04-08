@@ -296,7 +296,11 @@ public class PanelEdition extends javax.swing.JPanel {
         }
     	
     	valListeClient.removeAllItems();
-        valListeClient.setModel(new javax.swing.DefaultComboBoxModel(code_client));
+    	DefaultComboBoxModel model = new DefaultComboBoxModel(code_client);
+    	valListeClient.setModel(model);
+    	valListeClient.repaint();
+    	valListeClient.validate();
+    	
         valListeClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 valListeClientActionPerformed(evt);
@@ -327,12 +331,13 @@ public class PanelEdition extends javax.swing.JPanel {
         }
     }                                               
 
-    private void valListeClientActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        String enseigne = "";
+    private void valListeClientActionPerformed(java.awt.event.ActionEvent evt) {
+    	String enseigne = "";
     	for (Object[] cl : client){
-    		if (cl[0] == valListeClient.getSelectedItem().toString()){
-    			enseigne = cl[1].toString();
-    		}
+	    	try{
+	        	if (cl[0] == valListeClient.getSelectedItem().toString())
+	        		enseigne = cl[1].toString();
+	    	} catch (Exception e){}
     	}
     	valNomClient.setText(enseigne);
     }                                              

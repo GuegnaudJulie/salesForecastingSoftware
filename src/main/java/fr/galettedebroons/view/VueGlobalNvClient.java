@@ -22,10 +22,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -76,13 +78,11 @@ public class VueGlobalNvClient {
 	JPanel panelBouton;
 	JPanel panelGlobal;
 	JScrollPane scrollPane;
-	JComboBox[] comboTournee;
+	JList[] listTournee;
 	JLabel labelErreur;
 	List<NouveauClient> listnvclient;
 	List<Object[]> clients;
-	String nomClient;
-	String codeClient;
-	String tourneeCombo;
+	List<Object> tourneeContenu;
 	String codeGamme;
 		
 	/**
@@ -133,11 +133,22 @@ public class VueGlobalNvClient {
 			nbNewClient = 1;
 		
 		// récupération de la liste de tournee
-		String[] tournee = rd_.recuperationTournee(); 
+		String[] tournee = rd_.recuperationTournee();
+		listTournee = new JList[nbNewClient];
 		
 		// récupération de la liste de gamme
     	String[] gamme = rd_.recuperationGamme();
-    	comboTournee = new JComboBox[nbNewClient];
+    	
+    	
+    	
+    	/*
+   	
+	JList liste = new JList(dlm);
+	dlm.addElement("un");
+	dlm.addElement("deux");
+    	 * 
+    	 */
+    	
     	
     	int indice = 0;
     	if (panel_ == null){
@@ -151,9 +162,13 @@ public class VueGlobalNvClient {
 				if (!rcp_.recuperationProfil(cli[1].toString()) && !listClients.contains(cli[1].toString()) ){
 					listClients.add(cli[1].toString());
 		    		
-			    	JComboBox jt = new JComboBox(tournee);
-			    	comboTournee[indice] = jt;
-		    		
+					DefaultListModel dlm = new DefaultListModel();
+					JList jt = new JList(dlm);
+					for (int i = 0; i<tournee.length; i++){
+						dlm.addElement(tournee[i]);
+					}
+					listTournee[indice] = jt;
+					
 		    		NouveauClient np = new NouveauClient(main_, this, cli[1].toString(),cli[0].toString(), jt);
 		    		
 		    		gbc.gridx = 0;
@@ -171,7 +186,7 @@ public class VueGlobalNvClient {
 	    	}
     	}
     	else{
-			JComboBox jt = new JComboBox(tournee);
+			JList jt = new JList(tournee);
 			panelGeneral.setLayout(new GridLayout(nbNewClient*2,0));
 			NouveauClient np = new NouveauClient(main_, this, null, null, jt);
     		panelGeneral.add(np);
@@ -207,14 +222,9 @@ public class VueGlobalNvClient {
 		//On crée des nouvelles combobox que l'on rajoute à chaque client en leur précisant l'objet qui a déjà été selectionné
 		String[] tournee = rd_.recuperationTournee();
 		
-		int indice = 0;
 		for (NouveauClient nc : listnvclient){
-			JComboBox jt = new JComboBox(tournee);
 			Object selection = nc.getSelectTournee();
-			
-			nc.majComboTournee(jt, selection);
-			
-			indice ++;
+			nc.majComboTournee(tournee, selection);
 		}
     }
 	
@@ -226,42 +236,49 @@ public class VueGlobalNvClient {
 		Tournee tournee;
 		RecupTournee rt = new RecupTournee(main_);
 		
-		int indice = 0;
 		main_.getTransaction().begin();
 		for (NouveauClient listclient : listnvclient){
 			try{
 				//Recuperation code gamme
-				tourneeCombo = listclient.getSelectTournee().toString();
-			
+				tourneeContenu = listclient.getSelectTournee();
+				
 				//Création d'un profil
 				List<Livraison> livr = new ArrayList<Livraison>();
 				List<Prevision> prev = new ArrayList<Prevision>();
 				List<QuantiteReelle> qr = new ArrayList<QuantiteReelle>();
 				List<MargeLivraison> ml = new ArrayList<MargeLivraison>();
+				List<Tournee> listTour = new ArrayList<Tournee>();
+				
+				if (tourneeContenu.isEmpty())
+					messageErreur = "Erreur : des informations sont manquantes ou erronées";
+				
+				for (Object t : tourneeContenu){
+					tournee = rt.recuperationTournee(t.toString());
+					listTour.add(tournee);
+				}
 				p = new Profil(listclient.getTextFieldCC().getText(), livr, prev, qr, ml, true);
-				tournee = rt.recuperationTournee(tourneeCombo);
-				p.setProfil_tournee(tournee);
+				p.setProfil_tournee(listTour);
 				
 				//Création d'un client
 				List<Profil> profil = new ArrayList<Profil>();
 				profil.add(p);
-				c = new Client(nomClient, profil);
+				c = new Client(listclient.getTextFieldCC().getText(), profil);
 				p.setClient_profil(c);
 				
 				//Liaison du profil et de la tournee
-				List<Profil> listP = tournee.getProfil_tournee();
-				if (listP == null)
-					tournee.setProfil_tournee(profil);
-				else
-					tournee.addProfil(p);
-					
+				for (Tournee t : listTour){
+					List<Profil> listP = t.getProfil_tournee();
+					if (listP == null)
+						t.setProfil_tournee(profil);
+					else
+						t.addProfil(p);
+				}
+				
 				main_.getManager().persist(c);
 					
 			} catch (Exception e) {
 				messageErreur = "Erreur : des informations sont manquantes ou erronées";
 			}
-			
-			indice ++;
 		}
 		
 		if (messageErreur == ""){

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -15,7 +16,7 @@ public class Profil {
 	private Client client_profil;
 	private List<Livraison> livraison_profil;
 	private Boolean actif;
-	private Tournee profil_tournee;
+	private List<Tournee> profil_tournee;
 	private List<MargeLivraison> marge_profil;
 	private List<Prevision> prevision_profil;
 	private List<QuantiteReelle> reel_profil;
@@ -75,13 +76,17 @@ public class Profil {
 		this.client_profil = client;
 	}
 
-	@ManyToOne
-	public Tournee getProfil_tournee() {
+	@ManyToMany
+	public List<Tournee> getProfil_tournee() {
 		return profil_tournee;
 	}
 
-	public void setProfil_tournee(Tournee profil_tournee) {
+	public void setProfil_tournee(List<Tournee> profil_tournee) {
 		this.profil_tournee = profil_tournee;
+	}
+	
+	public void addTournee(Tournee tournee){
+		profil_tournee.add(tournee);
 	}
 
 	@OneToMany(mappedBy="marge_profil", cascade=CascadeType.PERSIST)
