@@ -159,8 +159,17 @@ public class RemplissageLivraison {
 				}
 			}
 			else if (!prevu && semaineNonFerie){
-				lprec = rl_.recupLivraisonPrec(produit, profil, date);
-				qtPrec = rqr_.recuperationPrecQR(profil, produit, date);
+				try{
+					lprec = rl_.recupLivraisonPrec(produit, profil, date);
+				} catch (Exception e){
+					lprec = null;
+				}
+				
+				try{
+					qtPrec = rqr_.recuperationPrecQR(profil, produit, date);
+				} catch (Exception e){
+					qtPrec = null;
+				}
 				
 				if (qteReelle >= 0){
 					if (lprec != null)

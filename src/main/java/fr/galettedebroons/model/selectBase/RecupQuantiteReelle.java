@@ -48,7 +48,7 @@ public class RecupQuantiteReelle {
 	}
 
 	public QuantiteReelle recuperationPrecQR(Profil profil, Produit produit, Date date) {
-		List<QuantiteReelle> listqr = manager_.createQuery("select q from QuantiteReelle q where "
+		QuantiteReelle qr = manager_.createQuery("select q from QuantiteReelle q where "
 				+ "reel_profil LIKE :profil AND "
 				+ "reel_produit LIKE :prod AND "
 				+ "date < :d " 
@@ -56,15 +56,8 @@ public class RecupQuantiteReelle {
 				.setParameter("profil", profil)
 				.setParameter("prod", produit)
 				.setParameter("d", date)
-				.getResultList();
-		
-		QuantiteReelle qr = null ;
-		int i = 0;
-		for(QuantiteReelle q : listqr){
-			if (i == 0)
-				qr = q;
-			i++;
-		}
+				.setMaxResults(1)
+				.getSingleResult();
 		
 		return qr;
 	}
