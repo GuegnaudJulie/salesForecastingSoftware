@@ -323,7 +323,7 @@ public class RecuperationDonnees {
 	public int countNbProduitPrevision(){
 		long count = 0;
 		int res = 0;
-		count = manager_.createQuery("select count(distinct prevision_profil) as c "
+		count = manager_.createQuery("select count(distinct prevision_produit) as c "
 				+"FROM Prevision", Long.class)
 				.getSingleResult();
 		res = (int) count;

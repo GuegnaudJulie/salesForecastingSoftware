@@ -280,13 +280,37 @@ public class VuePrevision extends javax.swing.JPanel {
     	reinitialiserJTable1();
     	reinitialiserJTable2();
     	
-    	// taille du tableau
+    	String nomTournee = "";
+    	String nomProfil = "";
+    	java.util.Date data = null;
+    	nomTournee = (String) jComboBox1.getSelectedItem();
+    	System.out.println("nomTournee : " +nomTournee);
+    	nomProfil = (String) jComboBox2.getSelectedItem();
+    	System.out.println("nomProfil : " +nomProfil);
+    	
+    	// TAILLE DU TABLEAU !!!!!!!
     	int horizonProduit = 0;
     	int vertiProfil = 0;
     	
-    	horizonProduit = rd.countNbProduitPrevision();
-    	vertiProfil = rd.countNbProfilPrevision();
-    	jTable1.setSize(horizonProduit, vertiProfil);
+    	horizonProduit = rd.countNbProduitPrevision() + 1;
+    	if(nomProfil.toString().contains("Tous")){
+    		System.out.println("JE CONTIENT TOUUUUS");
+    		
+    		
+    		// requete non ok !!!! retourne tous les profils de prevision
+    		// sans tenir compte de la tournee !!!!!
+    		vertiProfil = rd.countNbProfilPrevision();
+    	}else{
+    		vertiProfil = 1;
+    	}
+    	
+    	// definir le model de mon table
+    	Object[][] modelDonnee = new Object[vertiProfil][horizonProduit];
+    	title = new String[horizonProduit];
+    	jTable2.setModel(new javax.swing.table.DefaultTableModel(modelDonnee, title));
+    	int i = 0;
+    	title[i] = "Toto";
+    	//jTable1.setSize(horizonProduit, vertiProfil);
     	
     	System.out.println("HORIZONTALE :::: " +horizonProduit);
     	System.out.println("VERTICALE :::: " +vertiProfil);
@@ -294,14 +318,7 @@ public class VuePrevision extends javax.swing.JPanel {
     	jTable1.repaint();
     	jTable2.repaint();
     	
-    	String nomTournee = "";
-    	String nomProfil = "";
-    	java.util.Date data = null;
     	
-    	nomTournee = (String) jComboBox1.getSelectedItem();
-    	System.out.println("nomTournee : " +nomTournee);
-    	nomProfil = (String) jComboBox2.getSelectedItem();
-    	System.out.println("nomProfil : " +nomProfil);
     	System.out.println(String.valueOf(jDateChooser1.getDate()));
     	
     	data = jDateChooser1.getDate();
@@ -524,6 +541,7 @@ public class VuePrevision extends javax.swing.JPanel {
     		}
     	}
     	jTable2.setDefaultRenderer(Object.class, new VuePrevisionCustomisation());
+    	
    	}
     
     /**
@@ -617,6 +635,8 @@ public class VuePrevision extends javax.swing.JPanel {
     String[] listeTournee;
     String[] listeProduit;
     String[] listProfilEditable;
+    
+    private String[] title;
 
 	//@Override
 	/*public Component getTableCellRendererComponent(JTable table, Object color,
