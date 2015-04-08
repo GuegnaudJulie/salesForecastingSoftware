@@ -1,5 +1,8 @@
 package fr.galettedebroons.model.selectBase;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,6 +17,12 @@ public class RecupTournee {
 	
 	public RecupTournee(Main main){
 		manager_ = main.getManager();
+	}
+	
+	public List<Tournee> listTournee(){
+		List<Tournee> tournee = manager_.createQuery("select t from Tournee t", Tournee.class).getResultList();
+		
+		return tournee;
 	}
 	
 	public Tournee recuperationTournee(String nom){
@@ -80,5 +89,21 @@ public class RecupTournee {
 		}
 		
 		return joursTournee;
+	}
+
+	public List<Profil> recuperationProfilTournee(String tournee){
+		@SuppressWarnings("unchecked")
+		Collection<Profil> list = manager_.createQuery("select t.profil_tournee "
+				+ "FROM Tournee t WHERE t.nom LIKE :tournee", Collection.class)
+				.setParameter("tournee", tournee)
+				.getSingleResult();
+		
+		List<Profil> listProfil = new ArrayList<Profil>();
+		
+		for (Profil p : list){
+			listProfil.add(p);
+		}
+		
+		return listProfil;
 	}
 }
