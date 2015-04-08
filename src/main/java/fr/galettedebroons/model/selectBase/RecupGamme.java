@@ -1,5 +1,7 @@
 package fr.galettedebroons.model.selectBase;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import fr.galettedebroons.domain.Gamme;
@@ -20,6 +22,20 @@ public class RecupGamme {
 				.getSingleResult();
 		
 		return g;
+	}
+	
+	public String[] recuperationGamme(){
+		List<String> ListGamme = manager_.createQuery("select g.code_gamme " +
+				"from Gamme g ", String.class).getResultList();
+		
+		String[] gamme = new String[ListGamme.size()];
+		int i = 0;
+		for (String g : ListGamme){
+			gamme[i] = g;
+			i++;
+		}
+		
+		return gamme;
 	}
 	
 	public int recuperationValiditeGamme(Gamme g){

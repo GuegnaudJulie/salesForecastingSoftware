@@ -38,22 +38,23 @@ import fr.galettedebroons.model.selectBase.RecupGamme;
 import fr.galettedebroons.model.selectBase.RecupTemporaire;
 
 public class VueGlobalNvProduit {
-	static List<Object[]> results;
+	private List<Object[]> results;
 	
-	static JPanel panelGeneral;
-	static JPanel panelGlobal;
-	static JPanel panelBouton;
-	static JScrollPane scrollPane;
-	static JLabel labelErreur;
-	static JFrame fenetre;
-	static JComboBox[] comboGamme;
-	static List<NouveauProduit> listnvproduit;
+	private JPanel panelGeneral;
+	private JPanel panelGlobal;
+	private JPanel panelBouton;
+	private JScrollPane scrollPane;
+	private JLabel labelErreur;
+	private JFrame fenetre;
+	private JComboBox[] comboGamme;
+	private List<NouveauProduit> listnvproduit;
 	
-	static String textCombo;
-	static Main main_;
-	static PanelEdition panel_;
-	private static TraitementDonneesTemporaire ClasseTraitement_;
-	static List<String> produits;
+	private String textCombo;
+	private Main main_;
+	private PanelEdition panel_;
+	private TraitementDonneesTemporaire ClasseTraitement_;
+	private RecupGamme rg_;
+	private List<String> produits;
 	
 	/**
 	 * constructeur appel methode dynamique creation panel nouveau client
@@ -62,13 +63,14 @@ public class VueGlobalNvProduit {
 		main_ = main; //Contient notre EntityManager => plus besoin de faire : new Main(manager_) et de créer le manager
 		panel_ = panel;
 		ClasseTraitement_ = tdt;
+		rg_ = new RecupGamme(main_);
 		initialisationProduits();
 	}
 	
 	/**
 	 * initialisation dynamique des nouveaux clients dans la base temporaire
 	 */
-	private static void initialisationProduits() {
+	private void initialisationProduits() {
 		labelErreur = new JLabel();
 		panelGeneral = new JPanel();
 		panelGlobal = new JPanel();
@@ -117,7 +119,7 @@ public class VueGlobalNvProduit {
 	    		comboGamme[indice] = jb;
 	    		//panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
 	    		
-	    		NouveauProduit np = new NouveauProduit(main_, prod.toString(), jb);
+	    		NouveauProduit np = new NouveauProduit(main_, prod.toString(), jb, this);
 	    		
 	    		gbc.gridx = 0;
 	    		gbc.gridy = indice;
@@ -135,7 +137,7 @@ public class VueGlobalNvProduit {
     	else{
 			JComboBox jb = new JComboBox(gamme);
 			panelGeneral.setLayout(new GridLayout(nbNewProd*2,0));
-			NouveauProduit np = new NouveauProduit(main_, null, jb);
+			NouveauProduit np = new NouveauProduit(main_, null, jb, this);
 			panelGeneral.add(np);
 			listnvproduit.add(np);
 		}
@@ -171,11 +173,21 @@ public class VueGlobalNvProduit {
     	
 	}
 	
+	public void majComboGamme(){
+		//On crée des nouvelles combobox que l'on rajoute à chaque client en leur précisant l'objet qui a déjà été selectionné
+		String[] gamme = rg_.recuperationGamme();
+		
+		for (NouveauProduit np : listnvproduit){
+			Object selection = np.getSelectGamme();
+			np.majListGamme(gamme, selection);
+		}
+	}
+	
 	/**
 	 * recupere et enregistre les informations des produits 
 	 * @param evt
 	 */
-	private static void enregistrercliActionPerformed(ActionEvent evt) {
+	private void enregistrercliActionPerformed(ActionEvent evt) {
 		labelErreur.setText("");
 		RecupGamme rg = new RecupGamme(main_);
 		String messageErreur = "";

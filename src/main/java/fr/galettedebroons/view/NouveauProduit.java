@@ -27,9 +27,10 @@ public class NouveauProduit extends java.awt.Panel {
 
     /** Creates new form NouveauClient */
 
-    public NouveauProduit(Main main, String code_produit, JComboBox comboGamme) {
+    public NouveauProduit(Main main, String code_produit, JComboBox comboGamme, VueGlobalNvProduit panel) {
     	main_ = main;
     	rd_ = new RecuperationDonnees(main);
+    	panel_ = panel;
     	initComponents(code_produit, comboGamme);
     }	
 
@@ -184,21 +185,19 @@ public class NouveauProduit extends java.awt.Panel {
     	return fenetreNvGamme;
     }
     
-    public void listGamme(){
-		// récupération de la liste de gamme
-    	String[] gamme = rd_.recuperationGamme();
-    	
+    public void majListGamme(String[] gamme, Object selec){
     	jComboBox1.removeAllItems();
-    	//jComboBox2 = new JComboBox(gamme);
     	DefaultComboBoxModel model = new DefaultComboBoxModel(gamme);
     	jComboBox1.setModel(model);
-
+    	
+    	jComboBox1.setSelectedItem(selec);
+    	
     	jComboBox1.repaint();
     	jComboBox1.validate();
     }
     
     public void methode(){
-    	listGamme();
+    	panel_.majComboGamme();
 	}
     
     public String getSelectCode(){
@@ -245,7 +244,7 @@ public class NouveauProduit extends java.awt.Panel {
     private JFrame fenetreNvGamme;
     private Main main_;
     private RecuperationDonnees rd_;
+    private VueGlobalNvProduit panel_;
     // End of variables declaration
-
 }
 

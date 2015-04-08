@@ -43,5 +43,7 @@ public class TraitementDonneesTemporaire {
 		
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
 		rdt.vidage();
+		
+		//prevision
 	}
 }

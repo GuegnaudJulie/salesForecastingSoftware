@@ -156,6 +156,19 @@ public class RemplissageLivraison {
 					else if (lprec != null && qtPrec == null){
 						ajoutQuantiteReelle(qteReelle, profil, produit, lprec.getDate_livraison(), rupture);
 					}
+					
+					//Ajout de données à prévision
+					try{
+						if (qteReelle > 0){
+							main_.getTransaction().begin();
+							Prevision p = new Prevision(qteReelle, profil, produit, date);
+							main_.getManager().persist(p);
+							main_.getTransaction().commit();
+						}
+					} catch (Exception e) {
+						
+					}
+					
 				}
 			}
 			else if (!prevu && semaineNonFerie){
