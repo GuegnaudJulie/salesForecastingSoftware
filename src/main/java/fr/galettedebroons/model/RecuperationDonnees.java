@@ -310,4 +310,24 @@ public class RecuperationDonnees {
 		
 	}
 	
+	public int countNbProfilPrevision(){
+		long count = 0;
+		int res = 0;
+		count = manager_.createQuery("select count(distinct prevision_profil) as c "
+				+"FROM Prevision", Long.class)
+				.getSingleResult();
+		res = (int) count;
+		return res;
+	}
+	
+	public int countNbProduitPrevision(){
+		long count = 0;
+		int res = 0;
+		count = manager_.createQuery("select count(distinct prevision_profil) as c "
+				+"FROM Prevision", Long.class)
+				.getSingleResult();
+		res = (int) count;
+		return res;
+	}
+	
 }

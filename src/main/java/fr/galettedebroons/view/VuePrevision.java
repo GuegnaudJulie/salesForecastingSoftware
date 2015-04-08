@@ -279,6 +279,18 @@ public class VuePrevision extends javax.swing.JPanel {
     	// remise à zéro de mes 2 tables
     	reinitialiserJTable1();
     	reinitialiserJTable2();
+    	
+    	// taille du tableau
+    	int horizonProduit = 0;
+    	int vertiProfil = 0;
+    	
+    	horizonProduit = rd.countNbProduitPrevision();
+    	vertiProfil = rd.countNbProfilPrevision();
+    	jTable1.setSize(horizonProduit, vertiProfil);
+    	
+    	System.out.println("HORIZONTALE :::: " +horizonProduit);
+    	System.out.println("VERTICALE :::: " +vertiProfil);
+    	
     	jTable1.repaint();
     	jTable2.repaint();
     	
