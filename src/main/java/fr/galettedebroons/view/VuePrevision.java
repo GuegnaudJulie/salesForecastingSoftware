@@ -3,12 +3,9 @@ package fr.galettedebroons.view;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.ComboBoxModel;
+import javax.persistence.NoResultException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -17,12 +14,11 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 import fr.galettedebroons.model.ModificationDonnees;
 import fr.galettedebroons.model.RecuperationDonnees;
+import fr.galettedebroons.model.selectBase.RecupQuantiteReelle;
 import fr.galettedebroons.main.Main;
 
 
@@ -41,7 +37,7 @@ import fr.galettedebroons.main.Main;
  *
  * @author poher
  */
-public class VuePrevision extends javax.swing.JPanel implements TableCellRenderer {
+public class VuePrevision extends javax.swing.JPanel {
 	
 	private Main main_;
 
@@ -76,6 +72,7 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
         
         rd = new RecuperationDonnees(main_);
         md = new ModificationDonnees(main_);
+        rqr = new RecupQuantiteReelle(main_);
         
         //recuperation tournee
         listeTournee = rd.recuperationTournee();
@@ -174,17 +171,6 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
         
         jLabel5.setText("Prévision + Marge de reprise");
 
-        /*jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));*/
         jScrollPane2.setViewportView(jTable2);
 
         jButton1.setText("Prévision");
@@ -298,7 +284,6 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
     	
     	String nomTournee = "";
     	String nomProfil = "";
-    	String date = "";
     	java.util.Date data = null;
     	
     	nomTournee = (String) jComboBox1.getSelectedItem();
@@ -309,15 +294,13 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
     	
     	data = jDateChooser1.getDate();
     	System.out.println("data :  " +data);
-    	date = String.valueOf(jDateChooser1.getDate());
-    	System.out.println("ma date : " +date);
     	
     	//si un profil est selectionné en particulier
     	if(!nomProfil.toString().contains("Tous") && data != null){
     		String profil = "";
     		String monProfil = "";
     		String monProduit = "";
-    		int maQuantité = 0;
+    		int maQuantite = 0;
     		
         	profil = (String) jComboBox2.getSelectedItem();
         	List<Object[]> maliste = rd.recupuniqueProfil(data, profil);
@@ -326,12 +309,10 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
         	jTable1.getTableHeader().getColumnModel().getColumn(0).setHeaderValue("Profil");
     		jTable1.repaint();
     		jTable1.getTableHeader().repaint();
-    		//jTable1.getModel().setValueAt(monProfil, 0, 0);
     		
     		jTable2.getTableHeader().getColumnModel().getColumn(0).setHeaderValue("Profil");
     		jTable2.repaint();
     		jTable2.getTableHeader().repaint();
-    		
     		
     		int indiceTitre = 1;
     		int colonneProduitQte = 1;
@@ -346,19 +327,30 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
     			System.out.println("Mon produit " +p[2]);
     			monProduit = (String) p[2];
     			System.out.println("Ma quantité " +p[0]);
-    			maQuantité = (int) p[0];
+    			maQuantite = (int) p[0];
     			
     			jTable1.getModel().setValueAt(monProfil, 0, 0);
     			jTable1.getTableHeader().getColumnModel().getColumn(indiceTitre).setHeaderValue(monProduit);
     			indiceTitre++;
-    			jTable1.getModel().setValueAt(maQuantité, ligneProduitQte, colonneProduitQte);
+    			jTable1.getModel().setValueAt(maQuantite, ligneProduitQte, colonneProduitQte);
     			colonneProduitQte++;
     			
     			// jtable2 :
+    			boolean recupBool = false;
+				try{
+					recupBool = rqr.recuperationPrecQRBool(monProfil, monProduit, data);
+				}catch(NoResultException e){
+					System.out.println("il n'y a pas de rupture en base");
+				}
+				// maQuantite + 25% :
+				// maQuantite = maQuantite + 25*maQuantite/100
+				if(recupBool){
+					maQuantite = maQuantite + (maQuantite * 25 /100);
+				}
     			jTable2.getModel().setValueAt(monProfil, 0, 0);
     			jTable2.getTableHeader().getColumnModel().getColumn(indiceTitre).setHeaderValue(monProduit);
     			indiceTitreTable2++;
-    			jTable2.getModel().setValueAt(maQuantité, ligneProduitQte, colonneProduitQte);
+    			jTable2.getModel().setValueAt(maQuantite, ligneProduitQte, colonneProduitQte);
     			colonneProduitQteTable2++;
     		}
     	}
@@ -416,14 +408,10 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
     			System.out.println("Ma quantité " +p[0]);
     			maQuantite = (int) p[0];
     			
-    			// si meme profil alors ajout du produit après ancient produit ajouté
-    			System.out.println("la valeur de mon profil : " +monProfilPrecedent);
-    			System.out.println("la valeur de mon profil précédent : " +colonne);
+    			// si meme profil alors ajout du produit après ancien produit ajouté
     			if(monProfil.equals(monProfilPrecedent) || (jTable1.getModel().getValueAt(0, 0) == null)){
-    				System.out.println("je rentre bien dans ma condition");
     				jTable1.getModel().setValueAt(monProfil, ligneprofil, colonneprofil);
     				jTable1.getTableHeader().getColumnModel().getColumn(k).setHeaderValue(monProduit);
-    				
     				
     				// table 2
     				jTable2.getModel().setValueAt(monProfil, ligneprofil, colonneprofil);
@@ -436,21 +424,28 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
     				mesTitre[tabTitre] = monProduit;
     				tabTitre++;
     				colonne++;
-    				System.out.println("ma quantité : " +maQuantite);
     				
+    				jTable1.getModel().setValueAt(maQuantite, ligne, colonne);
+    				// controle si il y a eu rupture, si boolean = true
+    				boolean recupBool = false;
+    				try{
+    					recupBool = rqr.recuperationPrecQRBool(monProfil, monProduit, data);
+    				}catch(NoResultException e){
+    					System.out.println("il n'y a pas de rupture en base");
+    				}
     				// maQuantite + 25% :
     				// maQuantite = maQuantite + 25*maQuantite/100
-    				jTable1.getModel().setValueAt(maQuantite, ligne, colonne);
+    				if(recupBool){
+    					maQuantite = maQuantite + (maQuantite * 25 /100);
+    				}
+    				
+    				
     				// table 2
     				jTable2.getModel().setValueAt(maQuantite, ligne, colonne);
     				monProfilPrecedent = monProfil;
-    				
-    				System.out.println("la valeur de ma colonne : " +colonne);
-    				System.out.println("la valeur de ma ligne : " +ligne);
     				k++;
     			}
     			if(!monProfil.equals(monProfilPrecedent)){
-    				System.out.println("mon profil différent : " +monProfil);
     				ligneprofil++;
     				jTable1.getModel().setValueAt(monProfil, ligneprofil, colonneprofil);
     				// table 2
@@ -458,17 +453,24 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
     				listProfilEditable[indiceProfilEditable] = monProfil;
     				indiceProfilEditable++;
     				
-    				
     				// si mon produit est différent d'un produit déjà existant alors on avance
     				k = 0;
-    				System.out.println("c'est quoiii ? " +mesTitre[0]);
     				while(mesTitre[k] != null){
-    					System.out.println("mamaaaaa");
     					if(monProduit.equals(mesTitre[k])){
-    						System.out.println("monproduit : " +mesTitre[k] + "mon indice : " +k);
-    						System.out.println("ligne profil : " +ligneprofil);
-    						System.out.println("colonne profil : " +colonneprofil);
     						jTable1.getModel().setValueAt(maQuantite, ligneprofil, k+1);
+    						
+    						boolean recupBool = false;
+    	    				try{
+    	    					recupBool = rqr.recuperationPrecQRBool(monProfil, monProduit, data);
+    	    				}catch(NoResultException e){
+    	    					System.out.println("il n'y a pas de rupture en base");
+    	    				}
+    	    				// maQuantite + 25% :
+    	    				// maQuantite = maQuantite + 25*maQuantite/100
+    	    				if(recupBool){
+    	    					maQuantite = maQuantite + (maQuantite * 25 /100);
+    	    				}
+    						
     						// table 2
     						// maQuantite = maQuantite + 25%
     						jTable2.getModel().setValueAt(maQuantite, ligneprofil, k+1);
@@ -488,9 +490,13 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
     			}
     		}
     	}
+    	jTable2.setDefaultRenderer(Object.class, new VuePrevisionCustomisation());
    	}
     
-    
+    /**
+     * Affichage d'un panel avec la quantité totale des produits
+     * @param evt
+     */
     private void jButton2ActionPerformed(ActionEvent evt) {
     	QteALivrerTotal qteaLivrer = new fr.galettedebroons.view.QteALivrerTotal(main_);
     	JFrame fenetre = new JFrame();
@@ -500,7 +506,7 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
     }
     
     /**
-     * reinitialisation de l'affichage de la table
+     * reinitialisation de l'affichage de la table 1
      */
     public void reinitialiserJTable1(){
     	jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -527,6 +533,9 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
             ));
     }
     
+    /**
+     * reinitialisation de l'affichage de la table 2
+     */
     public void reinitialiserJTable2(){
     	jTable2.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
@@ -570,18 +579,27 @@ public class VuePrevision extends javax.swing.JPanel implements TableCellRendere
 
     RecuperationDonnees rd;
     ModificationDonnees md;
+    RecupQuantiteReelle rqr;
     String[] listClient;
     String[] listeTournee;
     String[] listeProduit;
     String[] listProfilEditable;
 
-	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value,
+	//@Override
+	/*public Component getTableCellRendererComponent(JTable table, Object color,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		
 		Component comp = getTableCellRendererComponent(
-		        table, value, isSelected, hasFocus, row, column);
+		        table, color, isSelected, hasFocus, row, column);
+		Color newColor = (Color) color;
+		setBackground(newColor);
+		
+		String contenu = (String) jTable2.getModel().getValueAt(1, 1);
+		if(contenu.contains("1") ){
+			comp.setBackground(Color.RED);
+		}
+		
 		// TODO Auto-generated method stub
-		return null;
-	}
+		return this;
+	}*/
 }
