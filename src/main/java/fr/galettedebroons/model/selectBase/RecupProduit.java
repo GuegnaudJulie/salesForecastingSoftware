@@ -20,4 +20,13 @@ public class RecupProduit {
 		
 		return prod;
 	}
+	
+	public Produit recupProduit(String code_produit) {
+		Produit prod =  manager_.createQuery("select p from Produit p WHERE " +
+				"code_produit LIKE :produit", Produit.class)
+				.setParameter("produit", code_produit)
+				.getSingleResult();
+		
+		return prod;
+	}
 }

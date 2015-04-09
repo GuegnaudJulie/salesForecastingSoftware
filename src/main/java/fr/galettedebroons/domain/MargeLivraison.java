@@ -13,6 +13,7 @@ public class MargeLivraison {
 	private double taux_reprise;
 	private Profil marge_profil;
 	private Produit marge_produit;
+	private boolean editable;
 	
 	public MargeLivraison(){}
 	
@@ -20,10 +21,11 @@ public class MargeLivraison {
 		this.taux_reprise = taux_reprise;
 	}
 	
-	public MargeLivraison(double taux_reprise, Profil marge_profil, Produit marge_produit) {
+	public MargeLivraison(double taux_reprise, Profil marge_profil, Produit marge_produit, boolean edition) {
 		this.taux_reprise = taux_reprise;
 		this.marge_profil = marge_profil;
 		this.marge_produit = marge_produit;
+		this.editable = edition;
 	}
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -59,5 +61,13 @@ public class MargeLivraison {
 
 	public void setMarge_produit(Produit marge_produit) {
 		this.marge_produit = marge_produit;
+	}
+
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 }

@@ -1,5 +1,7 @@
 package fr.galettedebroons.model.selectBase;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import fr.galettedebroons.domain.Profil;
@@ -26,6 +28,13 @@ public class RecupClientProfil {
 		}
 		
 		return present;
+	}
+	
+	public List<Profil> recuperationToutProfil(){
+		List<Profil> listProfil = manager_.createQuery("select p from Profil p", Profil.class)
+					.getResultList();
+			
+		return listProfil;
 	}
 	
 }

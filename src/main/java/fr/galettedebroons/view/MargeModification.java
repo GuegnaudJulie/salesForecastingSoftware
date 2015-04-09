@@ -159,7 +159,7 @@ public class MargeModification extends javax.swing.JPanel {
 				double nvTauxReprise = 0.0;
 				try{
 					nvTauxReprise = Integer.parseInt(jTextField1.getText());
-					md.insertNvTxReprise(nvTauxReprise, enseigne_client, codeProduit);
+					md.insertNvTxReprise(nvTauxReprise, enseigne_client, codeProduit, false);
 					System.out.println("j'ai modifier ma marge !!! ");
 					// réaffichage de mon label avec la nouvelle valeur 
 					tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);

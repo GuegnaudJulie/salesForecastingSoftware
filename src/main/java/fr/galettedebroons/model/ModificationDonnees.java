@@ -1,14 +1,18 @@
 package fr.galettedebroons.model;
 
+import java.sql.Date;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 
 import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.MargeLivraison;
+import fr.galettedebroons.domain.Prevision;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.main.Main;
+import fr.galettedebroons.model.selectBase.RecupPrevision;
 
 public class ModificationDonnees {
 	
@@ -50,7 +54,7 @@ public class ModificationDonnees {
 		l.setQte_reprise(qteMoins);
 	}
 	
-	public void insertNvTxReprise(double nvTauxReprise, String nomprofil, String nomproduit){
+	public void insertNvTxReprise(double nvTauxReprise, String nomprofil, String nomproduit, boolean editer){
 		tx_.begin();
 		RecuperationDonnees rd = new RecuperationDonnees(main_);
 		Produit np = rd.recuperationProduitComp(nomproduit);
@@ -58,33 +62,37 @@ public class ModificationDonnees {
 		Profil pp = rd.recuperationProfil(nomprofil);
 		System.out.println("mon profil ; " +pp);
 		// double taux_reprise, Profil marge_profil, Produit marge_produit
-		MargeLivraison margeL = new MargeLivraison(nvTauxReprise, pp, np);
+		MargeLivraison margeL = new MargeLivraison(nvTauxReprise, pp, np, editer);
 		manager_.persist(margeL);
 		tx_.commit();
-		
 	}
 	
-	public void updateMargeLivraisonManuelle(java.util.Date date, int quantite, String produit, String profil){
-		tx_.begin();
+	public void updatePrevisionManuelle(Date date, int quantite, String produit, String profil){
+		
+		System.out.println("Je rentre !!!!!!!!!");
+		
 		RecuperationDonnees rd = new RecuperationDonnees(main_);
-		Produit np = rd.recuperationProduitComp(produit);
-		System.out.println("mon produit :  " +np);
-		Profil pp = rd.recuperationProfil(profil);
-		System.out.println("mon profil ; " +pp);
+		RecupPrevision rp = new RecupPrevision(main_);
 		
-		manager_.createQuery("UPDATE Prevision pr SET quantite = :quantite "
-				+ "WHERE pr.prevision_produit LIKE :paramcode_prod AND pr.prevision_profil LIKE :paramcode_client")
-				.setParameter("quantite", quantite)
-				.setParameter("paramcode_prod", np)
-				.setParameter("paramcode_client", pp)
-				.executeUpdate();
-		this.tx_ = main_.getTransaction();
-		System.out.println("je re passe");
-		tx_.commit();
-	
+		Produit np = rd.recuperationProduitComp(produit);
+		Profil pp = rd.recuperationProfil(profil);
+		
+		try{
+			Prevision prev = rp.prevision(pp, np, date);
+			prev.setQuantite(quantite);
+			System.out.println("la quantite a change : " + prev.getQuantite());
+		} catch (Exception e){
+			tx_.begin();
+			
+			Prevision p = new Prevision(quantite, pp, np, date);
+			manager_.persist(p);
+			tx_.commit();
+			
+			System.out.println("J'ai créer une nouvelle prev ! : " + p.getQuantite());
+		}
 	}
 	
-	public void updateMargeLivraisonApresRepriseOuRupture(String profil, String produit, double taux_reprise){
+	public void updateMargeLivraisonApresRepriseOuRupture(String profil, String produit, double taux_reprise, boolean editer){
 		tx_.begin();
 		RecuperationDonnees rd = new RecuperationDonnees(main_);
 		Produit np = rd.recuperationProduitComp(produit);
@@ -113,7 +121,7 @@ public class ModificationDonnees {
 			
 		}catch(NoResultException e){
 			System.out.println("PAs de ligne correspondante, création d'une nouvelle marge livraison !");
-			MargeLivraison ml = new MargeLivraison(taux_reprise, pp, np);
+			MargeLivraison ml = new MargeLivraison(taux_reprise, pp, np, editer);
 			main_.getManager().persist(ml);
 			main_.getTransaction().commit();
 		}

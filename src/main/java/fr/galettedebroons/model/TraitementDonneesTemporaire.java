@@ -39,6 +39,10 @@ public class TraitementDonneesTemporaire {
 	public void insertionDonneeFin(){
 		RemplissageLivraison rl = new RemplissageLivraison(main_);
 		rl.remplissage();
+		
+		MargeLivraisonCalcul ml = new MargeLivraisonCalcul(main_);
+		ml.calculMarge();
+		
 		JOptionPane.showMessageDialog(panel_, "Les livraisons ont été ajoutées");
 		
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);

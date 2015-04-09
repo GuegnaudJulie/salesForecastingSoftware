@@ -41,10 +41,8 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         panelAccueil = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         panelEdition = new fr.galettedebroons.view.PanelEdition(main_);
-        panelPrevision = new fr.galettedebroons.view.VuePrevision2(main_);
+        panelPrevision = new fr.galettedebroons.view.VuePrevision(main_);
         jLabel2 = new javax.swing.JLabel();
-        panelProduction = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         panelParametrage = new fr.galettedebroons.view.MargeModification(main_);
         panelManuel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -95,27 +93,6 @@ public class InterfaceGenerale extends javax.swing.JFrame {
 
        panelOnglet.addTab("Prévision semaine", panelPrevision);
 
-        jLabel3.setText("Bienvenue dans l'onglet production. Vous y trouver le nombre de galette à produire et la quantité de chaque ingrédient à prévoir soit pour la journée soit pour la semaine soit pour la semaine prochaine");
-
-        javax.swing.GroupLayout panelProductionLayout = new javax.swing.GroupLayout(panelProduction);
-        panelProduction.setLayout(panelProductionLayout);
-        panelProductionLayout.setHorizontalGroup(
-            panelProductionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelProductionLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(jLabel3)
-                .addContainerGap(47, Short.MAX_VALUE))
-        );
-        panelProductionLayout.setVerticalGroup(
-            panelProductionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelProductionLayout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(501, Short.MAX_VALUE))
-        );
-
-        panelOnglet.addTab("Production", panelProduction);
-
         jLabel4.setText("Bienvenue dans le manuel de notre application. Que serait une application sans un bon vieux manuel d'utilisation ? Et puis, ça ne serait pas sérieux s'il n'y en avait pas un XD");
 
         javax.swing.GroupLayout panelManuelLayout = new javax.swing.GroupLayout(panelManuel);
@@ -162,14 +139,12 @@ public class InterfaceGenerale extends javax.swing.JFrame {
     private javax.swing.JButton boutonSocieteBroons;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel panelAccueil;
     private javax.swing.JPanel panelEdition;
     private javax.swing.JPanel panelManuel;
     private javax.swing.JTabbedPane panelOnglet;
     private javax.swing.JPanel panelPrevision;
-    private javax.swing.JPanel panelProduction;
     private javax.swing.JPanel panelParametrage;
     private javax.swing.JPanel panelSociete;
     // End of variables declaration                   

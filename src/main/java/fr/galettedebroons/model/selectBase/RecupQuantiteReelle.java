@@ -65,6 +65,15 @@ public class RecupQuantiteReelle {
 		return qr;
 	}
 	
+	public QuantiteReelle recuperationPrecQR(Profil profil, String code_prod, Date date) {
+		RecupProduit rp = new RecupProduit(main_);
+		Produit produit = rp.recupProduit(code_prod);
+		
+		QuantiteReelle qr = recuperationPrecQR(profil, produit, date);
+		
+		return qr;
+	}
+	
 	public boolean recuperationPrecQRBool(String profil, String produit, java.util.Date date) {
 		//tx_.begin();
 		RecuperationDonnees rd = new RecuperationDonnees(main_);
@@ -82,4 +91,5 @@ public class RecupQuantiteReelle {
 		
 		return qr;
 	}
+
 }
