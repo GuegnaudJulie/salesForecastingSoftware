@@ -58,9 +58,7 @@ public class ModificationDonnees {
 		tx_.begin();
 		RecuperationDonnees rd = new RecuperationDonnees(main_);
 		Produit np = rd.recuperationProduitComp(nomproduit);
-		System.out.println("mon produit :  " +np);
 		Profil pp = rd.recuperationProfil(nomprofil);
-		System.out.println("mon profil ; " +pp);
 		// double taux_reprise, Profil marge_profil, Produit marge_produit
 		MargeLivraison margeL = new MargeLivraison(nvTauxReprise, pp, np, editer);
 		manager_.persist(margeL);

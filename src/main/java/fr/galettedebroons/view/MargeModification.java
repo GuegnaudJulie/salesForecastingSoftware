@@ -146,35 +146,43 @@ public class MargeModification extends javax.swing.JPanel {
 	     * @param evt
 	     */
 	    private void jButton1ActionPerformed(ActionEvent evt) {
-	    	jLabel1.setText("Taux de reprise actuel : ");
-	    	double tauxreprise = 0.0;
-	    	this.enseigne_client = "";
-	    	this.codeProduit = "";
-	    	
-	    	enseigne_client = (String) jComboBox1.getSelectedItem();
-			codeProduit = (String) jComboBox2.getSelectedItem();
-			
-			tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);
-			if(tauxreprise == 0.0){
-				double nvTauxReprise = 0.0;
+	    	try{
+	    		enseigne_client = jComboBox1.getSelectedItem().toString();
+	    		codeProduit = jComboBox2.getSelectedItem().toString();
+	    		
+	    		jLabel1.setText("Taux de reprise actuel : ");
+		    	double tauxreprise;
 				try{
-					nvTauxReprise = Integer.parseInt(jTextField1.getText());
-					md.insertNvTxReprise(nvTauxReprise, enseigne_client, codeProduit, false);
-					System.out.println("j'ai modifier ma marge !!! ");
-					// réaffichage de mon label avec la nouvelle valeur 
 					tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);
-					jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
-					
-				}catch(NumberFormatException e){
-					System.out.println("toto");
+				} catch (Exception e){
+					tauxreprise = 0.15;
 				}
-			}
-			else{
+				
 				jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
 				this.repaint();
-			}
-			
-			
+				
+				/*
+				if(tauxreprise == 0.0){
+					double nvTauxReprise = 0.0;
+					try{
+						nvTauxReprise = Integer.parseInt(jTextField1.getText());
+						md.insertNvTxReprise(nvTauxReprise, enseigne_client, codeProduit, false);
+						
+						// réaffichage de mon label avec la nouvelle valeur 
+						tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);
+						jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
+					}catch(NumberFormatException e){
+						System.out.println("toto");
+					}
+				}
+				else{
+					jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
+					this.repaint();
+				}
+				*/
+	    		
+	    	} catch (Exception e){}
+	    	
 		}
 	    
 	    /**
@@ -183,6 +191,19 @@ public class MargeModification extends javax.swing.JPanel {
 	     * @param evt
 	     */
 	    private void jButton2ActionPerformed(ActionEvent evt) {
+	    	try{
+	    		enseigne_client = jComboBox1.getSelectedItem().toString();
+	    		codeProduit = jComboBox2.getSelectedItem().toString();
+		    	Double nvTauxReprise = Double.parseDouble(jTextField1.getText());
+		    	
+		    	try{
+		    		md.updateTauxReprise(nvTauxReprise, enseigne_client, codeProduit);
+		    	} catch (Exception e){
+		    		md.insertNvTxReprise(nvTauxReprise, enseigne_client, codeProduit, false);
+		    	}
+		    	
+	    	} catch (Exception e){}
+	    	/*
 	    	double pourcentage = 0.0;
 	    	double tauxreprise = 0.0;
 	    	jLabel1.setText("Taux de reprise actuel : ");
@@ -192,13 +213,11 @@ public class MargeModification extends javax.swing.JPanel {
 			pourcentage = Integer.parseInt(jTextField1.getText());
 			nomprofil = (String) jComboBox1.getSelectedItem();
 			nomproduit = (String) jComboBox2.getSelectedItem();
-			System.out.println("mon pourcentaaaaa : " +pourcentage);
-			System.out.println("mon pourcentaaaaa : " +nomprofil);
-			System.out.println("mon pourcentaaaaa : " +nomprofil);
 			
 			md.updateTauxReprise(pourcentage, nomprofil, nomproduit);
 			tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);
 			jLabel1.setText(jLabel1.getText() + " " + tauxreprise + " %");
+			*/
 		}
 
 	    // Variables declaration - do not modify
