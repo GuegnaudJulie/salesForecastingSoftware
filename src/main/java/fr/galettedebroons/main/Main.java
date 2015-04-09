@@ -5,6 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import fr.galettedebroons.jri.Rcall;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
 import fr.galettedebroons.model.TraitementDonneesTemporaire;
 import fr.galettedebroons.view.InterfaceGenerale;
@@ -75,6 +76,7 @@ public class Main {
 		*/
 		
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main);
+		Rcall.main(args);
 		rdt.vidage();
 		
 		InterfaceGenerale IHM = new InterfaceGenerale(main);
