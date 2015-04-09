@@ -415,7 +415,7 @@ public class VuePrevision extends javax.swing.JPanel {
     		ligne ++;
     	}
     	
-    	for(colonne = 0; colonne < taille[1]; colonne++ ){
+    	for(colonne = 0; colonne < taille[1] && selectionProfil().contains("Tous"); colonne++ ){
     		if (colonne == 0)
     			data[ligne][colonne] = "Total";
     		else
