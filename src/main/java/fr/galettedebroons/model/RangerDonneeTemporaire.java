@@ -95,17 +95,22 @@ public class RangerDonneeTemporaire {
 		}
 		int qtite = Integer.parseInt(donnee[5]);
 		
-		/* Insertion dans la table temporaire */
-		main_.getTransaction().begin();
-		
-		Temporaire temp;
-		if (qtite>0)
-			temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], qtite, 0, code);
-		else
-			temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], 0, qtite, code);
-		
-		manager_.persist(temp);
-		main_.getTransaction().commit();
+		// si mon produit est un 1 ou 2 on n'insert pas 
+		if(donnee[4].equals("1") || donnee[4].equals("2")){
+			System.out.println("On ne doit pas insérer dans notre table temporaire, produit 1 ou 2");
+		}else {
+			/* Insertion dans la table temporaire */
+			main_.getTransaction().begin();
+			
+			Temporaire temp;
+			if (qtite>0)
+				temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], qtite, 0, code);
+			else
+				temp = new Temporaire(donnee[0], date, donnee[2], donnee[3], donnee[4], 0, qtite, code);
+			
+			manager_.persist(temp);
+			main_.getTransaction().commit();
+		}
 	}
 	
 	/**
