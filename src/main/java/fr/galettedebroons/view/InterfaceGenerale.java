@@ -41,7 +41,7 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         panelAccueil = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         panelEdition = new fr.galettedebroons.view.PanelEdition(main_);
-        panelPrevision = new fr.galettedebroons.view.VuePrevision(main_);
+        panelPrevision = new fr.galettedebroons.view.VuePrevision2(main_);
         jLabel2 = new javax.swing.JLabel();
         panelProduction = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();

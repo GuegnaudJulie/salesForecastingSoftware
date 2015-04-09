@@ -190,6 +190,7 @@ public class RecuperationDonnees {
 		
 		return tableauProfil;
 	}
+	
 	public List<Object[]> recuperationListLivraison(){
 		List<Object[]> livr = manager_.createQuery("select l.bon_livraison, l.livraison_profil.code_client, l.livraison_produit.code_produit, l.date_livraison, l.qte_livraison, l.qte_reprise from " +
 				"Livraison l", Object[].class)

@@ -93,14 +93,15 @@ public class RecupTournee {
 
 	public List<Profil> recuperationProfilTournee(String tournee){
 		@SuppressWarnings("unchecked")
-		Collection<Profil> list = manager_.createQuery("select t.profil_tournee "
+		List<Collection> list = manager_.createQuery("select t.profil_tournee "
 				+ "FROM Tournee t WHERE t.nom LIKE :tournee", Collection.class)
 				.setParameter("tournee", tournee)
-				.getSingleResult();
+				.getResultList();
 		
 		List<Profil> listProfil = new ArrayList<Profil>();
-		
-		for (Profil p : list){
+		Iterator it = list.iterator();
+		while(it.hasNext()){
+			Profil p = (Profil) it.next();
 			listProfil.add(p);
 		}
 		
