@@ -77,7 +77,8 @@ public class Rcall {
             System.out.println("Cannot load R");
             return;
         }
-        re.eval("source('C:\\\\Users\\\\14009922\\\\Downloads\\\\scriptR.R')");
+    	
+       re.eval("source('C:\\\\Users\\\\poher\\\\Downloads\\\\newscript.R')");
        // re.eval("result<-qte_eff()");
        // re.eval("print(result)");
         

@@ -76,7 +76,7 @@ public class Main {
 		*/
 		
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main);
-		//Rcall.main(args);
+		Rcall.main(args);
 		rdt.vidage();
 		
 		InterfaceGenerale IHM = new InterfaceGenerale(main);

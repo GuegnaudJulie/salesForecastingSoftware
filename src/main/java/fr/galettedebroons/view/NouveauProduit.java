@@ -190,7 +190,8 @@ public class NouveauProduit extends java.awt.Panel {
     	DefaultComboBoxModel model = new DefaultComboBoxModel(gamme);
     	jComboBox1.setModel(model);
     	
-    	jComboBox1.setSelectedItem(selec);
+    	if (selec != null)
+    		jComboBox1.setSelectedItem(selec);
     	
     	jComboBox1.repaint();
     	jComboBox1.validate();

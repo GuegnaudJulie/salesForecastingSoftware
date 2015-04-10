@@ -178,7 +178,12 @@ public class VueGlobalNvProduit {
 		String[] gamme = rg_.recuperationGamme();
 		
 		for (NouveauProduit np : listnvproduit){
-			Object selection = np.getSelectGamme();
+			Object selection;
+			try{
+				selection = np.getSelectGamme();
+			} catch (Exception e){
+				selection = null;
+			}
 			np.majListGamme(gamme, selection);
 		}
 	}
