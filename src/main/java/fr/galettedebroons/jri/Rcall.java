@@ -78,7 +78,8 @@ public class Rcall {
             return;
         }
     	
-       re.eval("source('C:\\\\Users\\\\poher\\\\Downloads\\\\newscript.R')");
+       //re.eval("source('C:\\\\Users\\\\poher\\\\Downloads\\\\script0.R')");
+       re.eval("source('R/Script/script0.R')");
        // re.eval("result<-qte_eff()");
        // re.eval("print(result)");
         
