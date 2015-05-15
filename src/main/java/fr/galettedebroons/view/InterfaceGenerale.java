@@ -31,8 +31,8 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         boutonSocieteBroons = new javax.swing.JButton();
         panelOnglet = new javax.swing.JTabbedPane();
         panelAccueil = new fr.galettedebroons.view.PanelAccueil();
-        panelEdition = new fr.galettedebroons.view.PanelEdition(main_);
-        panelPrevision = new fr.galettedebroons.view.VuePrevision(main_);
+        panelPrevision = new fr.galettedebroons.view.PanelPrevision(main_);
+        panelEdition = new fr.galettedebroons.view.PanelEdition(main_, panelPrevision);
         panelParametrage = new fr.galettedebroons.view.MargeModification(main_);
         panelManuel = new fr.galettedebroons.view.PanelManuel();
         
@@ -88,11 +88,11 @@ public class InterfaceGenerale extends javax.swing.JFrame {
     private Main main_;
     // Variables declaration - do not modify                     
     private javax.swing.JButton boutonSocieteBroons;
-    private javax.swing.JPanel panelAccueil;
-    private javax.swing.JPanel panelEdition;
-    private javax.swing.JPanel panelManuel;
+    private fr.galettedebroons.view.PanelAccueil panelAccueil;
+    private fr.galettedebroons.view.PanelEdition panelEdition;
+    private fr.galettedebroons.view.PanelManuel panelManuel;
     private javax.swing.JTabbedPane panelOnglet;
-    private javax.swing.JPanel panelPrevision;
+    private fr.galettedebroons.view.PanelPrevision panelPrevision;
     private javax.swing.JPanel panelParametrage;
     private javax.swing.JPanel panelSociete;
     // End of variables declaration                   

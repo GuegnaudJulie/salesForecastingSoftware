@@ -135,6 +135,11 @@ public class NouveauClient extends java.awt.Panel {
 	    	MAJComboG();
 	    }
 	    
+		public void MAJComboG() {
+			this.jList1.repaint();
+			this.jList1.validate();
+		}
+	    
 	    public List<Object> getSelectTournee() {
 	    	return jList1.getSelectedValuesList();
 		}
@@ -165,11 +170,4 @@ public class NouveauClient extends java.awt.Panel {
 	    private Main main_;
 	    private VueGlobalNvClient vue_;
 	    // End of variables declaration
-	    
-	    
-		public void MAJComboG() {
-			this.jList1.repaint();
-			this.jList1.validate();
-		}
-		
 }

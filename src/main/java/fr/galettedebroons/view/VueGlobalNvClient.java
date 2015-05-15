@@ -45,6 +45,7 @@ public class VueGlobalNvClient {
 	
 	private Main main_;
 	private PanelEdition panel_;
+	private PanelPrevision panelPrev_;
 	private EnchainementInsertionDonnees ClasseTraitement_;
 	private RecupTemporaire rt_;
 	private RecupClientProfil rcp_;
@@ -69,9 +70,10 @@ public class VueGlobalNvClient {
 	 * @param main acces au Entity Manager pour gerer la BDD
 	 * @param panel
 	 */
-	public VueGlobalNvClient(Main main, PanelEdition panel, EnchainementInsertionDonnees traitementDonneesTemporaire){
+	public VueGlobalNvClient(Main main, PanelEdition panel, PanelPrevision panelPrev, EnchainementInsertionDonnees traitementDonneesTemporaire){
 		main_ = main; 
 		panel_ = panel;
+		panelPrev_ = panelPrev;
 		ClasseTraitement_ = traitementDonneesTemporaire;
 		rt_ = new RecupTemporaire(main_);
 		rcp_ = new RecupClientProfil(main_);
@@ -206,6 +208,8 @@ public class VueGlobalNvClient {
 			Object selection = nc.getSelectTournee();
 			nc.majComboTournee(tournee, selection);
 		}
+		
+		panelPrev_.majListTournee(tournee);
     }
 	
 	private void enregistrercliActionPerformed(ActionEvent evt) {

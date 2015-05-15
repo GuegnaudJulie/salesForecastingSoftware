@@ -23,8 +23,9 @@ import fr.galettedebroons.model.accessBase.RecupProduit;
  */
 public class PanelEdition extends javax.swing.JPanel {
 	
-    public PanelEdition(Main main) {
+    public PanelEdition(Main main, PanelPrevision panbelPrev) {
         main_ = main;
+        panbelPrev_ = panbelPrev;
         rcp_ = new RecupClientProfil(main_);
         rp_ = new RecupProduit(main);
         initComponents();
@@ -346,7 +347,7 @@ public class PanelEdition extends javax.swing.JPanel {
     }                                              
 
     private void boutonAjoutClientActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-        nouveauClient = new VueGlobalNvClient(main_, this, null);
+        nouveauClient = new VueGlobalNvClient(main_, this, panbelPrev_, null);
     }     
     
     void terminerAjoutClient(){
@@ -406,7 +407,7 @@ public class PanelEdition extends javax.swing.JPanel {
         		traitementManuel();
         }
     	if (messageErreur.getText() == ""){
-    		EnchainementInsertionDonnees tdt = new EnchainementInsertionDonnees(main_, this);
+    		EnchainementInsertionDonnees tdt = new EnchainementInsertionDonnees(main_, this, panbelPrev_);
     		tdt.insertionDonnee();
     	}
     }
@@ -536,6 +537,7 @@ public class PanelEdition extends javax.swing.JPanel {
     private javax.swing.JComboBox valListeProduit;
     private VueGlobalNvClient nouveauClient;
     private VueGlobalNvProduit nouveauProduit;
+    private PanelPrevision panbelPrev_;
     
     // Variables declaration - do not modify                     
     private javax.swing.JButton boutonAjoutArticle;

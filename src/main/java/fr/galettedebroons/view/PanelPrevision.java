@@ -35,9 +35,9 @@ import fr.galettedebroons.main.Main;
  *
  * @author poher
  */
-public class VuePrevision extends javax.swing.JPanel {
+public class PanelPrevision extends javax.swing.JPanel {
 	
-    public VuePrevision(Main main) {
+    public PanelPrevision(Main main) {
     	this.main_ = main;
     	rcp_ = new RecupClientProfil(main_);
     	rt_ = new RecupTournee(main_);
@@ -179,6 +179,15 @@ public class VuePrevision extends javax.swing.JPanel {
         );
     }// </editor-fold>
     
+    public void majListTournee(String[] gamme){
+    	jComboBox1.removeAllItems();
+    	DefaultComboBoxModel model = new DefaultComboBoxModel(gamme);
+    	jComboBox1.setModel(model);
+    	
+    	jComboBox1.repaint();
+    	jComboBox1.validate();
+    }
+    
     private String selectionTournee(){
     	return jComboBox1.getSelectedItem().toString();
     }
@@ -199,23 +208,25 @@ public class VuePrevision extends javax.swing.JPanel {
     }
     
     private void actionSelectionTournee(ActionEvent evt){
-    	String tournee = selectionTournee();
-    	
-    	if (!tournee.contains("Aucune sélection")){
-	    	listClient_ = rt_.recuperationProfilTournee(tournee);
+    	try{
+	    	String tournee = selectionTournee();
 	    	
-	    	code_client = new String[listClient_.size()+1];
-	        code_client[0] = "Tous";
-	        int indice = 1;
-	        for (Profil cl : listClient_){
-	            code_client[indice] = cl.getCode_client();
-	            indice++;
-	        }
-	        
-	    	jComboBox2.removeAllItems();
-	    	DefaultComboBoxModel model = new DefaultComboBoxModel(code_client);
-	    	jComboBox2.setModel(model);
-    	}
+	    	if (!tournee.contains("Aucune sélection")){
+		    	listClient_ = rt_.recuperationProfilTournee(tournee);
+		    	
+		    	code_client = new String[listClient_.size()+1];
+		        code_client[0] = "Tous";
+		        int indice = 1;
+		        for (Profil cl : listClient_){
+		            code_client[indice] = cl.getCode_client();
+		            indice++;
+		        }
+		        
+		    	jComboBox2.removeAllItems();
+		    	DefaultComboBoxModel model = new DefaultComboBoxModel(code_client);
+		    	jComboBox2.setModel(model);
+	    	}
+    	} catch (Exception e){}
     }
     
     private void actionSelectionProfil(ActionEvent evt) {
