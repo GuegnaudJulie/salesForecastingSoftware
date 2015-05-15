@@ -12,17 +12,12 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JViewport;
 
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
@@ -32,10 +27,9 @@ import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.QuantiteReelle;
 import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
-import fr.galettedebroons.model.RecuperationDonnees;
-import fr.galettedebroons.model.TraitementDonneesTemporaire;
-import fr.galettedebroons.model.selectBase.RecupGamme;
-import fr.galettedebroons.model.selectBase.RecupTemporaire;
+import fr.galettedebroons.model.EnchainementInsertionDonnees;
+import fr.galettedebroons.model.accessBase.RecupGamme;
+import fr.galettedebroons.model.accessBase.RecupTemporaire;
 
 public class VueGlobalNvProduit {
 	private List<Object[]> results;
@@ -52,14 +46,14 @@ public class VueGlobalNvProduit {
 	private String textCombo;
 	private Main main_;
 	private PanelEdition panel_;
-	private TraitementDonneesTemporaire ClasseTraitement_;
+	private EnchainementInsertionDonnees ClasseTraitement_;
 	private RecupGamme rg_;
 	private List<String> produits;
 	
 	/**
 	 * constructeur appel methode dynamique creation panel nouveau client
 	 */
-	public VueGlobalNvProduit(Main main, PanelEdition panel, TraitementDonneesTemporaire tdt){
+	public VueGlobalNvProduit(Main main, PanelEdition panel, EnchainementInsertionDonnees tdt){
 		main_ = main; //Contient notre EntityManager => plus besoin de faire : new Main(manager_) et de créer le manager
 		panel_ = panel;
 		ClasseTraitement_ = tdt;
@@ -91,7 +85,6 @@ public class VueGlobalNvProduit {
 		fenetre = new JFrame();
 		fenetre.setSize(700,500);
 		
-		RecuperationDonnees rd = new RecuperationDonnees(main_);
 		RecupTemporaire rt = new RecupTemporaire(main_);
 		
     	// recupere les produits dans la table temporaire
@@ -104,7 +97,7 @@ public class VueGlobalNvProduit {
 			nbNewProd = 1;
 		
 		// recupere les gammes existantes pour JcomboBox
-		String[] gamme = rd.recuperationGamme();
+		String[] gamme = rg_.recuperationGamme();
     	
     	comboGamme = new JComboBox[nbNewProd];
     	int indice = 0;

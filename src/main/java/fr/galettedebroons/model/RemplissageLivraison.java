@@ -2,18 +2,17 @@ package fr.galettedebroons.model;
 
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
-import fr.galettedebroons.domain.Prevision;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.QuantiteReelle;
 import fr.galettedebroons.domain.Temporaire;
-import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.selectBase.RecupGamme;
-import fr.galettedebroons.model.selectBase.RecupLivraison;
-import fr.galettedebroons.model.selectBase.RecupPrevision;
-import fr.galettedebroons.model.selectBase.RecupQuantiteReelle;
-import fr.galettedebroons.model.selectBase.RecupTournee;
+import fr.galettedebroons.model.accessBase.ModificationDonnees;
+import fr.galettedebroons.model.accessBase.RecupClientProfil;
+import fr.galettedebroons.model.accessBase.RecupLivraison;
+import fr.galettedebroons.model.accessBase.RecupProduit;
+import fr.galettedebroons.model.accessBase.RecupQuantiteReelle;
+import fr.galettedebroons.model.accessBase.RecupTournee;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -33,7 +32,8 @@ public class RemplissageLivraison {
 	
 	private EntityManager manager_;
 	private Main main_;
-	private RecuperationDonnees rd_;
+	private RecupClientProfil rcp_;
+	private RecupProduit rp_;
 	private RecupLivraison rl_;
 	private RecupTournee rt_;
 	private ModificationDonnees md_;
@@ -45,8 +45,9 @@ public class RemplissageLivraison {
 	}
 	
 	public void remplissage(){
-		rd_ = new RecuperationDonnees(main_);
 		md_ = new ModificationDonnees(main_);
+		rcp_ = new RecupClientProfil(main_);
+		rp_ = new RecupProduit(main_);
 		rl_ = new RecupLivraison(main_);
 		rt_ = new RecupTournee(main_);
 		rqr_ = new RecupQuantiteReelle(main_);
@@ -64,10 +65,10 @@ public class RemplissageLivraison {
 			Date date = t.getDate();
 			
 			//recuperation du profil du client
-			Profil profil = rd_.recupProfil(code_profil);
+			Profil profil = rcp_.recupProfil(code_profil);
 			
 			//recuperation du produit de la livraison
-			Produit produit = rd_.recupProduit(code_produit);
+			Produit produit = rp_.recupProduit(code_produit);
 			
 			//recuperation de la gamme du produit
 			Gamme gamme = produit.getProduit_gamme();

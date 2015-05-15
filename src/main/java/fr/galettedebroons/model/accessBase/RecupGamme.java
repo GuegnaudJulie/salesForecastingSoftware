@@ -1,4 +1,4 @@
-package fr.galettedebroons.model.selectBase;
+package fr.galettedebroons.model.accessBase;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class RecupGamme {
 	public boolean gammePresent(String code){
 		boolean present;
 		try{
-			Gamme g = manager_.createQuery("select g from Gamme g where code_gamme LIKE :code", Gamme.class)
+			manager_.createQuery("select g from Gamme g where code_gamme LIKE :code", Gamme.class)
 					.setParameter("code", code)
 					.getSingleResult();
 			present = true;
@@ -66,4 +66,10 @@ public class RecupGamme {
 		
 		return gamme;
 	}
+
+	public Gamme recuperationGammeProduit(String code_produit){
+		Gamme gamme = manager_.createQuery("select p.produit_gamme from Produit p where code_produit LIKE :cp", Gamme.class).setParameter("cp", code_produit).getSingleResult();	
+		return gamme;
+	}
+	
 }

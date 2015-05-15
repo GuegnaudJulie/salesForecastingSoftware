@@ -5,7 +5,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.RecuperationDonnees;
 
 
 /*
@@ -29,7 +28,6 @@ public class NouveauProduit extends java.awt.Panel {
 
     public NouveauProduit(Main main, String code_produit, JComboBox comboGamme, VueGlobalNvProduit panel) {
     	main_ = main;
-    	rd_ = new RecuperationDonnees(main);
     	panel_ = panel;
     	initComponents(code_produit, comboGamme);
     }	
@@ -244,7 +242,6 @@ public class NouveauProduit extends java.awt.Panel {
     private javax.swing.JSeparator jSeparator1;
     private JFrame fenetreNvGamme;
     private Main main_;
-    private RecuperationDonnees rd_;
     private VueGlobalNvProduit panel_;
     // End of variables declaration
 }

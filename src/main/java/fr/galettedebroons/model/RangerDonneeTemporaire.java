@@ -4,20 +4,13 @@ import java.sql.Date;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
-import fr.galettedebroons.domain.Produit;
-import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.main.Main;
-
-import java.util.ArrayList;
 
 import javax.persistence.Query;
 

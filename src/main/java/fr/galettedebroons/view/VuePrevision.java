@@ -1,8 +1,5 @@
 package fr.galettedebroons.view;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -11,27 +8,21 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JTable;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
 import fr.galettedebroons.domain.MargeLivraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.QuantiteReelle;
 import fr.galettedebroons.domain.Tournee;
-import fr.galettedebroons.model.ModificationDonnees;
 import fr.galettedebroons.model.MonCellRenderer;
-import fr.galettedebroons.model.RecuperationDonnees;
-import fr.galettedebroons.model.selectBase.RecupMargeLivraison;
-import fr.galettedebroons.model.selectBase.RecupProduit;
-import fr.galettedebroons.model.selectBase.RecupQuantiteReelle;
-import fr.galettedebroons.model.selectBase.RecupTournee;
+import fr.galettedebroons.model.accessBase.ModificationDonnees;
+import fr.galettedebroons.model.accessBase.RecupClientProfil;
+import fr.galettedebroons.model.accessBase.RecupMargeLivraison;
+import fr.galettedebroons.model.accessBase.RecupProduit;
+import fr.galettedebroons.model.accessBase.RecupQuantiteReelle;
+import fr.galettedebroons.model.accessBase.RecupTournee;
 import fr.galettedebroons.main.Main;
 
 /*
@@ -48,9 +39,9 @@ public class VuePrevision extends javax.swing.JPanel {
 	
     public VuePrevision(Main main) {
     	this.main_ = main;
+    	rcp_ = new RecupClientProfil(main_);
     	rt_ = new RecupTournee(main_);
     	rp_ = new RecupProduit(main_);
-    	rd_ = new RecuperationDonnees(main_);
     	md_ = new ModificationDonnees(main_);
     	rml_ = new RecupMargeLivraison(main_);
     	rqr_ = new RecupQuantiteReelle(main_);
@@ -87,7 +78,7 @@ public class VuePrevision extends javax.swing.JPanel {
 			}
         });
         
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selectionner une tournée"}));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Aucune sélection"}));
         jComboBox2.addActionListener(new java.awt.event.ActionListener(){
         	public void actionPerformed(java.awt.event.ActionEvent evt) {
         		actionSelectionProfil(evt);
@@ -102,13 +93,13 @@ public class VuePrevision extends javax.swing.JPanel {
         jTable2.setAutoResizeMode(HEIGHT);
         jTable2.setAutoscrolls(true);
         
-        jLabel2.setText("Tournée");
+        jLabel2.setText("Profil");
 
         jLabel3.setText("Date");
 
-        jLabel4.setText("profil");
+        jLabel4.setText("Tournée");
         
-        jLabel5.setText("Prévision + Marge de reprise/Marge de rupture");
+        jLabel5.setText("Prévision + Marge de livraison");
 
         jScrollPane2.setViewportView(jTable2);
 
@@ -234,7 +225,7 @@ public class VuePrevision extends javax.swing.JPanel {
 				listClient_ = rt_.recuperationProfilTournee(selectionTournee());
 			else{
 				listClient_ = new ArrayList<Profil>();
-				listClient_.add(rd_.recupProfil(profil));
+				listClient_.add(rcp_.recupProfil(profil));
 			}
     	} catch (Exception e) {}
 	}
@@ -369,7 +360,7 @@ public class VuePrevision extends javax.swing.JPanel {
     		colonne ++;
     		
     		//récupération de la liste des previsions
-    		List<Object[]> maliste = rd_.recupuniqueProfil(selectionDate(), profil.getCode_client());
+    		List<Object[]> maliste = rcp_.recupuniqueProfil(selectionDate(), profil.getCode_client());
     		
     		//On parcourt les colonnes et on insert
     		for (int i = 1; i<titre_.length-1 ; i++){
@@ -460,7 +451,7 @@ public class VuePrevision extends javax.swing.JPanel {
 	    		colonne = 2;
 	    		
 	    		//récupération de la liste des previsions
-	    		List<Object[]> maliste = rd_.recupuniqueProfil(selectionDate(), profil.getCode_client());
+	    		List<Object[]> maliste = rcp_.recupuniqueProfil(selectionDate(), profil.getCode_client());
 	    		
 	    		//On parcourt les colonnes et on insert
 	    		for (int i = 2; i<titre_.length-1 ; i++){
@@ -597,11 +588,11 @@ public class VuePrevision extends javax.swing.JPanel {
     private javax.swing.JTable jTable2;
 
 	private Main main_;
+	private RecupClientProfil rcp_;
     private RecupTournee rt_;
     private RecupProduit rp_;
     private RecupMargeLivraison rml_;
     private RecupQuantiteReelle rqr_;
-    private RecuperationDonnees rd_;
     private ModificationDonnees md_;
     private List<Tournee> listeTournee_;
     private List<Profil> listClient_;

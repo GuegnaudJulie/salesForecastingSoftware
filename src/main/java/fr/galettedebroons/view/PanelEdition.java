@@ -2,6 +2,7 @@ package fr.galettedebroons.view;
 
 import java.util.List;
 import java.io.IOException;
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -11,8 +12,9 @@ import javax.swing.DefaultCellEditor;
 import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.LectureFichier;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
-import fr.galettedebroons.model.RecuperationDonnees;
-import fr.galettedebroons.model.TraitementDonneesTemporaire;
+import fr.galettedebroons.model.EnchainementInsertionDonnees;
+import fr.galettedebroons.model.accessBase.RecupClientProfil;
+import fr.galettedebroons.model.accessBase.RecupProduit;
 
 /**
  * @author  Julie Guegnaud
@@ -23,6 +25,8 @@ public class PanelEdition extends javax.swing.JPanel {
 	
     public PanelEdition(Main main) {
         main_ = main;
+        rcp_ = new RecupClientProfil(main_);
+        rp_ = new RecupProduit(main);
         initComponents();
     }
 
@@ -35,7 +39,6 @@ public class PanelEdition extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-    	rd = new RecuperationDonnees(main_);
     	nouveauClient = null;
     	nouveauProduit = null;
         panelEdition = new javax.swing.JPanel();
@@ -286,7 +289,7 @@ public class PanelEdition extends javax.swing.JPanel {
     }// </editor-fold>                        
 
     private void listeClient() {
-    	client = rd.recuperationCodeClient();
+    	client = rcp_.recuperationCodeClient();
         String[] code_client = new String[client.size()+1];
         code_client[0] = "selectionner";
         int indice = 1;
@@ -309,7 +312,7 @@ public class PanelEdition extends javax.swing.JPanel {
 	}
     
     private void listeProduit(){
-    	produit = rd.recuperationCodeProduit();
+    	produit = rp_.recuperationCodeProduit();
         String[] code_produit = new String[produit.size()+1];
         code_produit[0] = "";
         int indice = 1;
@@ -403,7 +406,7 @@ public class PanelEdition extends javax.swing.JPanel {
         		traitementManuel();
         }
     	if (messageErreur.getText() == ""){
-    		TraitementDonneesTemporaire tdt = new TraitementDonneesTemporaire(main_, this);
+    		EnchainementInsertionDonnees tdt = new EnchainementInsertionDonnees(main_, this);
     		tdt.insertionDonnee();
     	}
     }
@@ -522,12 +525,14 @@ public class PanelEdition extends javax.swing.JPanel {
     	this.repaint();
     }
 
-    private RecuperationDonnees rd;
+    
     private Object[][] data;
     private String[] title = {"Article", "Quantité livrée", "Quantité reprise"};
     private List<Object[]> produit;
     private List<Object[]> client;
     private Main main_;
+    private RecupClientProfil rcp_;
+    private RecupProduit rp_;
     private javax.swing.JComboBox valListeProduit;
     private VueGlobalNvClient nouveauClient;
     private VueGlobalNvProduit nouveauProduit;

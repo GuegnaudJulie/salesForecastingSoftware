@@ -2,15 +2,13 @@ package fr.galettedebroons.view;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.RecuperationDonnees;
+import fr.galettedebroons.model.accessBase.RecupPrevision;
 
 /**
 *
@@ -34,6 +32,7 @@ public class QteALivrerTotal extends javax.swing.JPanel {
 	    /** Creates new form QteALivrer */
 	    public QteALivrerTotal(Main main) {
 	    	this.main_ = main;
+	    	rp_ = new RecupPrevision(main_);
 	        initComponents();
 	    }
 
@@ -54,8 +53,6 @@ public class QteALivrerTotal extends javax.swing.JPanel {
 	        jLabel3 = new javax.swing.JLabel();
 	        jButton1 = new javax.swing.JButton();
 	        jLabel4 = new javax.swing.JLabel();
-	        
-	        rd = new RecuperationDonnees(main_);
 	        
 	        jButton1.setText("Voir");
 	        jButton1.addActionListener(new java.awt.event.ActionListener(){
@@ -155,7 +152,7 @@ public class QteALivrerTotal extends javax.swing.JPanel {
     		
 	    	System.out.println("ma date de début : " +dateDebut);
 	    	System.out.println("ma date de fin : " +dateFin);
-	    	List<Object[]> maliste = rd.recupSommeProduit(dateDebut, dateFin);
+	    	List<Object[]> maliste = rp_.recupSommeProduit(dateDebut, dateFin);
 	    	
 	    	// parcours de ma liste de produit - quantité
 	    	for (Object[] p : maliste){
@@ -215,7 +212,7 @@ public class QteALivrerTotal extends javax.swing.JPanel {
 			
 	    }
 
-
+	    private RecupPrevision rp_;
 	    // Variables declaration - do not modify
 	    private javax.swing.JButton jButton1;
 	    private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -227,7 +224,5 @@ public class QteALivrerTotal extends javax.swing.JPanel {
 	    private javax.swing.JScrollPane jScrollPane1;
 	    private javax.swing.JTable jTable1;
 	    // End of variables declaration
-	    
-	    RecuperationDonnees rd;
 
 }

@@ -1,4 +1,4 @@
-package fr.galettedebroons.model.selectBase;
+package fr.galettedebroons.model.accessBase;
 
 import java.sql.Date;
 import java.util.List;

@@ -8,10 +8,10 @@ import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.QuantiteReelle;
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.selectBase.RecupClientProfil;
-import fr.galettedebroons.model.selectBase.RecupMargeLivraison;
-import fr.galettedebroons.model.selectBase.RecupProduit;
-import fr.galettedebroons.model.selectBase.RecupQuantiteReelle;
+import fr.galettedebroons.model.accessBase.RecupClientProfil;
+import fr.galettedebroons.model.accessBase.RecupMargeLivraison;
+import fr.galettedebroons.model.accessBase.RecupProduit;
+import fr.galettedebroons.model.accessBase.RecupQuantiteReelle;
 
 public class MargeLivraisonCalcul {
 

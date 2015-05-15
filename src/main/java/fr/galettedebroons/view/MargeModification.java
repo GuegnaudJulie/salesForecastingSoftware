@@ -1,18 +1,14 @@
 package fr.galettedebroons.view;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.swing.JComboBox;
 
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.ModificationDonnees;
-import fr.galettedebroons.model.RecuperationDonnees;
+import fr.galettedebroons.model.accessBase.ModificationDonnees;
+import fr.galettedebroons.model.accessBase.RecupClientProfil;
+import fr.galettedebroons.model.accessBase.RecupMargeLivraison;
+import fr.galettedebroons.model.accessBase.RecupProduit;
 
 /**
  *
@@ -47,17 +43,19 @@ public class MargeModification extends javax.swing.JPanel {
 	        jButton2 = new javax.swing.JButton();
 	        jLabel4 = new javax.swing.JLabel();
 	        
-	        rd = new RecuperationDonnees(main_);
+	        rcp_ = new RecupClientProfil(main_);
+	        rp_ = new RecupProduit(main_);
+	        rml_ = new RecupMargeLivraison(main_);
 			md = new ModificationDonnees(main_);
 
 			// recherche des clients en base et ajout dans combobox1
-			listClient = rd.recuperationProfil();
+			listClient = rcp_.recuperationProfil();
 			jComboBox1 = new JComboBox(listClient);
 	        
 	        //jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
 	        // recherche des produits associes au client selectionne
-			listProduit = rd.recuperationProduit();
+			listProduit = rp_.recuperationProduit();
 			jComboBox2 = new JComboBox(listProduit);
 	        //jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -153,7 +151,7 @@ public class MargeModification extends javax.swing.JPanel {
 	    		jLabel1.setText("Taux de reprise actuel : ");
 		    	double tauxreprise;
 				try{
-					tauxreprise = rd.recuperationTxReprise(codeProduit, enseigne_client);
+					tauxreprise = rml_.recuperationTxReprise(codeProduit, enseigne_client);
 				} catch (Exception e){
 					tauxreprise = 0.15;
 				}
@@ -233,7 +231,9 @@ public class MargeModification extends javax.swing.JPanel {
 	    private javax.swing.JTextField jTextField1;
 	    
 	    Main main_;
-		RecuperationDonnees rd;
+	    RecupClientProfil rcp_;
+	    RecupProduit rp_;
+	    RecupMargeLivraison rml_;
 		ModificationDonnees md;
 		
 		String[] listClient;

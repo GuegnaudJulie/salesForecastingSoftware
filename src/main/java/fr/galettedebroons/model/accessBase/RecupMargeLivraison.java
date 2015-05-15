@@ -1,4 +1,4 @@
-package fr.galettedebroons.model.selectBase;
+package fr.galettedebroons.model.accessBase;
 
 import javax.persistence.EntityManager;
 
@@ -36,5 +36,51 @@ public class RecupMargeLivraison {
 		MargeLivraison ml = recuperationML(profil, produit);
 		
 		return ml;
+	}
+	
+	public double recuperationTxReprise(String code_prod, String code_client){
+		RecupProduit rp = new RecupProduit(main_);
+		RecupClientProfil rcp = new RecupClientProfil(main_);
+		
+		Produit np = rp.recuperationProduitComp(code_prod);
+		Profil pp = rcp.recupProfil(code_client);
+		
+		double res = 0.0;
+		
+		try{
+			res = manager_.createQuery("select m.taux_reprise from MargeLivraison m " +
+				"WHERE m.marge_produit LIKE :paramcode_prod AND m.marge_profil LIKE :paramcode_client ", Double.class)
+				.setParameter("paramcode_prod", np)
+				.setParameter("paramcode_client", pp).getSingleResult();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+	
+	/**
+	 * Recupere marge de livraison en fonction d'un profil et d'un produit
+	 * pour intégrer à l'interface de prévision de vente
+	 * tableau (prévision + marge)
+	 * @return le taux de reprise 
+	 */
+	public double recuperationMargeLivraison(String profil, String produit){
+		RecupProduit rp = new RecupProduit(main_);
+		RecupClientProfil rcp = new RecupClientProfil(main_);
+		
+		double margeLivraison = 0.0;
+		
+		Profil monProfil = rcp.recupProfil(profil);
+		Produit monProduit = rp.recuperationProduitComp(produit);
+		
+		margeLivraison = manager_.createQuery("select ml.taux_reprise from MargeLivraison "
+				+"where ml.marge_profil LIKE :prof and ml.marge_produit LIKE :prod ", Double.class)
+				.setParameter("prof", monProfil)
+				.setParameter("prod", monProduit)
+				.getSingleResult();
+		
+		return margeLivraison;
+		
 	}
 }

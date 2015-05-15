@@ -2,13 +2,14 @@ package fr.galettedebroons.model;
 
 import javax.swing.JOptionPane;
 
+import fr.galettedebroons.jri.Rcall;
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.selectBase.RecupTemporaire;
+import fr.galettedebroons.model.accessBase.RecupTemporaire;
 import fr.galettedebroons.view.PanelEdition;
 import fr.galettedebroons.view.VueGlobalNvClient;
 import fr.galettedebroons.view.VueGlobalNvProduit;
 
-public class TraitementDonneesTemporaire {
+public class EnchainementInsertionDonnees {
 
 	private Main main_;
 	private PanelEdition panel_;
@@ -16,7 +17,7 @@ public class TraitementDonneesTemporaire {
 	private VueGlobalNvProduit fenetreProduit;
 	private RecupTemporaire rt_;
 	
-	public TraitementDonneesTemporaire(Main main, PanelEdition panel){
+	public EnchainementInsertionDonnees(Main main, PanelEdition panel){
 		main_ = main;
 		panel_ = panel;
 		rt_ = new RecupTemporaire(main_);
@@ -43,11 +44,11 @@ public class TraitementDonneesTemporaire {
 		MargeLivraisonCalcul ml = new MargeLivraisonCalcul(main_);
 		ml.calculMarge();
 		
-		JOptionPane.showMessageDialog(panel_, "Les livraisons ont été ajoutées");
-		
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
 		rdt.vidage();
 		
-		//prevision
+		Rcall.main(main_.getArgs());
+		
+		JOptionPane.showMessageDialog(panel_, "Les livraisons ont été ajoutées");
 	}
 }

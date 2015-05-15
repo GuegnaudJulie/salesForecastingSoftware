@@ -1,16 +1,13 @@
-package fr.galettedebroons.model.selectBase;
+package fr.galettedebroons.model.accessBase;
 
 import java.sql.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.QuantiteReelle;
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.RecuperationDonnees;
 
 public class RecupQuantiteReelle {
 
@@ -75,11 +72,12 @@ public class RecupQuantiteReelle {
 	}
 	
 	public boolean recuperationPrecQRBool(String profil, String produit, java.util.Date date) {
-		//tx_.begin();
-		RecuperationDonnees rd = new RecuperationDonnees(main_);
-		Profil monProfil = rd.recuperationProfil(profil);
-		System.out.println("Récupère le produit en fonction du String passé en paramètre");
-		Produit monProduit = rd.recuperationProduitComp(produit);
+		RecupProduit rp = new RecupProduit(main_);
+		RecupClientProfil rcp = new RecupClientProfil(main_);
+		
+		Profil monProfil = rcp.recupProfil(profil);
+		Produit monProduit = rp.recuperationProduitComp(produit);
+		
 		boolean qr = manager_.createQuery("select q.rupture_stock from QuantiteReelle q where "
 				+ "reel_profil LIKE :profil AND "
 				+ "reel_produit LIKE :prod AND "

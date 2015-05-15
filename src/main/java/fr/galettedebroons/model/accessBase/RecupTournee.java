@@ -1,4 +1,4 @@
-package fr.galettedebroons.model.selectBase;
+package fr.galettedebroons.model.accessBase;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class RecupTournee {
 	public boolean tourneePresente(String nom){
 		boolean present;
 		try{
-			Tournee tournee = manager_.createQuery("select t from Tournee t where nom LIKE :nom", Tournee.class)
+			manager_.createQuery("select t from Tournee t where nom LIKE :nom", Tournee.class)
 					.setParameter("nom", nom)
 					.getSingleResult();
 			present = true;
@@ -92,7 +92,6 @@ public class RecupTournee {
 	}
 
 	public List<Profil> recuperationProfilTournee(String tournee){
-		@SuppressWarnings("unchecked")
 		List<Collection> list = manager_.createQuery("select t.profil_tournee "
 				+ "FROM Tournee t WHERE t.nom LIKE :tournee", Collection.class)
 				.setParameter("tournee", tournee)
@@ -106,5 +105,32 @@ public class RecupTournee {
 		}
 		
 		return listProfil;
+	}
+
+	public Profil recuperationProfil(String code_client){
+		Profil profil = manager_.createQuery("select p from Profil p where code_client LIKE :cc ", Profil.class)
+				.setParameter("cc", code_client)
+				.getSingleResult();
+		return profil;
+	}
+	
+	public List<Object[]> recuperationTourneee(){
+		List<Object[]> tournee = manager_.createQuery("select distinct t.id, t.jour_tournee, t.nom" +
+				" from Tournee t", Object[].class).getResultList();
+		return tournee;
+	}
+	
+	public String[] recuperationTournee(){
+		List<String> ListTournee = manager_.createQuery("select t.nom " +
+				"from Tournee t ", String.class).getResultList();
+		
+		String[] tournee = new String[ListTournee.size()];
+		int i = 0;
+		for (String g : ListTournee){
+			tournee[i] = g;
+			i++;
+		}
+		
+		return tournee;
 	}
 }

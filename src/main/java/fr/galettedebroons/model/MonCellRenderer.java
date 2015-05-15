@@ -1,7 +1,6 @@
 package fr.galettedebroons.model;
 import java.awt.Color;
 import java.awt.Component;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -9,6 +8,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class MonCellRenderer extends DefaultTableCellRenderer {
 
+	private static final long serialVersionUID = 226531220534131041L;	
 	private List<int[]> caseRouge_;
 	
 	public MonCellRenderer(List<int[]> caseAvecRupture) {

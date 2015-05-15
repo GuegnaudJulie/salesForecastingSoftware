@@ -2,7 +2,6 @@ package fr.galettedebroons.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -10,48 +9,31 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import fr.galettedebroons.domain.Client;
-import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.domain.Livraison;
 import fr.galettedebroons.domain.MargeLivraison;
 import fr.galettedebroons.domain.Prevision;
-import fr.galettedebroons.domain.Produit;
 import fr.galettedebroons.domain.Profil;
 import fr.galettedebroons.domain.QuantiteReelle;
-import fr.galettedebroons.domain.Temporaire;
 import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.main.Main;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
-import fr.galettedebroons.model.RecuperationDonnees;
-import fr.galettedebroons.model.TraitementDonneesTemporaire;
-import fr.galettedebroons.model.selectBase.RecupClientProfil;
-import fr.galettedebroons.model.selectBase.RecupGamme;
-import fr.galettedebroons.model.selectBase.RecupTemporaire;
-import fr.galettedebroons.model.selectBase.RecupTournee;
-import fr.galettedebroons.*;
+import fr.galettedebroons.model.EnchainementInsertionDonnees;
+import fr.galettedebroons.model.accessBase.RecupClientProfil;
+import fr.galettedebroons.model.accessBase.RecupGamme;
+import fr.galettedebroons.model.accessBase.RecupTemporaire;
+import fr.galettedebroons.model.accessBase.RecupTournee;
 /**
  * Vue globale de la creation d'un nouveau client
  * Vue dynamique en fonction du nombre de client non creer 
@@ -61,42 +43,40 @@ import fr.galettedebroons.*;
  */
 public class VueGlobalNvClient {
 	
-	Main main_;
-	PanelEdition panel_;
-	TraitementDonneesTemporaire ClasseTraitement_;
-	RecuperationDonnees rd_;
-	RecupTemporaire rt_;
-	RecupClientProfil rcp_;
-	List<Object[]> results;
+	private Main main_;
+	private PanelEdition panel_;
+	private EnchainementInsertionDonnees ClasseTraitement_;
+	private RecupTemporaire rt_;
+	private RecupClientProfil rcp_;
+	private RecupTournee rtour_;
+	private RecupGamme rg_;
+	private List<Object[]> results;
 	
-	String nomClientLabel;
-	String nomClientJTF;
-	String codeClientLabel;
-	String codeClientJTF;
-	JFrame fenetre;
-	JPanel panelGeneral;
-	JPanel panelBouton;
-	JPanel panelGlobal;
-	JScrollPane scrollPane;
-	JList[] listTournee;
-	JLabel labelErreur;
-	List<NouveauClient> listnvclient;
-	List<Object[]> clients;
-	List<Object> tourneeContenu;
-	String codeGamme;
+	private JFrame fenetre;
+	private JPanel panelGeneral;
+	private JPanel panelBouton;
+	private JPanel panelGlobal;
+	private JScrollPane scrollPane;
+	private JList[] listTournee;
+	private JLabel labelErreur;
+	private List<NouveauClient> listnvclient;
+	private List<Object[]> clients;
+	private List<Object> tourneeContenu;
+	private String codeGamme;
 		
 	/**
 	 * Constructeur initialise composants graphiques
 	 * @param main acces au Entity Manager pour gerer la BDD
 	 * @param panel
 	 */
-	public VueGlobalNvClient(Main main, PanelEdition panel, TraitementDonneesTemporaire traitementDonneesTemporaire){
+	public VueGlobalNvClient(Main main, PanelEdition panel, EnchainementInsertionDonnees traitementDonneesTemporaire){
 		main_ = main; 
 		panel_ = panel;
 		ClasseTraitement_ = traitementDonneesTemporaire;
-		rd_ = new RecuperationDonnees(main_);
 		rt_ = new RecupTemporaire(main_);
 		rcp_ = new RecupClientProfil(main_);
+		rtour_ = new RecupTournee(main_);
+		rg_ = new RecupGamme(main_);
 		initialisationClients();
 	}
 
@@ -133,11 +113,11 @@ public class VueGlobalNvClient {
 			nbNewClient = 1;
 		
 		// récupération de la liste de tournee
-		String[] tournee = rd_.recuperationTournee();
+		String[] tournee = rtour_.recuperationTournee();
 		listTournee = new JList[nbNewClient];
 		
 		// récupération de la liste de gamme
-    	String[] gamme = rd_.recuperationGamme();
+    	String[] gamme = rg_.recuperationGamme();
     	
     	
     	
@@ -220,7 +200,7 @@ public class VueGlobalNvClient {
 	
 	public void listTournee(){
 		//On crée des nouvelles combobox que l'on rajoute à chaque client en leur précisant l'objet qui a déjà été selectionné
-		String[] tournee = rd_.recuperationTournee();
+		String[] tournee = rtour_.recuperationTournee();
 		
 		for (NouveauClient nc : listnvclient){
 			Object selection = nc.getSelectTournee();

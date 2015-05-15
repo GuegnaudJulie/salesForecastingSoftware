@@ -7,7 +7,7 @@ package fr.galettedebroons.view;
 
 import fr.galettedebroons.domain.Gamme;
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.selectBase.RecupGamme;
+import fr.galettedebroons.model.accessBase.RecupGamme;
 
 /**
  *

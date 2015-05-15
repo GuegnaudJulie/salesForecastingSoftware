@@ -11,7 +11,6 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.RecuperationDonnees;
 
 /**
  * Formulaire de creation de nouveau client
@@ -23,7 +22,6 @@ public class NouveauClient extends java.awt.Panel {
 	    /** Creates new form NouveauClient */
 	    public NouveauClient(Main main, VueGlobalNvClient vue, String cc, String nc, JList tournee) {
 	    	main_ = main;
-	    	rd_ = new RecuperationDonnees(main);
 	    	vue_ = vue;
 	        initComponents(cc, nc, tournee);
 	    }
@@ -165,7 +163,6 @@ public class NouveauClient extends java.awt.Panel {
 	    private javax.swing.JTextField jTextField2;
 	    private JFrame fenetre;
 	    private Main main_;
-	    private RecuperationDonnees rd_;
 	    private VueGlobalNvClient vue_;
 	    // End of variables declaration
 	    

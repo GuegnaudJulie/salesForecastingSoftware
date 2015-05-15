@@ -7,7 +7,7 @@ package fr.galettedebroons.view;
 
 import fr.galettedebroons.domain.Tournee;
 import fr.galettedebroons.main.Main;
-import fr.galettedebroons.model.selectBase.RecupTournee;
+import fr.galettedebroons.model.accessBase.RecupTournee;
 
 /**
 *
