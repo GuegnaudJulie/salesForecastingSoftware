@@ -30,11 +30,10 @@ public class InterfaceGenerale extends javax.swing.JFrame {
         panelSociete = new javax.swing.JPanel();
         boutonSocieteBroons = new javax.swing.JButton();
         panelOnglet = new javax.swing.JTabbedPane();
-        panelAccueil = new fr.galettedebroons.view.PanelAccueil();
+        panelCredit = new fr.galettedebroons.view.PanelCredit();
         panelPrevision = new fr.galettedebroons.view.PanelPrevision(main_);
         panelEdition = new fr.galettedebroons.view.PanelEdition(main_, panelPrevision);
         panelParametrage = new fr.galettedebroons.view.MargeModification(main_);
-        panelManuel = new fr.galettedebroons.view.PanelManuel();
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,17 +55,15 @@ public class InterfaceGenerale extends javax.swing.JFrame {
                 .addComponent(boutonSocieteBroons)
                 .addContainerGap())
         );
-        
-        panelOnglet.addTab("Accueil", panelAccueil);
-        
+                
         panelOnglet.addTab("Edition", panelEdition);
 
         panelOnglet.addTab("Prévision semaine", panelPrevision);
 
         panelOnglet.addTab("Parametrage", panelParametrage);
 
-        panelOnglet.addTab("Manuel d'utilisation", panelManuel);
-
+        panelOnglet.addTab("Crédit", panelCredit);
+        
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,9 +85,8 @@ public class InterfaceGenerale extends javax.swing.JFrame {
     private Main main_;
     // Variables declaration - do not modify                     
     private javax.swing.JButton boutonSocieteBroons;
-    private fr.galettedebroons.view.PanelAccueil panelAccueil;
+    private fr.galettedebroons.view.PanelCredit panelCredit;
     private fr.galettedebroons.view.PanelEdition panelEdition;
-    private fr.galettedebroons.view.PanelManuel panelManuel;
     private javax.swing.JTabbedPane panelOnglet;
     private fr.galettedebroons.view.PanelPrevision panelPrevision;
     private javax.swing.JPanel panelParametrage;

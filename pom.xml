@@ -10,6 +10,37 @@
 	<name>salesForecastingSoftware</name>
 	<url>http://maven.apache.org</url>
 	
+	<build>
+		<plugins>	
+			<plugin>
+				 <groupId>org.apache.maven.plugins</groupId>
+				 <artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					 <appendAssemblyId>false</appendAssemblyId>
+					 <finalName>${project.artifactId}-${project.version}</finalName>
+					 <outputDirectory>${basedir}\\export</outputDirectory>
+					 <descriptorRefs>
+					 <descriptorRef>jar-with-dependencies</descriptorRef>
+					 </descriptorRefs>
+					 <archive>
+					 <manifest>
+					 <mainClass>fr.galettedebroons.main.Main</mainClass>
+					 </manifest>
+					 </archive>
+				 </configuration>
+				<executions>
+				 <execution>
+				 <id>package-jar-with-dependencies</id>
+				 <phase>package</phase>
+				 <goals>
+				 <goal>single</goal>
+				 </goals>
+				 </execution>
+				 </executions>
+			</plugin>
+		</plugins>
+	</build>
+	
 	<properties>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>1.7</maven.compiler.target>
@@ -81,20 +112,6 @@
 			<artifactId>REngine</artifactId>
 			<version>1.7-3</version>
 		</dependency>
-		
-		<!-- 
-		<dependency>
-			<groupId>net.rforge</groupId>
-			<artifactId>JRI</artifactId>
-			<version>0.9-4</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>net.rforge</groupId>
-			<artifactId>REngine</artifactId>
-			<version>0.9-4</version>
-		</dependency>
-		 -->
 		 
 	</dependencies>
 </project>

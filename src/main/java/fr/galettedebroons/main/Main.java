@@ -46,7 +46,7 @@ public class Main {
 
 	
 	public static void main(String[] args) {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("majAnteros"); // majAnteros, createAnteros, createAndDrop ...
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("perso_julie"); // MAJ, createAndDrop
 		EntityManager manager = factory.createEntityManager();
 		EntityTransaction tx = manager.getTransaction();
 		
