@@ -15,17 +15,33 @@ public class Main {
 	private EntityManager manager_;
 	private EntityTransaction tx_;
 	private String[] args_;
+	private EntityManagerFactory factory_;
 	
-	public Main(EntityManager manager) {
+	public Main(EntityManagerFactory factory, EntityManager manager, EntityTransaction tx, String[] args) {
+		factory_ = factory;
 		manager_ = manager;
+		tx_ = tx;
+		args_ = args;
 	}
 	
+	public EntityManagerFactory getFactory() {
+		return factory_;
+	}
+
 	public EntityManager getManager(){
 		return manager_;
 	}
 	
 	public EntityTransaction getTransaction(){
 		return this.tx_;
+	}
+
+	public String[] getArgs() {
+		return args_;
+	}
+
+	public void setFactory(EntityManagerFactory factory_) {
+		this.factory_ = factory_;
 	}
 	
 	public void setManager(EntityManager manager){
@@ -35,24 +51,17 @@ public class Main {
 	public void setTransaction(EntityTransaction tx){
 		tx_ = tx;
 	}
-
-	public String[] getArgs() {
-		return args_;
-	}
-
+	
 	public void setArgs(String[] args_) {
 		this.args_ = args_;
 	}
-
 	
 	public static void main(String[] args) {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("perso_julie"); // MAJ, createAndDrop
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("connexion"); // MAJ, createAndDrop
 		EntityManager manager = factory.createEntityManager();
 		EntityTransaction tx = manager.getTransaction();
 		
-		Main main = new Main(manager);
-		main.setTransaction(tx);
-		main.setArgs(args);
+		Main main = new Main(factory, manager, tx, args);
 		
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main);
 		//Rcall.main(args); //A été remis dans EnchaînementDonnees
@@ -64,4 +73,5 @@ public class Main {
 		
 		System.out.println(".. done");
 	}
+
 }

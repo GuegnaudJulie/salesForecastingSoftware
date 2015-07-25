@@ -3,7 +3,6 @@ package fr.galettedebroons.jri;
 import java.io.*;
 import java.awt.Frame;
 import java.awt.FileDialog;
-
 import java.util.Enumeration;
 
 import org.rosuda.JRI.RBool;
@@ -12,6 +11,8 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.RList;
 import org.rosuda.JRI.RVector;
 import org.rosuda.JRI.RMainLoopCallbacks;
+
+import fr.galettedebroons.main.Main;
 
 class TextConsole implements RMainLoopCallbacks
 {
@@ -59,6 +60,7 @@ class TextConsole implements RMainLoopCallbacks
 }
 
 public class Rcall {
+		
     public static void main(String[] args) {
     // just making sure we have the right version of everything
     if (!Rengine.versionCheck()) {

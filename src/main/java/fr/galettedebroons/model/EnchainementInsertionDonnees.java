@@ -1,5 +1,9 @@
 package fr.galettedebroons.model;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 
 import fr.galettedebroons.jri.Rcall;
@@ -50,7 +54,21 @@ public class EnchainementInsertionDonnees {
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main_);
 		rdt.vidage();
 		
+		/*
+		main_.getManager().close();
+		main_.getFactory().close();
+		*/
+		
 		Rcall.main(main_.getArgs());
+		
+		/*
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("connexion");
+		EntityManager manager = factory.createEntityManager();
+		EntityTransaction tx = manager.getTransaction();
+		main_.setFactory(factory);
+		main_.setManager(manager);
+		main_.setTransaction(tx);
+		*/
 		
 		JOptionPane.showMessageDialog(panel_, "Les livraisons ont été ajoutées");
 	}
