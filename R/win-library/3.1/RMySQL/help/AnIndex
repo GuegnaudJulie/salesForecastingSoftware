@@ -62,7 +62,6 @@ dbMoreResults	dbNextResult
 dbMoreResults,MySQLConnection-method	dbNextResult
 dbNextResult	dbNextResult
 dbNextResult,MySQLConnection-method	dbNextResult
-dbObjectId-class	db-meta
 dbQuoteIdentifier,MySQLConnection,character-method	dbQuoteIdentifier-MySQLConnection-character-method
 dbReadTable,MySQLConnection,character-method	dbReadTable
 dbRemoveTable,MySQLConnection,character-method	dbReadTable

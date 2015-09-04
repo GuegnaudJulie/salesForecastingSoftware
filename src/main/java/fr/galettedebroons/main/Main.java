@@ -7,7 +7,6 @@ import javax.persistence.Persistence;
 
 import fr.galettedebroons.jri.Rcall;
 import fr.galettedebroons.model.RangerDonneeTemporaire;
-import fr.galettedebroons.model.EnchainementInsertionDonnees;
 import fr.galettedebroons.view.InterfaceGenerale;
 
 public class Main {
@@ -63,8 +62,12 @@ public class Main {
 		
 		Main main = new Main(factory, manager, tx, args);
 		
+		System.out.println("Etape 1 du Main !");
 		RangerDonneeTemporaire rdt = new RangerDonneeTemporaire(main);
+		
+		System.out.println("Etape 2 du Main !");
 		//Rcall.main(args); //A été remis dans EnchaînementDonnees
+		System.out.println("Etape 2 du Main !");
 		rdt.vidage();
 		
 		InterfaceGenerale IHM = new InterfaceGenerale(main);
