@@ -76,8 +76,18 @@ public class Rcall {
         // 3) the callbacks are implemented by the TextConsole class above
         Rengine re = null;
         try{
+        	System.out.println("TOTOOOOOOOOOOOO");
+        	re = Rengine.getMainEngine();
+        	System.out.println("TOTOOOOOOOOOOOO2");
+        	if(re == null){
+        		System.out.println("TOTOOOOOOOOOOOO23");
+        		//re=new Rengine(new String[] {"--vanilla"}, false, new TextConsole());
+        		re=new Rengine(new String[]{"--vanilla"}, false, new TextConsole());
+        		
+        		System.out.println("TOTOOOOOOOOOOOO3");
+        	}
 	       	System.out.println("coucou -- je veux passer !!!");
-	        re=new Rengine(args, false, new TextConsole());
+	        
 	        System.out.println("salut !!!");
         }catch(Exception e){
         	System.out.println("toto" + e.getMessage());
