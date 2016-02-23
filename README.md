@@ -1,8 +1,8 @@
 # saleForecatstingSoftware
 
-#################################
-####### Version française ####### 
-#################################
+#######################
+## Version française ##
+#######################
 # Prérequis
 1- Installer la version 3.2.2 de R sur le serveur
 2- Lancer R et la commande suivante : install.packages(“rJava”)
